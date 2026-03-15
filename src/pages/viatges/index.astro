@@ -3,9 +3,10 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
 import StatCard from '@components/ui/StatCard.astro';
 import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import DataExplorer from '@components/sections/DataExplorer.tsx';
+import TripProfile from '@components/sections/TripProfile.tsx';
 import BarChart from '@components/charts/BarChart';
 import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
-import { formatCurrency, formatNumber, formatCompactNumber } from '@lib/utils';
+import { formatCurrency, formatNumber } from '@lib/utils';
 import { querySocrata, countSocrata } from '@lib/api/socrata';
 
 interface TripRow {
@@ -16,13 +17,16 @@ interface TripRow {
   departament: string;
   motiu: string;
   inici_viatge: string;
-  fi_viatge: string;
   dietes_i_manutenci: string;
   allotjament: string;
   transport: string;
   altres_despeses: string;
-  comitiva: string;
-  agenda: string;
+}
+
+function safeNum(v: string | undefined | null): number {
+  if (!v) return 0;
+  const n = parseFloat(v);
+  return isNaN(n) ? 0 : n;
 }
 
 let totalTrips = 0;
@@ -50,12 +54,13 @@ try {
     querySocrata<TripRow>({
       dataset: DATASETS.viatges_oficials,
       order: 'total_despeses DESC',
+      where: 'total_despeses > 0',
       limit: 5,
     }),
   ]);
 
   totalTrips = count;
-  totalSpent = sumRows.length > 0 ? parseFloat(sumRows[0].total) || 0 : 0;
+  totalSpent = safeNum(sumRows[0]?.total);
   avgCost = totalTrips > 0 ? totalSpent / totalTrips : 0;
   topDestinations = destRows.map(d => ({
     label: d.destinaci,
@@ -72,11 +77,10 @@ const destData = topDestinations.map(d => d.count);
 
 <DefaultLayout title="Viatges oficials" description="On viatgen els alts carrecs de la Generalitat? Destins, motius i despeses detallades." section="viatges">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-    <!-- Header -->
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">On viatgen els teus politics?</h1>
       <p class="text-sm text-gray-500 mb-4">
-        Viatges a l'estranger dels alts carrecs de la Generalitat amb despeses desglossades.
+        Viatges a l'estranger dels alts carrecs amb despeses desglossades.
       </p>
       <DataSourceBanner
         source="Transparencia Catalunya (Socrata)"
@@ -84,7 +88,7 @@ const destData = topDestinations.map(d => d.count);
         scope="Viatges oficials a l'estranger dels alts carrecs i directius de la Generalitat"
         notes={[
           'Inclou dietes, allotjament, transport i altres despeses per viatge',
-          'Alguns viatges tenen cost 0€ perque l\'organitzacio cobreix les despeses',
+          'Alguns viatges tenen cost 0 € perque l\'organitzacio cobreix les despeses',
         ]}
       />
     </section>
@@ -94,12 +98,12 @@ const destData = topDestinations.map(d => d.count);
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <StatCard label="Viatges registrats" value={formatNumber(totalTrips)} />
         <StatCard label="Despesa total" value={formatCurrency(totalSpent)} />
-        <StatCard label="Cost mitja per viatge" value={formatCurrency(avgCost)} />
+        <StatCard label="Cost mitja" value={formatCurrency(avgCost)} />
         <StatCard label="Destinacions" value={formatNumber(topDestinations.length) + '+'} />
       </div>
     </section>
 
-    <!-- Top destinations chart -->
+    <!-- Charts + top trips -->
     {destLabels.length > 0 && (
       <section>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -114,35 +118,45 @@ const destData = topDestinations.map(d => d.count);
             />
           </div>
 
-          <!-- Top expensive trips -->
           <div>
             <h2 class="text-sm font-semibold text-gray-700 mb-4">Viatges mes cars</h2>
             <div class="space-y-3">
-              {topExpensive.map((trip) => (
-                <div class="border border-gray-200 rounded-lg bg-white p-4">
-                  <div class="flex items-start justify-between gap-3 mb-2">
-                    <div class="min-w-0">
-                      <p class="text-sm font-medium text-gray-900 truncate">{trip.nom_i_cognoms}</p>
-                      <p class="text-xs text-gray-500 truncate">{trip.c_rrec}</p>
+              {topExpensive.map((trip) => {
+                const total = safeNum(trip.total_despeses);
+                const dietes = safeNum(trip.dietes_i_manutenci);
+                const hotel = safeNum(trip.allotjament);
+                const transport = safeNum(trip.transport);
+                return (
+                  <button
+                    type="button"
+                    class="w-full text-left border border-gray-200 rounded-lg bg-white p-4 hover:border-gray-400 transition-colors cursor-pointer"
+                    data-person={trip.nom_i_cognoms}
+                    onclick={`window.dispatchEvent(new CustomEvent('trip-profile-open', { detail: '${trip.nom_i_cognoms.replace(/'/g, "\\'")}' }))`}
+                  >
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                      <div class="min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">{trip.nom_i_cognoms}</p>
+                        <p class="text-xs text-gray-500 truncate">{trip.c_rrec}</p>
+                      </div>
+                      <span class="text-lg font-bold text-gray-900 tabular-nums shrink-0">
+                        {formatCurrency(total)}
+                      </span>
                     </div>
-                    <span class="text-lg font-bold text-gray-900 tabular-nums shrink-0">
-                      {formatCurrency(parseFloat(trip.total_despeses))}
-                    </span>
-                  </div>
-                  <p class="text-xs text-gray-700 mb-2 line-clamp-2">{trip.motiu}</p>
-                  <div class="flex flex-wrap gap-1.5 text-xs">
-                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{trip.destinaci}</span>
-                    <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{trip.departament}</span>
-                  </div>
-                  {(parseFloat(trip.dietes_i_manutenci) > 0 || parseFloat(trip.allotjament) > 0 || parseFloat(trip.transport) > 0) && (
-                    <div class="flex gap-3 mt-2 text-xs text-gray-400">
-                      {parseFloat(trip.dietes_i_manutenci) > 0 && <span>Dietes: {formatCurrency(parseFloat(trip.dietes_i_manutenci))}</span>}
-                      {parseFloat(trip.allotjament) > 0 && <span>Hotel: {formatCurrency(parseFloat(trip.allotjament))}</span>}
-                      {parseFloat(trip.transport) > 0 && <span>Transport: {formatCurrency(parseFloat(trip.transport))}</span>}
+                    <p class="text-xs text-gray-700 mb-2 line-clamp-2">{trip.motiu}</p>
+                    <div class="flex flex-wrap gap-1.5 text-xs mb-2">
+                      <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{trip.destinaci}</span>
                     </div>
-                  )}
-                </div>
-              ))}
+                    {(dietes > 0 || hotel > 0 || transport > 0) && (
+                      <div class="flex gap-3 text-xs text-gray-400">
+                        {dietes > 0 && <span>Dietes: {formatCurrency(dietes)}</span>}
+                        {hotel > 0 && <span>Hotel: {formatCurrency(hotel)}</span>}
+                        {transport > 0 && <span>Transport: {formatCurrency(transport)}</span>}
+                      </div>
+                    )}
+                    <p class="text-[10px] text-gray-300 mt-2">Clica per veure tots els viatges d'aquesta persona</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -170,4 +184,11 @@ const destData = topDestinations.map(d => d.count);
       />
     </section>
   </div>
+
+  <!-- Trip Profile Panel (Preact island) -->
+  <TripProfile
+    client:load
+    domain={SOCRATA_DOMAIN}
+    dataset={DATASETS.viatges_oficials}
+  />
 </DefaultLayout>
