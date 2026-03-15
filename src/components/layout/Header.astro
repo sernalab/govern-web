@@ -9,7 +9,6 @@ const links = [
   { label: 'Contractes', href: '/contractes', id: 'contractes' },
   { label: 'Subvencions', href: '/subvencions', id: 'subvencions' },
   { label: 'Salaris', href: '/salaris', id: 'salaris' },
-  { label: 'Pressupostos', href: '/pressupostos', id: 'pressupostos' },
   { label: 'Corrupcio', href: '/corrupcio', id: 'corrupcio' },
   { label: 'Detector', href: '/detector', id: 'detector' },
 ];
@@ -23,12 +22,10 @@ function linkClass(id: string): string {
 
 <header class="fixed top-0 inset-x-0 z-50 bg-gray-950 border-b border-gray-800">
   <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-    <a href="/" class="flex items-center gap-2 group">
+    <a href="/" class="flex items-center gap-2">
       <span class="text-white font-bold text-lg tracking-tight">govern</span>
-      <span class="text-gray-500 text-xs font-medium hidden sm:inline">/cat</span>
     </a>
 
-    <!-- Desktop nav -->
     <ul class="hidden md:flex items-center gap-5">
       {links.map((link) => (
         <li>
@@ -39,7 +36,6 @@ function linkClass(id: string): string {
       ))}
     </ul>
 
-    <!-- Mobile hamburger -->
     <label for="mobile-menu-toggle" class="md:hidden cursor-pointer p-2 text-gray-400 hover:text-white" aria-label="Obrir menu">
       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -47,7 +43,6 @@ function linkClass(id: string): string {
     </label>
   </nav>
 
-  <!-- Mobile menu (CSS-only) -->
   <input type="checkbox" id="mobile-menu-toggle" class="peer hidden" />
   <div class="md:hidden hidden peer-checked:block bg-gray-950 border-t border-gray-800">
     <ul class="flex flex-col px-4 py-2 gap-0">

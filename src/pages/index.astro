@@ -1,147 +1,247 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro';
-import Hero from '@components/sections/Hero.astro';
-import RecentActivity from '@components/sections/RecentActivity.astro';
 import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
-import BarChart from '@components/charts/BarChart';
-import DoughnutChart from '@components/charts/DoughnutChart';
-import type { DashboardStats, Contracte, Subvencio } from '@lib/types';
-import type { ContractsByYearRow, ContractsByTypeRow } from '@lib/data-fetcher';
+import { formatCurrency, formatCompactNumber } from '@lib/utils';
+import type { DashboardStats, Contracte, CarrecPublic } from '@lib/types';
+import type { TopCompanyRow, SubventionsByPurposeRow } from '@lib/data-fetcher';
 import {
   fetchDashboardStats,
-  fetchContractsByYear,
-  fetchContractsByType,
-  fetchRecentContracts,
-  fetchRecentSubvencions,
+  fetchTopCompanies,
+  fetchSubventionsByPurpose,
+  fetchCuriousContracts,
+  fetchSalaryComparison,
 } from '@lib/data-fetcher';
 
 let stats: DashboardStats | null = null;
-let contractsByYearData: ContractsByYearRow[] | null = null;
-let contractsByTypeData: ContractsByTypeRow[] | null = null;
-let recentContracts: Contracte[] | null = null;
-let recentSubvencions: Subvencio[] | null = null;
+let topCompanies: TopCompanyRow[] = [];
+let subsByPurpose: SubventionsByPurposeRow[] = [];
+let curiousContracts: Contracte[] = [];
+let salaryData: { president: CarrecPublic | null; directors: CarrecPublic[] } = { president: null, directors: [] };
 
 try {
-  [stats, contractsByYearData, contractsByTypeData, recentContracts, recentSubvencions] = await Promise.all([
+  [stats, topCompanies, subsByPurpose, curiousContracts, salaryData] = await Promise.all([
     fetchDashboardStats(),
-    fetchContractsByYear(),
-    fetchContractsByType(),
-    fetchRecentContracts(5),
-    fetchRecentSubvencions(5),
+    fetchTopCompanies(7),
+    fetchSubventionsByPurpose(8),
+    fetchCuriousContracts(6),
+    fetchSalaryComparison(),
   ]);
-} catch (err) {
+} catch {
   // silenced
 }
 
-const contractsByYear = contractsByYearData
-  ? {
-      labels: contractsByYearData.filter(r => r.any >= 2015).map((r) => String(r.any)),
-      data: contractsByYearData.filter(r => r.any >= 2015).map((r) => r.total),
-    }
+const totalVolume = stats
+  ? (stats.importTotalContractes || 0) + (stats.importTotalSubvencions || 0)
   : null;
 
-// Deduplicate types after stripping numeric prefixes (e.g. "5. SERVEIS" and "SERVEIS")
-const mergedTypes = new Map<string, number>();
-if (contractsByTypeData) {
-  for (const r of contractsByTypeData) {
-    const label = r.tipus_contracte.replace(/^\d+\.\s*/, '');
-    mergedTypes.set(label, (mergedTypes.get(label) || 0) + r.total);
-  }
+// Calculate max for bar widths
+const maxCompanyAmount = topCompanies.length > 0 ? topCompanies[0].import_total : 1;
+const maxSubAmount = subsByPurpose.length > 0 ? subsByPurpose[0].total : 1;
+
+function parseSalary(s: string | undefined): number {
+  if (!s) return 0;
+  return parseFloat(s.replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
 }
-const sortedTypes = [...mergedTypes.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
-const contractsByType = sortedTypes.length > 0
-  ? { labels: sortedTypes.map(([l]) => l), data: sortedTypes.map(([, v]) => v) }
-  : null;
 ---
 
 <DefaultLayout
   title="Govern"
-  description="Transparencia i dades publiques de Catalunya. Contractes, subvencions, salaris, pressupostos i casos de corrupcio."
+  description="On van els teus diners? Dades publiques de contractes, subvencions i salaris de Catalunya."
   section="inicio"
 >
-  <Hero stats={stats} />
+  <!-- Hero -->
+  <section class="bg-gray-950 text-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <p class="text-gray-500 text-xs font-medium mb-6 tracking-widest uppercase">Dades publiques de Catalunya</p>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+        On van els teus<br />diners?
+      </h1>
+      {totalVolume && (
+        <p class="text-lg sm:text-xl text-gray-400 mb-4">
+          <span class="text-white font-semibold">{formatCompactNumber(totalVolume)} €</span> gestionats en contractes i subvencions publiques
+        </p>
+      )}
+      <p class="text-sm text-gray-500 max-w-xl mb-10">
+        Dades reals de l'API de Transparencia Catalunya. Sense filtres, sense opinions. Tu decideixes.
+      </p>
+    </div>
+  </section>
 
-  <!-- Data context -->
-  <section class="py-6 bg-white border-b border-gray-100">
+  <!-- 1. Les empreses que mes cobren -->
+  {topCompanies.length > 0 && (
+    <section class="py-12 sm:py-16 border-b border-gray-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Les empreses que mes cobren</h2>
+        <p class="text-sm text-gray-500 mb-8">Ranking d'empreses per volum total de contractes publics acumulats</p>
+
+        <div class="space-y-3">
+          {topCompanies.map((company, i) => {
+            const pct = (company.import_total / maxCompanyAmount) * 100;
+            return (
+              <div class="group">
+                <div class="flex items-baseline justify-between gap-4 mb-1">
+                  <div class="flex items-baseline gap-3 min-w-0">
+                    <span class="text-xs text-gray-400 tabular-nums w-4 shrink-0">{i + 1}</span>
+                    <span class="text-sm text-gray-900 font-medium truncate">{company.adjudicatari}</span>
+                  </div>
+                  <div class="flex items-baseline gap-3 shrink-0">
+                    <span class="text-xs text-gray-400">{company.total.toLocaleString('ca-ES')} contractes</span>
+                    <span class="text-sm font-semibold text-gray-900 tabular-nums">{formatCompactNumber(company.import_total)} €</span>
+                  </div>
+                </div>
+                <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-gray-900 rounded-full" style={`width: ${pct}%`}></div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div class="mt-6">
+          <a href="/contractes" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">
+            Explora tots els contractes &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 2. On van les subvencions -->
+  {subsByPurpose.length > 0 && (
+    <section class="py-12 sm:py-16 bg-gray-50 border-b border-gray-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">On van les subvencions?</h2>
+        <p class="text-sm text-gray-500 mb-8">Distribucio per finalitat publica de totes les subvencions concedides</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {subsByPurpose.map((item) => {
+            const pct = (item.total / maxSubAmount) * 100;
+            return (
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <div class="flex items-baseline justify-between gap-2 mb-2">
+                  <span class="text-sm text-gray-900 font-medium">{item.finalitat}</span>
+                  <span class="text-sm font-semibold text-gray-900 tabular-nums shrink-0">{formatCompactNumber(item.total)} €</span>
+                </div>
+                <div class="h-1 bg-gray-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-gray-400 rounded-full" style={`width: ${pct}%`}></div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div class="mt-6">
+          <a href="/subvencions" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">
+            Explora totes les subvencions &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 3. Que cobren els carrecs publics -->
+  {salaryData.president && (
+    <section class="py-12 sm:py-16 border-b border-gray-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Que cobren els carrecs publics?</h2>
+        <p class="text-sm text-gray-500 mb-8">Retribucions brutes anuals previstes dels alts carrecs de la Generalitat</p>
+
+        <div class="max-w-2xl">
+          <!-- President -->
+          <div class="border border-gray-200 rounded-lg p-5 mb-3">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold text-gray-900">{salaryData.president.cognoms_nom}</p>
+                <p class="text-xs text-gray-500 mt-0.5">{salaryData.president.denominacio_lloc}</p>
+              </div>
+              <p class="text-xl font-bold text-gray-900 tabular-nums shrink-0">{salaryData.president.retribucio_anual_prevista}</p>
+            </div>
+          </div>
+
+          <!-- Directors -->
+          <div class="space-y-1">
+            {salaryData.directors.slice(0, 4).map((d) => (
+              <div class="flex items-center justify-between gap-4 py-2.5 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+                <div class="min-w-0">
+                  <p class="text-sm text-gray-700 truncate">{d.cognoms_nom}</p>
+                  <p class="text-xs text-gray-400 truncate">{d.denominacio_lloc}</p>
+                </div>
+                <p class="text-sm font-medium text-gray-900 tabular-nums shrink-0">{d.retribucio_anual_prevista}</p>
+              </div>
+            ))}
+          </div>
+
+          <p class="text-xs text-gray-400 mt-4">
+            402 alts carrecs registrats. Retribucions brutes, sense dietes ni variables.
+          </p>
+        </div>
+
+        <div class="mt-6">
+          <a href="/salaris" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">
+            Veure tots els salaris &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 4. Contractes curiosos -->
+  {curiousContracts.length > 0 && (
+    <section class="py-12 sm:py-16 bg-gray-50 border-b border-gray-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Contractes del dia a dia</h2>
+        <p class="text-sm text-gray-500 mb-8">Petits contractes reals que mostren en que es gasten els diners publics al detall</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {curiousContracts.map((c) => (
+            <div class="bg-white border border-gray-200 rounded-lg p-4 space-y-2">
+              <p class="text-sm text-gray-900 font-medium leading-snug line-clamp-2">
+                {c.descripcio_expedient}
+              </p>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-gray-400 truncate">{c.organisme_contractant}</span>
+                <span class="text-sm font-bold text-gray-900 tabular-nums shrink-0">{formatCurrency(c.import_adjudicacio)}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 5. Mes seccions -->
+  <section class="py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-6">Aprofundeix</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <a href="/contractes" class="group block bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-400 transition-colors">
+          <p class="font-semibold text-gray-900 text-sm mb-1">Contractes</p>
+          <p class="text-xs text-gray-500">Cerca entre {stats ? formatCompactNumber(stats.totalContractes) : '3,5M'} contractes publics</p>
+        </a>
+        <a href="/subvencions" class="group block bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-400 transition-colors">
+          <p class="font-semibold text-gray-900 text-sm mb-1">Subvencions</p>
+          <p class="text-xs text-gray-500">Qui rep ajuts publics i per que</p>
+        </a>
+        <a href="/corrupcio" class="group block bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-400 transition-colors">
+          <p class="font-semibold text-gray-900 text-sm mb-1">Corrupcio</p>
+          <p class="text-xs text-gray-500">{stats ? stats.totalCasosCorrupcio : ''} casos documentats a Espanya</p>
+        </a>
+        <a href="/detector" class="group block bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-400 transition-colors">
+          <p class="font-semibold text-gray-900 text-sm mb-1">El Detector</p>
+          <p class="text-xs text-gray-500">Patrons sospitosos en contractacio</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Source -->
+  <section class="pb-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <DataSourceBanner
         source="Transparencia Catalunya (Socrata)"
         sourceUrl="https://analisi.transparenciacatalunya.cat"
-        scope="Dades agregades de contractes i subvencions del sector public catala"
-        notes={[
-          'Les xifres del dashboard son totals acumulats — inclouen registres des de 1998 fins avui',
-          'Les dades es consulten en temps de compilacio del lloc web',
-        ]}
+        scope="Contractes, subvencions i retribucions del sector public catala"
       />
-    </div>
-  </section>
-
-  <!-- Charts -->
-  <section class="py-12 sm:py-16 bg-white border-b border-gray-100">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex items-baseline justify-between mb-8">
-        <h2 class="text-xl font-bold text-gray-900">Contractacio publica</h2>
-        <a href="/contractes" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-          Veure tot &rarr;
-        </a>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div>
-          <p class="text-sm text-gray-500 mb-4">Evolucio anual (des de 2015)</p>
-          {contractsByYear ? (
-            <BarChart
-              client:load
-              labels={contractsByYear.labels}
-              data={contractsByYear.data}
-              label="Contractes"
-            />
-          ) : (
-            <div class="bg-gray-50 rounded-lg p-8 text-center">
-              <p class="text-sm text-gray-400">Dades no disponibles</p>
-            </div>
-          )}
-        </div>
-
-        <div>
-          <p class="text-sm text-gray-500 mb-4">Per tipologia</p>
-          {contractsByType ? (
-            <DoughnutChart
-              client:load
-              labels={contractsByType.labels}
-              data={contractsByType.data}
-            />
-          ) : (
-            <div class="bg-gray-50 rounded-lg p-8 text-center">
-              <p class="text-sm text-gray-400">Dades no disponibles</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Recent Activity -->
-  <RecentActivity contracts={recentContracts} subvencions={recentSubvencions} />
-
-  <!-- Explore more -->
-  <section class="py-12 bg-gray-50 border-t border-gray-100">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <h2 class="text-xl font-bold text-gray-900 mb-6">Explora</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <a href="/salaris" class="group block bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 transition-colors">
-          <p class="font-semibold text-gray-900 mb-1 text-sm">Salaris de carrecs publics</p>
-          <p class="text-xs text-gray-500">Retribucions dels alts carrecs de la Generalitat</p>
-        </a>
-        <a href="/pressupostos" class="group block bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 transition-colors">
-          <p class="font-semibold text-gray-900 mb-1 text-sm">Pressupostos</p>
-          <p class="text-xs text-gray-500">On es destinen els pressupostos publics</p>
-        </a>
-        <a href="/detector" class="group block bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 transition-colors">
-          <p class="font-semibold text-gray-900 mb-1 text-sm">El Detector</p>
-          <p class="text-xs text-gray-500">Analisi de patrons sospitosos en la contractacio</p>
-        </a>
-      </div>
     </div>
   </section>
 </DefaultLayout>

@@ -19,6 +19,17 @@ export interface ContractsByTypeRow {
   total: number;
 }
 
+export interface TopCompanyRow {
+  adjudicatari: string;
+  total: number;
+  import_total: number;
+}
+
+export interface SubventionsByPurposeRow {
+  finalitat: string;
+  total: number;
+}
+
 export async function fetchDashboardStats(): Promise<DashboardStats> {
   const [
     totalContractes,
@@ -58,6 +69,74 @@ export async function fetchDashboardStats(): Promise<DashboardStats> {
       (sum: number, cas: { import_estimat?: number }) => sum + (cas.import_estimat ?? 0),
       0,
     ),
+  };
+}
+
+/** Top companies by total contract volume */
+export async function fetchTopCompanies(limit: number = 10): Promise<TopCompanyRow[]> {
+  const rows = await querySocrata<{ adjudicatari: string; total: string; import_total: string }>({
+    dataset: DATASETS.contractes,
+    select: 'adjudicatari, count(*) as total, sum(import_adjudicacio) as import_total',
+    group: 'adjudicatari',
+    order: 'import_total DESC',
+    where: 'adjudicatari IS NOT NULL',
+    limit,
+  });
+
+  return rows.map((row) => ({
+    adjudicatari: row.adjudicatari,
+    total: parseInt(row.total, 10),
+    import_total: parseFloat(row.import_total) || 0,
+  }));
+}
+
+/** Subsidies grouped by public purpose */
+export async function fetchSubventionsByPurpose(limit: number = 10): Promise<SubventionsByPurposeRow[]> {
+  const rows = await querySocrata<{ finalitat_p_blica: string; total: string }>({
+    dataset: DATASETS.subvencions_concedides,
+    select: 'finalitat_p_blica, sum(import_subvenci_pr_stec_ajut) as total',
+    group: 'finalitat_p_blica',
+    where: 'finalitat_p_blica IS NOT NULL',
+    order: 'total DESC',
+    limit,
+  });
+
+  return rows.map((row) => ({
+    finalitat: row.finalitat_p_blica,
+    total: parseFloat(row.total) || 0,
+  }));
+}
+
+/** Small/curious contracts - low amounts, recent */
+export async function fetchCuriousContracts(limit: number = 10): Promise<Contracte[]> {
+  const today = new Date().toISOString().slice(0, 10);
+  return querySocrata<Contracte>({
+    dataset: DATASETS.contractes,
+    where: `import_adjudicacio > 0 AND import_adjudicacio < 500 AND data_adjudicacio <= '${today}' AND descripcio_expedient IS NOT NULL`,
+    order: 'data_adjudicacio DESC',
+    limit,
+  });
+}
+
+/** Key salary figures for comparison */
+export async function fetchSalaryComparison(): Promise<{ president: CarrecPublic | null; directors: CarrecPublic[] }> {
+  const [presidentRows, directorRows] = await Promise.all([
+    querySocrata<CarrecPublic>({
+      dataset: DATASETS.retribucions_alts_carrecs,
+      where: "denominacio_lloc = 'PRESIDENT DE LA GENERALITAT DE CATALUNYA'",
+      limit: 1,
+    }),
+    querySocrata<CarrecPublic>({
+      dataset: DATASETS.retribucions_alts_carrecs,
+      where: "vinculacio = 'Alts càrrecs'",
+      order: 'retribucio_anual_prevista DESC',
+      limit: 5,
+    }),
+  ]);
+
+  return {
+    president: presidentRows[0] || null,
+    directors: directorRows,
   };
 }
 
