@@ -40,11 +40,17 @@ const contractsByYear = contractsByYearData
     }
   : null;
 
-const contractsByType = contractsByTypeData
-  ? {
-      labels: contractsByTypeData.slice(0, 5).map((r) => r.tipus_contracte.replace(/^\d+\.\s*/, '')),
-      data: contractsByTypeData.slice(0, 5).map((r) => r.total),
-    }
+// Deduplicate types after stripping numeric prefixes (e.g. "5. SERVEIS" and "SERVEIS")
+const mergedTypes = new Map<string, number>();
+if (contractsByTypeData) {
+  for (const r of contractsByTypeData) {
+    const label = r.tipus_contracte.replace(/^\d+\.\s*/, '');
+    mergedTypes.set(label, (mergedTypes.get(label) || 0) + r.total);
+  }
+}
+const sortedTypes = [...mergedTypes.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+const contractsByType = sortedTypes.length > 0
+  ? { labels: sortedTypes.map(([l]) => l), data: sortedTypes.map(([, v]) => v) }
   : null;
 ---
 
