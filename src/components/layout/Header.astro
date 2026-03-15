@@ -10,10 +10,11 @@ const links = [
   { label: 'Subvencions', href: '/subvencions', id: 'subvencions' },
   { label: 'Salaris', href: '/salaris', id: 'salaris' },
   { label: 'Viatges', href: '/viatges', id: 'viatges' },
-  { label: 'Corrupció', href: '/corrupcio', id: 'corrupcio' },
+  { label: 'Corrupció', href: '/corrupcio', id: 'corrupcio', wip: true },
 ];
 
-function linkClass(id: string): string {
+function linkClass(id: string, wip?: boolean): string {
+  if (wip) return 'text-gray-600 text-sm cursor-default';
   const isActive = section === id;
   if (isActive) return 'text-white font-medium text-sm';
   return 'text-gray-400 hover:text-white text-sm transition-colors';
@@ -29,7 +30,7 @@ function linkClass(id: string): string {
     <ul class="hidden md:flex items-center gap-5">
       {links.map((link) => (
         <li>
-          <a href={link.href} class={linkClass(link.id)}>
+          <a href={link.href} class={linkClass(link.id, link.wip)}>
             {link.label}
           </a>
         </li>
@@ -48,7 +49,7 @@ function linkClass(id: string): string {
     <ul class="flex flex-col px-4 py-2 gap-0">
       {links.map((link) => (
         <li>
-          <a href={link.href} class={`block py-3 px-3 ${linkClass(link.id)}`}>
+          <a href={link.href} class={`block py-3 px-3 ${linkClass(link.id, link.wip)}`}>
             {link.label}
           </a>
         </li>
