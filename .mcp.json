@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "govern": {
+      "command": "uv",
+      "args": ["run", "--directory", "../mcp-govern", "mcp-govern"]
+    }
+  }
+}

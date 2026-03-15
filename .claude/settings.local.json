@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "WebFetch(domain:www.rtve.es)",
+      "WebSearch",
+      "WebFetch(domain:www.boe.es)",
+      "WebFetch(domain:datos.gob.es)",
+      "WebFetch(domain:www.pap.hacienda.gob.es)",
+      "WebFetch(domain:casos-aislados.com)",
+      "WebFetch(domain:datos.justicia.es)",
+      "WebFetch(domain:dev.socrata.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:analisi.transparenciacatalunya.cat)",
+      "WebFetch(domain:www.infosubvenciones.es)",
+      "WebFetch(domain:www.poderjudicial.es)",
+      "WebFetch(domain:contrataciondelsectorpublico.gob.es)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(gh api:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(cd:*)",
+      "mcp__govern__cercar_contractes",
+      "mcp__govern__cercar_subvencions",
+      "mcp__govern__estadistiques",
+      "Bash(grep:*)",
+      "mcp__govern__llistar_camps",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(find:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "govern"
+  ]
+}

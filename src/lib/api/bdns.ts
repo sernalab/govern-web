@@ -46,16 +46,11 @@ async function bdnsFetch<T>(endpoint: string, params: Record<string, string>): P
     }
   }
 
-  console.log(`[BDNS] Fetching: ${url.toString()}`);
-
   const response = await fetch(url.toString(), {
-    headers: {
-      'Accept': 'application/json',
-    },
+    headers: { 'Accept': 'application/json' },
   });
 
   if (!response.ok) {
-    console.error(`[BDNS] ✗ ${url.toString()} → ${response.status}`);
     const errorBody = await response.text().catch(() => 'Unknown error');
     throw new BDNSError(
       `BDNS API error: ${response.status} - ${errorBody}`,
@@ -64,7 +59,6 @@ async function bdnsFetch<T>(endpoint: string, params: Record<string, string>): P
     );
   }
 
-  console.log(`[BDNS] ✓ Response received from ${url.toString()}`);
   return response.json() as Promise<T>;
 }
 

@@ -1,9 +1,8 @@
 import { SOCRATA_DOMAIN } from '../../data/datasets';
 import type { SocrataQueryOptions } from '../types';
 
-// Simple in-memory cache for API responses (avoids re-fetching on every dev reload)
 const cache = new Map<string, { data: unknown; timestamp: number }>();
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 5 * 60 * 1000;
 
 export class SocrataError extends Error {
   public status: number;
@@ -39,20 +38,14 @@ export async function querySocrata<T>(options: SocrataQueryOptions): Promise<T[]
 
   const cached = cache.get(url);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    console.log(`[Socrata] Cache hit: ${url}`);
     return cached.data as T[];
   }
 
-  console.log(`[Socrata] Fetching: ${url}`);
-
   const response = await fetch(url, {
-    headers: {
-      'Accept': 'application/json',
-    },
+    headers: { 'Accept': 'application/json' },
   });
 
   if (!response.ok) {
-    console.error(`[Socrata] ✗ ${url} → ${response.status}`);
     const errorBody = await response.text().catch(() => 'Unknown error');
     throw new SocrataError(
       `Socrata API error: ${response.status} - ${errorBody}`,
@@ -62,7 +55,6 @@ export async function querySocrata<T>(options: SocrataQueryOptions): Promise<T[]
   }
 
   const data: T[] = await response.json();
-  console.log(`[Socrata] ✓ ${url} → ${data.length} rows`);
   cache.set(url, { data, timestamp: Date.now() });
   return data;
 }
@@ -78,20 +70,14 @@ export async function countSocrata(
 
   const cached = cache.get(url);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    console.log(`[Socrata] Cache hit: ${url}`);
     return cached.data as number;
   }
 
-  console.log(`[Socrata] Fetching: ${url}`);
-
   const response = await fetch(url, {
-    headers: {
-      'Accept': 'application/json',
-    },
+    headers: { 'Accept': 'application/json' },
   });
 
   if (!response.ok) {
-    console.error(`[Socrata] ✗ ${url} → ${response.status}`);
     const errorBody = await response.text().catch(() => 'Unknown error');
     throw new SocrataError(
       `Socrata count error: ${response.status} - ${errorBody}`,
@@ -102,7 +88,6 @@ export async function countSocrata(
 
   const data: Array<{ count: string }> = await response.json();
   const count = data.length === 0 ? 0 : parseInt(data[0].count, 10);
-  console.log(`[Socrata] ✓ ${url} → count=${count}`);
   cache.set(url, { data: count, timestamp: Date.now() });
   return count;
 }

@@ -99,7 +99,7 @@ export default function SpainMap({ data, title = 'Mapa de España' }: SpainMapPr
           },
         }).addTo(map);
       } catch (err) {
-        console.warn('Could not load GeoJSON for Spain map:', err);
+        // silenced
       }
 
       setLoading(false);

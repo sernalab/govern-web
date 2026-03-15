@@ -41,7 +41,7 @@ export default function SalaryComparator() {
         setError(`Error ${res.status} de l'API`);
       }
     } catch (err) {
-      console.error('Search error:', err);
+      // silenced
       setResults([]);
       setError('No s\'ha pogut connectar amb l\'API');
     } finally {

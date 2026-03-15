@@ -412,7 +412,7 @@ export default function DataExplorer({
       setItems(result.data);
       setTotal(result.count);
     } catch (err) {
-      console.error('DataExplorer fetch error:', err);
+      // silenced
       setItems([]);
       setTotal(0);
       setError(err instanceof Error ? err.message : 'Error desconegut carregant les dades');
