@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'preact/hooks';
+import { useRef, useEffect, useState, useCallback } from 'preact/hooks';
 
 interface Column {
   key: string;
@@ -19,6 +19,109 @@ interface DataExplorerProps {
   pageSize?: number;
 }
 
+const FIELD_LABELS: Record<string, string> = {
+  // Contracts
+  situaci_contractual: 'Situacio contractual',
+  exercici: 'Exercici',
+  subjecte_ambit: 'Ambit',
+  agrupacio_organisme: 'Departament',
+  id_agrupacio_organisme: 'ID departament',
+  id_organisme_contractant: 'ID organisme',
+  organisme_contractant: 'Organisme contractant',
+  codi_expedient: 'Codi expedient',
+  procediment_adjudicacio: 'Procediment',
+  tipus_contracte: 'Tipus de contracte',
+  descripcio_expedient: 'Descripcio',
+  contracte: 'Contracte',
+  numero_lot: 'Lot',
+  codi_cpv: 'Codi CPV',
+  adjudicatari: 'Adjudicatari',
+  import_adjudicacio: 'Import adjudicacio',
+  data_adjudicacio: 'Data adjudicacio',
+  lot_desert: 'Lot desert',
+  dies_durada: 'Dies durada',
+  mesos_durada: 'Mesos durada',
+  anys_durada: 'Anys durada',
+  // Subsidies
+  clau: 'Clau',
+  codi_raisc: 'Codi RAISC',
+  codi_bdns: 'Codi BDNS',
+  discriminador_de_la_concessi: 'Discriminador concessio',
+  objecte_de_la_convocat_ria: 'Objecte convocatoria',
+  t_tol_convocat_ria_catal: 'Titol (catala)',
+  t_tol_convocat_ria_castell: 'Titol (castella)',
+  bases_reguladores_url_catal: 'Bases reguladores',
+  bases_reguladores_url_castell: 'Bases reguladores (ES)',
+  ra_social_del_beneficiari: 'Beneficiari',
+  cif_beneficiari: 'CIF beneficiari',
+  import_subvenci_pr_stec_ajut: 'Import subvencio',
+  import_ajuda_equivalent: 'Import ajuda equivalent',
+  data_concessi: 'Data concessio',
+  entitat_oo_aa_o_departament: 'Entitat (codi)',
+  entitat_oo_aa_o_departament_1: 'Entitat',
+  any_de_la_convocat_ria: 'Any convocatoria',
+  subfinalitat_codi: 'Subfinalitat (codi)',
+  subfinalitat: 'Subfinalitat',
+  finalitat_rais_codi: 'Finalitat RAIS (codi)',
+  finalitat_rais: 'Finalitat RAIS',
+  finalitat_p_blica_codi: 'Finalitat publica (codi)',
+  finalitat_p_blica: 'Finalitat publica',
+  tipus_d_instument_d_ajut: 'Instrument (codi)',
+  tipus_d_instument_d_ajut_1: 'Instrument d\'ajut',
+  aplicaci_pressupost_ria: 'Aplicacio pressupostaria',
+  tipus_de_beneficiaris_codi: 'Tipus beneficiari (codi)',
+  tipus_de_beneficiaris: 'Tipus de beneficiari',
+  codi_territorial: 'Codi territorial',
+  administraci_codi: 'Administracio (codi)',
+  administraci_: 'Administracio',
+  departament_o_entitat_local_d_adscripci_codi: 'Dept. adscripcio (codi)',
+  departament_o_entitat_local_d_adscripci_: 'Dept. adscripcio',
+  // Salaries
+  cognoms_nom: 'Nom',
+  denominacio_lloc: 'Carrec',
+  departament: 'Departament',
+  retribucio_anual_prevista: 'Retribucio anual',
+  vinculacio: 'Vinculacio',
+  sexe: 'Sexe',
+  inici_periode: 'Inici periode',
+  // BDNS
+  descripcion: 'Descripcio',
+  beneficiario: 'Beneficiari',
+  importe: 'Import',
+  fechaConcesion: 'Data concessio',
+  organo: 'Organ',
+};
+
+const CURRENCY_FIELDS = new Set([
+  'import_adjudicacio',
+  'import_subvenci_pr_stec_ajut',
+  'import_ajuda_equivalent',
+  'importe',
+]);
+
+const DATE_FIELDS = new Set([
+  'data_adjudicacio',
+  'data_concessi',
+  'fechaConcesion',
+  'fechaPublicacion',
+  'inici_periode',
+]);
+
+const HIDDEN_FIELDS = new Set([
+  ':@computed_region_anyid',
+  // Hide internal code fields when the human-readable version exists
+  'id_agrupacio_organisme',
+  'id_organisme_contractant',
+  'subfinalitat_codi',
+  'finalitat_rais_codi',
+  'finalitat_p_blica_codi',
+  'tipus_de_beneficiaris_codi',
+  'administraci_codi',
+  'departament_o_entitat_local_d_adscripci_codi',
+  'entitat_oo_aa_o_departament',
+  'tipus_d_instument_d_ajut',
+]);
+
 function formatCurrency(value: number | string): string {
   const num = typeof value === 'string' ? parseFloat(value) : value;
   if (isNaN(num)) return '---';
@@ -29,7 +132,7 @@ function formatDate(value: string): string {
   if (!value) return '---';
   try {
     const date = new Date(value);
-    return date.toLocaleDateString('ca-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString('ca-ES', { year: 'numeric', month: 'long', day: 'numeric' });
   } catch {
     return value;
   }
@@ -47,12 +150,172 @@ function formatCell(value: unknown, format?: 'currency' | 'date' | 'text'): stri
   }
 }
 
+function isUrl(value: string): boolean {
+  return value.startsWith('http://') || value.startsWith('https://');
+}
+
+function formatDetailValue(key: string, value: unknown): string {
+  if (value === null || value === undefined) return '---';
+  if (CURRENCY_FIELDS.has(key)) return formatCurrency(value as number | string);
+  if (DATE_FIELDS.has(key)) return formatDate(value as string);
+  return String(value);
+}
+
+function getFieldLabel(key: string): string {
+  if (FIELD_LABELS[key]) return FIELD_LABELS[key];
+  // Fallback: humanize the key
+  return key
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 function buildSocrataUrl(domain: string, dataset: string): string {
   return `https://${domain}/resource/${dataset}.json`;
 }
 
 function buildBdnsUrl(domain: string, dataset: string): string {
   return `https://${domain}/${dataset}`;
+}
+
+function DetailModal({
+  item,
+  onClose,
+}: {
+  item: Record<string, unknown>;
+  onClose: () => void;
+}) {
+  const backdropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('keydown', handleEscape);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
+  function handleBackdropClick(e: MouseEvent) {
+    if (e.target === backdropRef.current) onClose();
+  }
+
+  const entries = Object.entries(item).filter(
+    ([key, value]) =>
+      value !== null &&
+      value !== undefined &&
+      String(value).trim() !== '' &&
+      !key.startsWith(':@') &&
+      !HIDDEN_FIELDS.has(key)
+  );
+
+  // Get the title from the first meaningful text field
+  const titleField =
+    (item.descripcio_expedient as string) ||
+    (item.contracte as string) ||
+    (item.objecte_de_la_convocat_ria as string) ||
+    (item.descripcion as string) ||
+    (item.cognoms_nom as string) ||
+    'Detall del registre';
+
+  return (
+    <div
+      ref={backdropRef}
+      onClick={handleBackdropClick}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        padding: '16px',
+      }}
+    >
+      <div
+        class="animate-in"
+        style={{
+          backgroundColor: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+          width: '100%',
+          maxWidth: '480px',
+          maxHeight: '80vh',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Header */}
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid #f4f4f5', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <h3 class="text-sm font-bold text-gray-900" style={{ lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+              {titleField}
+            </h3>
+            <p class="text-xs text-gray-400" style={{ marginTop: '2px' }}>Totes les dades disponibles</p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ flexShrink: 0, padding: '6px', borderRadius: '8px', border: 'none', background: 'none', cursor: 'pointer', color: '#a1a1aa' }}
+            aria-label="Tancar"
+          >
+            <svg style={{ width: 20, height: 20 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Body */}
+        <div style={{ overflowY: 'auto', flex: 1, padding: '16px 20px' }}>
+          <dl style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {entries.map(([key, value]) => {
+              const strValue = String(value);
+              const isLink = isUrl(strValue);
+              return (
+                <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <dt class="text-xs font-medium text-gray-400">
+                    {getFieldLabel(key)}
+                  </dt>
+                  <dd
+                    class={`text-sm text-gray-900 ${
+                      CURRENCY_FIELDS.has(key) ? 'font-semibold' : ''
+                    }`}
+                    style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}
+                  >
+                    {isLink ? (
+                      <a
+                        href={strValue}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-blue-600 hover:text-blue-800 underline text-xs"
+                      >
+                        Obrir enllac
+                      </a>
+                    ) : (
+                      formatDetailValue(key, value)
+                    )}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </div>
+
+        {/* Footer */}
+        <div style={{ padding: '12px 20px', borderTop: '1px solid #f4f4f5', display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            onClick={onClose}
+            style={{ padding: '8px 16px', fontSize: '12px', fontWeight: 500, color: '#3f3f46', backgroundColor: '#f4f4f5', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
+          >
+            Tancar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function DataExplorer({
@@ -71,6 +334,7 @@ export default function DataExplorer({
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Record<string, unknown> | null>(null);
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -174,6 +438,8 @@ export default function DataExplorer({
     }, 400);
   }
 
+  const handleCloseModal = useCallback(() => setSelectedItem(null), []);
+
   return (
     <div class="w-full">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
@@ -226,28 +492,60 @@ export default function DataExplorer({
               </thead>
               <tbody class="divide-y divide-gray-100">
                 {items.map((item, i) => (
-                  <tr key={i} class="hover:bg-gray-50 transition-colors">
-                    {columns.map((col) => (
-                      <td
-                        key={col.key}
-                        class={`px-4 py-2.5 text-gray-700 ${
-                          col.format === 'currency' ? 'text-right tabular-nums font-medium' : ''
-                        } max-w-xs truncate`}
-                      >
-                        {formatCell(item[col.key], col.format)}
-                      </td>
-                    ))}
+                  <tr
+                    key={i}
+                    onClick={() => setSelectedItem(item)}
+                    class="hover:bg-blue-50 transition-colors cursor-pointer group"
+                    title="Fes clic per veure tots els detalls"
+                  >
+                    {columns.map((col, ci) => {
+                      const rawValue = item[col.key];
+                      const displayValue = formatCell(rawValue, col.format);
+                      return (
+                        <td
+                          key={col.key}
+                          title={rawValue != null ? String(rawValue) : undefined}
+                          class={`px-4 py-2.5 text-gray-700 ${
+                            col.format === 'currency' ? 'text-right tabular-nums font-medium' : ''
+                          } max-w-xs truncate`}
+                        >
+                          <span class="flex items-center gap-1.5">
+                            {ci === 0 && (
+                              <svg class="w-3.5 h-3.5 text-gray-300 group-hover:text-blue-400 shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                              </svg>
+                            )}
+                            {displayValue}
+                          </span>
+                        </td>
+                      );
+                    })}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <div class="flex items-center justify-between mt-3 text-xs">
+          <div class="flex items-center justify-between mt-3 text-xs flex-wrap gap-2">
             <span class="text-gray-400">
-              {total.toLocaleString('ca-ES')} resultats · Pagina {page + 1} de {totalPages.toLocaleString('ca-ES')}
+              {total.toLocaleString('ca-ES')} resultats · Pagina {page + 1} de {totalPages.toLocaleString('ca-ES')} · Dades en temps real des de l'API
             </span>
-            <div class="flex gap-1.5">
+            <div class="flex items-center gap-1.5">
+              {dataSource === 'socrata' && (
+                <a
+                  href={`https://${domain}/resource/${dataset}.csv?$limit=50000${searchQuery.trim() ? `&$q=${encodeURIComponent(searchQuery.trim())}` : ''}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="px-3 py-1.5 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors text-xs inline-flex items-center gap-1"
+                  title="Descarregar totes les dades en format CSV"
+                >
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  CSV
+                </a>
+              )}
               <button
                 onClick={() => setPage(Math.max(0, page - 1))}
                 disabled={page === 0}
@@ -265,6 +563,10 @@ export default function DataExplorer({
             </div>
           </div>
         </>
+      )}
+
+      {selectedItem && (
+        <DetailModal item={selectedItem} onClose={handleCloseModal} />
       )}
     </div>
   );

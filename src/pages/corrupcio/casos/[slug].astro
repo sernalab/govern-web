@@ -1,14 +1,13 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro';
 import Badge from '@components/ui/Badge.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import SourceCitation from '@components/ui/SourceCitation.astro';
 import Timeline from '@components/charts/Timeline.tsx';
 import { formatCurrency, formatDate } from '@lib/utils';
 import type { CasCorrupcio } from '@lib/types';
 
 import casos from '@data/casos-corrupcion.json';
-
-const typedCasos = casos as CasCorrupcio[];
 
 export function getStaticPaths() {
   const allCasos = casos as CasCorrupcio[];
@@ -57,6 +56,11 @@ if (cas.data_sentencia) {
     type: 'sentencia',
   });
 }
+
+const totalPersones = cas.persones.length;
+const condemnatCount = cas.persones.filter(p => p.estat_judicial === 'condemnat').length;
+const investigatCount = cas.persones.filter(p => p.estat_judicial === 'investigat').length;
+const absoltCount = cas.persones.filter(p => p.estat_judicial === 'absolt').length;
 ---
 
 <DefaultLayout title={cas.nom} description={cas.descripcio} section="corrupcio" showDisclaimer={true}>
@@ -65,7 +69,6 @@ if (cas.data_sentencia) {
       &larr; Tornar als casos
     </a>
 
-    <!-- Header -->
     <section>
       <div class="flex items-start gap-3 flex-wrap mb-3">
         <h1 class="text-2xl font-bold text-gray-900">{cas.nom}</h1>
@@ -73,10 +76,18 @@ if (cas.data_sentencia) {
           {estatToLabel(cas.estat)}
         </Badge>
       </div>
-      <p class="text-sm text-gray-500 leading-relaxed">{cas.descripcio}</p>
+      <p class="text-sm text-gray-500 leading-relaxed mb-4">{cas.descripcio}</p>
+      <DataSourceBanner
+        source="Elaboracio propia a partir de fonts publiques"
+        scope="Dades recopilades manualment — poden contenir errors o no estar actualitzades"
+        notes={[
+          'Aquesta informacio es orientativa i no constitueix una font judicial oficial',
+          'Els imports son estimacions basades en informacio publicada en mitjans i resolucions judicials',
+          'Per a informacio judicial verificada, consulteu el CENDOJ (poderjudicial.es)',
+        ]}
+      />
     </section>
 
-    <!-- Key facts -->
     <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="border border-gray-200 rounded-lg p-4">
         <p class="text-xs text-gray-500 mb-1">Comunitat autonoma</p>
@@ -92,7 +103,6 @@ if (cas.data_sentencia) {
       </div>
     </section>
 
-    <!-- Timeline -->
     {timelineEvents.length > 0 && (
       <section class="border border-gray-200 rounded-lg bg-white p-5">
         <h2 class="text-sm font-semibold text-gray-700 mb-4">Cronologia judicial</h2>
@@ -100,32 +110,39 @@ if (cas.data_sentencia) {
       </section>
     )}
 
-    <!-- People involved -->
     <section>
       <h2 class="text-lg font-bold text-gray-900 mb-4">Persones implicades</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {cas.persones.map((persona) => (
-          <a href={`/corrupcio/persones/${persona.slug}`} class="block group border border-gray-200 rounded-lg p-4 bg-white hover:border-gray-400 transition-colors">
-            <div class="flex items-start justify-between gap-2 mb-2">
-              <div>
-                <h3 class="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
-                  {persona.nom}
-                </h3>
-                <p class="text-xs text-gray-500">{persona.carrec}</p>
-              </div>
-              <Badge variant={estatToVariant(persona.estat_judicial)}>
-                {estatToLabel(persona.estat_judicial)}
-              </Badge>
+      <div class="border border-gray-200 rounded-lg bg-white p-5">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div>
+            <p class="text-2xl font-bold text-gray-900">{totalPersones}</p>
+            <p class="text-xs text-gray-500 mt-1">Total implicats</p>
+          </div>
+          {condemnatCount > 0 && (
+            <div>
+              <p class="text-2xl font-bold text-red-600">{condemnatCount}</p>
+              <p class="text-xs text-gray-500 mt-1">Condemnats</p>
             </div>
-            {persona.pena && (
-              <p class="text-xs text-red-600 font-medium">{persona.pena}</p>
-            )}
-          </a>
-        ))}
+          )}
+          {investigatCount > 0 && (
+            <div>
+              <p class="text-2xl font-bold text-amber-600">{investigatCount}</p>
+              <p class="text-xs text-gray-500 mt-1">Investigats</p>
+            </div>
+          )}
+          {absoltCount > 0 && (
+            <div>
+              <p class="text-2xl font-bold text-emerald-600">{absoltCount}</p>
+              <p class="text-xs text-gray-500 mt-1">Absolts</p>
+            </div>
+          )}
+        </div>
+        <p class="text-xs text-gray-400 mt-4 text-center">
+          No es mostren noms individuals per precaucio legal. Consulteu les fonts judicials oficials per a detalls.
+        </p>
       </div>
     </section>
 
-    <!-- Dates -->
     <section class="border border-gray-200 rounded-lg bg-white p-5">
       <h2 class="text-sm font-semibold text-gray-700 mb-3">Dates clau</h2>
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -144,6 +161,8 @@ if (cas.data_sentencia) {
       </dl>
     </section>
 
-    <SourceCitation source={cas.font_judicial} />
+    {cas.font_judicial && (
+      <SourceCitation source={cas.font_judicial} />
+    )}
   </div>
 </DefaultLayout>

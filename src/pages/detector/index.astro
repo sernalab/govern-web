@@ -13,13 +13,24 @@ let totalContractes = 0;
 let error: string | null = null;
 
 try {
-  const contracts = await querySocrata<Contracte>({
-    dataset: DATASETS.contractes,
-    order: 'data_adjudicacio DESC',
-    limit: 1000,
-  });
-  totalContractes = contracts.length;
-  anomalies = runAllAnalysis(contracts);
+  // Fetch in batches to analyze more contracts (10k instead of 1k)
+  const BATCH_SIZE = 5000;
+  const TOTAL_LIMIT = 10000;
+  const allContracts: Contracte[] = [];
+
+  for (let offset = 0; offset < TOTAL_LIMIT; offset += BATCH_SIZE) {
+    const batch = await querySocrata<Contracte>({
+      dataset: DATASETS.contractes,
+      order: 'data_adjudicacio DESC',
+      limit: BATCH_SIZE,
+      offset,
+    });
+    allContracts.push(...batch);
+    if (batch.length < BATCH_SIZE) break;
+  }
+
+  totalContractes = allContracts.length;
+  anomalies = runAllAnalysis(allContracts);
 } catch (e) {
   error = e instanceof Error ? e.message : 'Error desconegut carregant dades';
 }

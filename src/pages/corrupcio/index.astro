@@ -1,6 +1,7 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro';
 import StatCard from '@components/ui/StatCard.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import Badge from '@components/ui/Badge.astro';
 import BarChart from '@components/charts/BarChart.tsx';
 import SpainMap from '@components/charts/SpainMap.tsx';
@@ -13,6 +14,7 @@ const typedCasos = casos as CasCorrupcio[];
 
 const totalCasos = typedCasos.length;
 const totalPersones = typedCasos.reduce((acc, cas) => acc + cas.persones.length, 0);
+const totalCondemnats = typedCasos.reduce((acc, cas) => acc + cas.persones.filter(p => p.estat_judicial === 'condemnat').length, 0);
 const totalImport = typedCasos.reduce((acc, cas) => acc + cas.import_estimat, 0);
 
 const casosByParty: Record<string, number> = {};
@@ -58,16 +60,24 @@ function estatToLabel(estat: string): string {
       <p class="text-sm text-gray-500 mb-2">
         Dades publiques de casos de corrupcio politica amb sentencies fermes i procediments en curs.
       </p>
-      <p class="text-xs text-gray-400 bg-gray-50 border border-gray-100 rounded px-3 py-2 inline-block">
-        Inclou casos de totes les comunitats autonomes d'Espanya.
-      </p>
+      <DataSourceBanner
+        source="CENDOJ, CGPJ i fonts judicials publiques"
+        sourceUrl="https://www.poderjudicial.es/cgpj/es/Temas/Transparencia/"
+        scope="Casos de corrupcio politica a Espanya amb procediments judicials documentats"
+        notes={[
+          'Inclou casos de totes les comunitats autonomes — els imports son estimacions basades en informacio judicial publica',
+          'L\'estat judicial (condemnat, investigat, absolt) reflecteix l\'ultima informacio disponible',
+          'Un cas "en curs" significa que el procediment judicial no ha conclòs — no implica culpabilitat',
+        ]}
+      />
     </section>
 
     <!-- KPIs -->
     <section>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <StatCard label="Casos registrats" value={formatNumber(totalCasos)} />
         <StatCard label="Persones implicades" value={formatNumber(totalPersones)} />
+        <StatCard label="Condemnats" value={formatNumber(totalCondemnats)} />
         <StatCard label="Import estimat total" value={formatCompactNumber(totalImport) + ' €'} />
       </div>
     </section>
@@ -116,9 +126,6 @@ function estatToLabel(estat: string): string {
             <div class="flex justify-between items-center text-xs">
               <span class="font-medium text-gray-700">
                 {formatCurrency(cas.import_estimat)}
-              </span>
-              <span class="text-gray-400">
-                {cas.persones.length} implicats
               </span>
             </div>
           </a>

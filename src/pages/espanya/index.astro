@@ -1,20 +1,25 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 ---
 
-<DefaultLayout title="Dades d'Espanya" description="Dades obertes d'ambit estatal: subvencions BDNS, legislacio i cataleg nacional" section="espanya">
+<DefaultLayout title="Dades d'Espanya" description="Dades obertes d'ambit estatal complementaries" section="espanya">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Dades d'Espanya</h1>
-      <p class="text-sm text-gray-500 mb-8">
+      <p class="text-sm text-gray-500 mb-4">
         Fonts d'ambit estatal complementaries a les dades de Catalunya.
       </p>
+      <DataSourceBanner
+        source="BDNS — Ministeri d'Hisenda"
+        sourceUrl="https://www.pap.hacienda.gob.es/bdnstrans/GE/es/inicio"
+        scope="Unica font estatal disponible amb API publica funcional"
+      />
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <!-- BDNS Subvencions -->
+      <div class="mt-6">
         <a
           href="/espanya/subvencions"
-          class="group block border border-gray-200 rounded-lg bg-white p-5 hover:border-gray-400 transition-colors"
+          class="group block border border-gray-200 rounded-lg bg-white p-5 hover:border-gray-400 transition-colors max-w-sm"
         >
           <h2 class="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">Subvencions BDNS</h2>
           <p class="text-xs text-gray-500 mb-3">
@@ -22,28 +27,6 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
           </p>
           <span class="text-xs text-gray-400">Ministeri d'Hisenda</span>
         </a>
-
-        <!-- BOE -->
-        <div class="border border-gray-100 rounded-lg bg-gray-50 p-5 opacity-50">
-          <div class="flex items-center gap-2 mb-2">
-            <h2 class="text-sm font-semibold text-gray-500">Legislacio BOE</h2>
-            <span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Properament</span>
-          </div>
-          <p class="text-xs text-gray-400">
-            Butlleti Oficial de l'Estat. Legislacio i disposicions.
-          </p>
-        </div>
-
-        <!-- datos.gob.es -->
-        <div class="border border-gray-100 rounded-lg bg-gray-50 p-5 opacity-50">
-          <div class="flex items-center gap-2 mb-2">
-            <h2 class="text-sm font-semibold text-gray-500">datos.gob.es</h2>
-            <span class="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Properament</span>
-          </div>
-          <p class="text-xs text-gray-400">
-            Cataleg de 113.000+ datasets de totes les administracions publiques.
-          </p>
-        </div>
       </div>
     </section>
   </div>

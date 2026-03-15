@@ -1,5 +1,6 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import DataExplorer from '@components/sections/DataExplorer.tsx';
 ---
 
@@ -10,9 +11,18 @@ import DataExplorer from '@components/sections/DataExplorer.tsx';
         &larr; Dades d'Espanya
       </a>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Subvencions — Espanya (BDNS)</h1>
-      <p class="text-sm text-gray-500 mb-6">
-        Base de Datos Nacional de Subvenciones — Font: Ministeri d'Hisenda
+      <p class="text-sm text-gray-500 mb-4">
+        Base de Datos Nacional de Subvenciones
       </p>
+      <DataSourceBanner
+        source="BDNS — Ministeri d'Hisenda"
+        sourceUrl="https://www.pap.hacienda.gob.es/bdnstrans/GE/es/inicio"
+        scope="Concessions de subvencions de totes les administracions publiques d'Espanya"
+        notes={[
+          'Dades de l\'API publica de la BDNS — pot no incloure concessions en tramit',
+          'Els imports reflecteixen la concessio, no necessariament l\'import final justificat',
+        ]}
+      />
     </section>
 
     <section>

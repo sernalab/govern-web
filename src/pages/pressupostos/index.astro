@@ -1,6 +1,7 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro';
 import StatCard from '@components/ui/StatCard.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import BudgetTreemap from '@components/charts/BudgetTreemap.tsx';
 import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
 import { formatCurrency, formatNumber } from '@lib/utils';
@@ -46,8 +47,17 @@ try {
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Pressupostos</h1>
-      <p class="text-sm text-gray-500 mb-6">Pressupostos de la Generalitat de Catalunya — Font: Transparencia Catalunya</p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <p class="text-sm text-gray-500 mb-4">Pressupostos de la Generalitat de Catalunya</p>
+      <DataSourceBanner
+        source="Transparencia Catalunya (Socrata)"
+        sourceUrl="https://analisi.transparenciacatalunya.cat"
+        scope="Pressupostos consolidats de despesa de la Generalitat, agrupats per seccio"
+        notes={[
+          'Imports sense consolidar — poden incloure transferencies internes entre seccions',
+          'La distribucio mostra l\'ultima actualitzacio disponible al portal',
+        ]}
+      />
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
         <StatCard
           label="Pressupost total (despesa)"
           value={totalBudget !== null ? formatCurrency(totalBudget) : '---'}

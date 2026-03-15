@@ -1,6 +1,7 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro';
 import StatCard from '@components/ui/StatCard.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import SalaryComparator from '@components/sections/SalaryComparator.tsx';
 import DataExplorer from '@components/sections/DataExplorer.tsx';
 import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
@@ -34,8 +35,18 @@ try {
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Retribucions de carrecs publics</h1>
-      <p class="text-sm text-gray-500 mb-6">Alts carrecs de la Generalitat de Catalunya — Font: Transparencia Catalunya</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <p class="text-sm text-gray-500 mb-4">Alts carrecs de la Generalitat de Catalunya</p>
+      <DataSourceBanner
+        source="Transparencia Catalunya (Socrata)"
+        sourceUrl="https://analisi.transparenciacatalunya.cat"
+        scope="Retribucions anuals previstes dels alts carrecs de la Generalitat"
+        notes={[
+          'Son retribucions brutes anuals previstes, no salaris nets percebuts',
+          'No inclou dietes, indemnitzacions ni retribucions variables',
+          'Les dades corresponen a la darrera actualitzacio del portal de transparencia',
+        ]}
+      />
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
         <StatCard
           label="Carrecs registrats"
           value={totalRecords !== null ? formatNumber(totalRecords) : '---'}

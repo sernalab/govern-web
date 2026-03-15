@@ -2,6 +2,7 @@
 import DefaultLayout from '@layouts/DefaultLayout.astro';
 import Hero from '@components/sections/Hero.astro';
 import RecentActivity from '@components/sections/RecentActivity.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import BarChart from '@components/charts/BarChart';
 import DoughnutChart from '@components/charts/DoughnutChart';
 import type { DashboardStats, Contracte, Subvencio } from '@lib/types';
@@ -53,6 +54,21 @@ const contractsByType = contractsByTypeData
   section="inicio"
 >
   <Hero stats={stats} />
+
+  <!-- Data context -->
+  <section class="py-6 bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <DataSourceBanner
+        source="Transparencia Catalunya (Socrata)"
+        sourceUrl="https://analisi.transparenciacatalunya.cat"
+        scope="Dades agregades de contractes i subvencions del sector public catala"
+        notes={[
+          'Les xifres del dashboard son totals acumulats — inclouen registres des de 1998 fins avui',
+          'Les dades es consulten en temps de compilacio del lloc web',
+        ]}
+      />
+    </div>
+  </section>
 
   <!-- Charts -->
   <section class="py-12 sm:py-16 bg-white border-b border-gray-100">

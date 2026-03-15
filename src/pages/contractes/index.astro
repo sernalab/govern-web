@@ -1,6 +1,7 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro';
 import StatCard from '@components/ui/StatCard.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import DataExplorer from '@components/sections/DataExplorer.tsx';
 import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
 import { formatCurrency, formatNumber } from '@lib/utils';
@@ -36,8 +37,17 @@ try {
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Contractes publics</h1>
-      <p class="text-sm text-gray-500 mb-6">Registre public de contractes de Catalunya — Font: Transparencia Catalunya</p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <p class="text-sm text-gray-500 mb-4">Registre public de contractes de Catalunya</p>
+      <DataSourceBanner
+        source="Transparencia Catalunya (Socrata)"
+        sourceUrl="https://analisi.transparenciacatalunya.cat"
+        scope="Tots els contractes publics de la Generalitat i entitats locals de Catalunya des de 1998"
+        notes={[
+          'Les dades inclouen contractes en totes les fases: adjudicats, formalitzats i liquidats',
+          'Imports en euros, IVA inclos segons la font original',
+        ]}
+      />
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
         <StatCard
           label="Total contractes"
           value={totalContracts !== null ? formatNumber(totalContracts) : '---'}
