@@ -59,11 +59,33 @@ function parseSalary(s: string | undefined): number {
       {totalVolume && (
         <p class="text-lg sm:text-xl text-gray-400 mb-4">
           <span class="text-white font-semibold">{formatCompactNumber(totalVolume)} €</span> gestionats en contractes i subvencions publiques
+          <span class="text-gray-600">· 1998–2026</span>
         </p>
       )}
       <p class="text-sm text-gray-500 max-w-xl mb-10">
         Dades reals de l'API de Transparencia Catalunya. Sense filtres, sense opinions. Tu decideixes.
       </p>
+
+      {stats && (
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-gray-800 rounded-lg overflow-hidden">
+          <div class="bg-gray-900 p-5">
+            <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.totalContractes)}</p>
+            <p class="text-xs text-gray-500 mt-1">contractes publics</p>
+          </div>
+          <div class="bg-gray-900 p-5">
+            <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.importTotalContractes)} €</p>
+            <p class="text-xs text-gray-500 mt-1">en contractacio</p>
+          </div>
+          <div class="bg-gray-900 p-5">
+            <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.totalSubvencions)}</p>
+            <p class="text-xs text-gray-500 mt-1">subvencions</p>
+          </div>
+          <div class="bg-gray-900 p-5">
+            <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.importTotalSubvencions)} €</p>
+            <p class="text-xs text-gray-500 mt-1">en ajuts publics</p>
+          </div>
+        </div>
+      )}
     </div>
   </section>
 
