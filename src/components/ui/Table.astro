@@ -1,0 +1,22 @@
+---
+interface Props {
+  headers: string[];
+}
+
+const { headers } = Astro.props;
+---
+
+<div class="overflow-x-auto rounded-xl border border-gray-200">
+  <table class="w-full text-sm text-left">
+    <thead>
+      <tr class="border-b border-gray-200 bg-gray-50">
+        {headers.map((header) => (
+          <th class="px-4 py-3 font-medium text-gray-600 whitespace-nowrap">{header}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200 [&>tr:nth-child(odd)]:bg-white [&>tr:nth-child(even)]:bg-gray-50 [&>tr]:hover:bg-gray-100 [&>tr]:transition-colors">
+      <slot />
+    </tbody>
+  </table>
+</div>

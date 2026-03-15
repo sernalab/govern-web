@@ -1,0 +1,137 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import Badge from '@components/ui/Badge.astro';
+import SourceCitation from '@components/ui/SourceCitation.astro';
+import { formatCurrency } from '@lib/utils';
+import type { CasCorrupcio, PersonaImplicada } from '@lib/types';
+
+import casos from '@data/casos-corrupcion.json';
+
+interface PersonaWithCasos {
+  persona: PersonaImplicada;
+  casos: CasCorrupcio[];
+}
+
+export function getStaticPaths() {
+  const allCasos = casos as CasCorrupcio[];
+  const personaMap = new Map<string, PersonaWithCasos>();
+
+  for (const cas of allCasos) {
+    for (const persona of cas.persones) {
+      if (!personaMap.has(persona.slug)) {
+        personaMap.set(persona.slug, { persona, casos: [] });
+      }
+      personaMap.get(persona.slug)!.casos.push(cas);
+    }
+  }
+
+  return Array.from(personaMap.entries()).map(([slug, data]) => ({
+    params: { slug },
+    props: data,
+  }));
+}
+
+interface Props {
+  persona: PersonaImplicada;
+  casos: CasCorrupcio[];
+}
+
+const { persona, casos: personaCasos } = Astro.props;
+
+function estatToVariant(estat: string): 'condenado' | 'investigado' | 'absuelto' | 'en_curso' {
+  const map: Record<string, 'condenado' | 'investigado' | 'absuelto' | 'en_curso'> = {
+    condemnat: 'condenado', investigat: 'investigado', absolt: 'absuelto', en_curs: 'en_curso',
+  };
+  return map[estat] || 'en_curso';
+}
+
+function estatToLabel(estat: string): string {
+  const map: Record<string, string> = {
+    condemnat: 'Condemnat', investigat: 'Investigat', absolt: 'Absolt', en_curs: 'En curs',
+  };
+  return map[estat] || estat;
+}
+---
+
+<DefaultLayout title={persona.nom} description={`Perfil judicial de ${persona.nom}`} section="corrupcio" showDisclaimer={true}>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <a href="/corrupcio" class="inline-flex items-center text-gray-400 hover:text-gray-700 transition-colors text-xs">
+      &larr; Tornar als casos
+    </a>
+
+    <!-- Person header -->
+    <section class="border border-gray-200 rounded-lg bg-white p-6">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-lg text-gray-400 shrink-0 font-medium">
+          {persona.nom.charAt(0)}
+        </div>
+        <div class="flex-1">
+          <div class="flex items-start gap-3 flex-wrap mb-1">
+            <h1 class="text-xl font-bold text-gray-900">{persona.nom}</h1>
+            <Badge variant={estatToVariant(persona.estat_judicial)}>
+              {estatToLabel(persona.estat_judicial)}
+            </Badge>
+          </div>
+          <p class="text-sm text-gray-500">{persona.carrec}</p>
+          {persona.partit && (
+            <span class="inline-block mt-2 text-xs bg-gray-50 text-gray-600 px-2 py-0.5 rounded border border-gray-100">
+              {persona.partit}
+            </span>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- Sentence -->
+    {(persona.sentencia || persona.pena) && (
+      <section class="border border-gray-200 rounded-lg bg-white p-5">
+        <h2 class="text-sm font-semibold text-gray-700 mb-3">Detalls de la sentencia</h2>
+        <div class="space-y-3 text-sm">
+          {persona.sentencia && (
+            <div>
+              <p class="text-xs text-gray-400 mb-0.5">Sentencia</p>
+              <p class="text-gray-900">{persona.sentencia}</p>
+            </div>
+          )}
+          {persona.pena && (
+            <div>
+              <p class="text-xs text-gray-400 mb-0.5">Pena</p>
+              <p class="text-red-600 font-semibold">{persona.pena}</p>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- Cases -->
+    <section>
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Casos</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {personaCasos.map((cas) => (
+          <a href={`/corrupcio/casos/${cas.slug}`} class="block group border border-gray-200 rounded-lg p-4 bg-white hover:border-gray-400 transition-colors">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <h3 class="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
+                {cas.nom}
+              </h3>
+              <Badge variant={estatToVariant(cas.estat)}>
+                {estatToLabel(cas.estat)}
+              </Badge>
+            </div>
+            <div class="flex flex-wrap gap-1.5 text-xs text-gray-500 mb-2">
+              <span class="bg-gray-50 px-2 py-0.5 rounded">{cas.comunitat}</span>
+              <span class="bg-gray-50 px-2 py-0.5 rounded">{cas.partit}</span>
+            </div>
+            <p class="text-xs text-gray-500 line-clamp-2 mb-2">{cas.descripcio}</p>
+            <p class="text-xs text-gray-700 font-medium">{formatCurrency(cas.import_estimat)}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="space-y-2">
+      {personaCasos.map((cas) => (
+        <SourceCitation source={cas.font_judicial} />
+      ))}
+    </div>
+  </div>
+</DefaultLayout>

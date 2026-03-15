@@ -1,0 +1,75 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import StatCard from '@components/ui/StatCard.astro';
+import DataExplorer from '@components/sections/DataExplorer.tsx';
+import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
+import { formatCurrency, formatNumber } from '@lib/utils';
+
+let totalContracts: number | null = null;
+let totalAmount: number | null = null;
+let avgValue: number | null = null;
+
+try {
+  const baseUrl = `https://${SOCRATA_DOMAIN}/resource/${DATASETS.contractes}.json`;
+
+  const [countRes, sumRes] = await Promise.all([
+    fetch(`${baseUrl}?$select=count(*)`),
+    fetch(`${baseUrl}?$select=sum(import_adjudicacio),avg(import_adjudicacio)`),
+  ]);
+
+  if (countRes.ok) {
+    const countData = await countRes.json();
+    totalContracts = Number(countData?.[0]?.count ?? 0);
+  }
+
+  if (sumRes.ok) {
+    const sumData = await sumRes.json();
+    totalAmount = Number(sumData?.[0]?.sum_import_adjudicacio ?? 0);
+    avgValue = Number(sumData?.[0]?.avg_import_adjudicacio ?? 0);
+  }
+} catch (e) {
+  console.error('Error fetching contract stats:', e);
+}
+---
+
+<DefaultLayout title="Contractes Publics" description="Explorador de contractes publics de la Generalitat de Catalunya" section="contractes">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <section>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Contractes publics</h1>
+      <p class="text-sm text-gray-500 mb-6">Registre public de contractes de Catalunya — Font: Transparencia Catalunya</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StatCard
+          label="Total contractes"
+          value={totalContracts !== null ? formatNumber(totalContracts) : '---'}
+        />
+        <StatCard
+          label="Import total"
+          value={totalAmount !== null ? formatCurrency(totalAmount) : '---'}
+        />
+        <StatCard
+          label="Valor mitja"
+          value={avgValue !== null ? formatCurrency(avgValue) : '---'}
+        />
+      </div>
+    </section>
+
+    <section>
+      <DataExplorer
+        client:load
+        title="Explorador de contractes"
+        dataset={DATASETS.contractes}
+        domain={SOCRATA_DOMAIN}
+        dataSource="socrata"
+        columns={[
+          { key: 'descripcio_expedient', label: 'Descripcio', format: 'text' },
+          { key: 'import_adjudicacio', label: 'Import', format: 'currency' },
+          { key: 'data_adjudicacio', label: 'Data', format: 'date' },
+          { key: 'adjudicatari', label: 'Adjudicatari', format: 'text' },
+          { key: 'organisme_contractant', label: 'Organisme', format: 'text' },
+        ]}
+        searchField="descripcio_expedient"
+        defaultOrder="data_adjudicacio DESC"
+      />
+    </section>
+  </div>
+</DefaultLayout>

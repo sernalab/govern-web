@@ -1,0 +1,149 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import Badge from '@components/ui/Badge.astro';
+import SourceCitation from '@components/ui/SourceCitation.astro';
+import Timeline from '@components/charts/Timeline.tsx';
+import { formatCurrency, formatDate } from '@lib/utils';
+import type { CasCorrupcio } from '@lib/types';
+
+import casos from '@data/casos-corrupcion.json';
+
+const typedCasos = casos as CasCorrupcio[];
+
+export function getStaticPaths() {
+  const allCasos = casos as CasCorrupcio[];
+  return allCasos.map((cas) => ({
+    params: { slug: cas.slug },
+    props: { cas },
+  }));
+}
+
+interface Props {
+  cas: CasCorrupcio;
+}
+
+const { cas } = Astro.props;
+
+function estatToVariant(estat: string): 'condenado' | 'investigado' | 'absuelto' | 'en_curso' {
+  const map: Record<string, 'condenado' | 'investigado' | 'absuelto' | 'en_curso'> = {
+    condemnat: 'condenado', investigat: 'investigado', absolt: 'absuelto', en_curs: 'en_curso',
+  };
+  return map[estat] || 'en_curso';
+}
+
+function estatToLabel(estat: string): string {
+  const map: Record<string, string> = {
+    condemnat: 'Condemnat', investigat: 'Investigat', absolt: 'Absolt', en_curs: 'En curs',
+  };
+  return map[estat] || estat;
+}
+
+const timelineEvents: { date: string; title: string; description?: string; type?: 'inicio' | 'investigacion' | 'juicio' | 'sentencia' }[] = [];
+
+if (cas.data_inici) {
+  timelineEvents.push({
+    date: cas.data_inici,
+    title: 'Inici de la investigacio',
+    description: `S'inicia la investigacio judicial del ${cas.nom}`,
+    type: 'inicio',
+  });
+}
+
+if (cas.data_sentencia) {
+  timelineEvents.push({
+    date: cas.data_sentencia,
+    title: 'Sentencia',
+    description: cas.font_judicial,
+    type: 'sentencia',
+  });
+}
+---
+
+<DefaultLayout title={cas.nom} description={cas.descripcio} section="corrupcio" showDisclaimer={true}>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <a href="/corrupcio" class="inline-flex items-center text-gray-400 hover:text-gray-700 transition-colors text-xs">
+      &larr; Tornar als casos
+    </a>
+
+    <!-- Header -->
+    <section>
+      <div class="flex items-start gap-3 flex-wrap mb-3">
+        <h1 class="text-2xl font-bold text-gray-900">{cas.nom}</h1>
+        <Badge variant={estatToVariant(cas.estat)}>
+          {estatToLabel(cas.estat)}
+        </Badge>
+      </div>
+      <p class="text-sm text-gray-500 leading-relaxed">{cas.descripcio}</p>
+    </section>
+
+    <!-- Key facts -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="border border-gray-200 rounded-lg p-4">
+        <p class="text-xs text-gray-500 mb-1">Comunitat autonoma</p>
+        <p class="text-sm font-semibold text-gray-900">{cas.comunitat}</p>
+      </div>
+      <div class="border border-gray-200 rounded-lg p-4">
+        <p class="text-xs text-gray-500 mb-1">Partit politic</p>
+        <p class="text-sm font-semibold text-gray-900">{cas.partit}</p>
+      </div>
+      <div class="border border-gray-200 rounded-lg p-4">
+        <p class="text-xs text-gray-500 mb-1">Import estimat</p>
+        <p class="text-sm font-semibold text-gray-900">{formatCurrency(cas.import_estimat)}</p>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    {timelineEvents.length > 0 && (
+      <section class="border border-gray-200 rounded-lg bg-white p-5">
+        <h2 class="text-sm font-semibold text-gray-700 mb-4">Cronologia judicial</h2>
+        <Timeline client:load events={timelineEvents} />
+      </section>
+    )}
+
+    <!-- People involved -->
+    <section>
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Persones implicades</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {cas.persones.map((persona) => (
+          <a href={`/corrupcio/persones/${persona.slug}`} class="block group border border-gray-200 rounded-lg p-4 bg-white hover:border-gray-400 transition-colors">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div>
+                <h3 class="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
+                  {persona.nom}
+                </h3>
+                <p class="text-xs text-gray-500">{persona.carrec}</p>
+              </div>
+              <Badge variant={estatToVariant(persona.estat_judicial)}>
+                {estatToLabel(persona.estat_judicial)}
+              </Badge>
+            </div>
+            {persona.pena && (
+              <p class="text-xs text-red-600 font-medium">{persona.pena}</p>
+            )}
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Dates -->
+    <section class="border border-gray-200 rounded-lg bg-white p-5">
+      <h2 class="text-sm font-semibold text-gray-700 mb-3">Dates clau</h2>
+      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        {cas.data_inici && (
+          <div>
+            <dt class="text-xs text-gray-400">Inici investigacio</dt>
+            <dd class="text-gray-900">{formatDate(cas.data_inici)}</dd>
+          </div>
+        )}
+        {cas.data_sentencia && (
+          <div>
+            <dt class="text-xs text-gray-400">Sentencia</dt>
+            <dd class="text-gray-900">{formatDate(cas.data_sentencia)}</dd>
+          </div>
+        )}
+      </dl>
+    </section>
+
+    <SourceCitation source={cas.font_judicial} />
+  </div>
+</DefaultLayout>

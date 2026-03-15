@@ -1,0 +1,20 @@
+---
+interface Props {
+  source: string;
+  url?: string;
+  date?: string;
+}
+
+const { source, url, date } = Astro.props;
+---
+
+<p class="text-xs text-gray-400 mt-2">
+  Fuente: {url ? (
+    <a href={url} target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-600 transition-colors">
+      {source}
+    </a>
+  ) : (
+    <span>{source}</span>
+  )}
+  {date && <span> &middot; Consultado el {date}</span>}
+</p>

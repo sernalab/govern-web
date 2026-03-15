@@ -1,0 +1,129 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import StatCard from '@components/ui/StatCard.astro';
+import Badge from '@components/ui/Badge.astro';
+import BarChart from '@components/charts/BarChart.tsx';
+import SpainMap from '@components/charts/SpainMap.tsx';
+import { formatCurrency, formatNumber, formatCompactNumber } from '@lib/utils';
+import type { CasCorrupcio } from '@lib/types';
+
+import casos from '@data/casos-corrupcion.json';
+
+const typedCasos = casos as CasCorrupcio[];
+
+const totalCasos = typedCasos.length;
+const totalPersones = typedCasos.reduce((acc, cas) => acc + cas.persones.length, 0);
+const totalImport = typedCasos.reduce((acc, cas) => acc + cas.import_estimat, 0);
+
+const casosByParty: Record<string, number> = {};
+for (const cas of typedCasos) {
+  casosByParty[cas.partit] = (casosByParty[cas.partit] || 0) + 1;
+}
+const partyChartData = Object.entries(casosByParty)
+  .sort((a, b) => b[1] - a[1])
+  .map(([label, value]) => ({ label, value }));
+
+const casosByCommunity: Record<string, number> = {};
+for (const cas of typedCasos) {
+  casosByCommunity[cas.comunitat] = (casosByCommunity[cas.comunitat] || 0) + 1;
+}
+const communityMapData = Object.entries(casosByCommunity)
+  .map(([region, value]) => ({ region, value }));
+
+function estatToVariant(estat: string): 'condenado' | 'investigado' | 'absuelto' | 'en_curso' {
+  const map: Record<string, 'condenado' | 'investigado' | 'absuelto' | 'en_curso'> = {
+    condemnat: 'condenado',
+    investigat: 'investigado',
+    absolt: 'absuelto',
+    en_curs: 'en_curso',
+  };
+  return map[estat] || 'en_curso';
+}
+
+function estatToLabel(estat: string): string {
+  const map: Record<string, string> = {
+    condemnat: 'Condemnat',
+    investigat: 'Investigat',
+    absolt: 'Absolt',
+    en_curs: 'En curs',
+  };
+  return map[estat] || estat;
+}
+---
+
+<DefaultLayout title="Corrupcio a Espanya" description="Casos de corrupcio politica a Espanya amb dades de sentencies fermes" section="corrupcio" showDisclaimer={true}>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <section>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Corrupcio a Espanya</h1>
+      <p class="text-sm text-gray-500 mb-2">
+        Dades publiques de casos de corrupcio politica amb sentencies fermes i procediments en curs.
+      </p>
+      <p class="text-xs text-gray-400 bg-gray-50 border border-gray-100 rounded px-3 py-2 inline-block">
+        Inclou casos de totes les comunitats autonomes d'Espanya.
+      </p>
+    </section>
+
+    <!-- KPIs -->
+    <section>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StatCard label="Casos registrats" value={formatNumber(totalCasos)} />
+        <StatCard label="Persones implicades" value={formatNumber(totalPersones)} />
+        <StatCard label="Import estimat total" value={formatCompactNumber(totalImport) + ' €'} />
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="border border-gray-200 rounded-lg bg-white p-5">
+          <h2 class="text-sm font-semibold text-gray-700 mb-4">Per partit politic</h2>
+          <BarChart
+            client:load
+            data={partyChartData}
+            title="Casos per partit"
+            color="#ef4444"
+          />
+        </div>
+        <div class="border border-gray-200 rounded-lg bg-white p-5">
+          <h2 class="text-sm font-semibold text-gray-700 mb-4">Per comunitat autonoma</h2>
+          <SpainMap
+            client:load
+            data={communityMapData}
+            title="Casos per comunitat"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Cases Grid -->
+    <section>
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Tots els casos</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {typedCasos.map((cas) => (
+          <a href={`/corrupcio/casos/${cas.slug}`} class="block group border border-gray-200 rounded-lg p-4 bg-white hover:border-gray-400 transition-colors">
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <h3 class="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
+                {cas.nom}
+              </h3>
+              <Badge variant={estatToVariant(cas.estat)}>
+                {estatToLabel(cas.estat)}
+              </Badge>
+            </div>
+            <div class="flex flex-wrap gap-1.5 text-xs text-gray-500 mb-3">
+              <span class="bg-gray-50 px-2 py-0.5 rounded">{cas.comunitat}</span>
+              <span class="bg-gray-50 px-2 py-0.5 rounded">{cas.partit}</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-medium text-gray-700">
+                {formatCurrency(cas.import_estimat)}
+              </span>
+              <span class="text-gray-400">
+                {cas.persones.length} implicats
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</DefaultLayout>

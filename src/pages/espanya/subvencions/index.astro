@@ -1,0 +1,37 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import DataExplorer from '@components/sections/DataExplorer.tsx';
+---
+
+<DefaultLayout title="Subvencions - Espanya (BDNS)" description="Concessions de subvencions de l'administracio estatal des de la Base de Datos Nacional de Subvenciones" section="espanya">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <section>
+      <a href="/espanya" class="inline-flex items-center text-gray-400 hover:text-gray-700 transition-colors text-xs mb-4">
+        &larr; Dades d'Espanya
+      </a>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Subvencions — Espanya (BDNS)</h1>
+      <p class="text-sm text-gray-500 mb-6">
+        Base de Datos Nacional de Subvenciones — Font: Ministeri d'Hisenda
+      </p>
+    </section>
+
+    <section>
+      <DataExplorer
+        client:load
+        title="Concessions BDNS"
+        dataset="concesiones"
+        domain="www.pap.hacienda.gob.es/bdnstrans/api"
+        dataSource="bdns"
+        columns={[
+          { key: 'descripcion', label: 'Descripcio', format: 'text' },
+          { key: 'beneficiario', label: 'Beneficiari', format: 'text' },
+          { key: 'importe', label: 'Import', format: 'currency' },
+          { key: 'fechaConcesion', label: 'Data', format: 'date' },
+          { key: 'organo', label: 'Organ', format: 'text' },
+        ]}
+        searchField="descripcion"
+        defaultOrder="fechaConcesion DESC"
+      />
+    </section>
+  </div>
+</DefaultLayout>

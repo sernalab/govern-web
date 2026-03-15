@@ -1,0 +1,159 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import StatCard from '@components/ui/StatCard.astro';
+import AnomalyCard from '@components/sections/AnomalyCard.astro';
+import { querySocrata } from '@lib/api/socrata';
+import { DATASETS } from '@data/datasets';
+import { runAllAnalysis } from '@lib/analysis';
+import { formatNumber } from '@lib/utils';
+import type { Contracte, Anomalia } from '@lib/types';
+
+let anomalies: Anomalia[] = [];
+let totalContractes = 0;
+let error: string | null = null;
+
+try {
+  const contracts = await querySocrata<Contracte>({
+    dataset: DATASETS.contractes,
+    order: 'data_adjudicacio DESC',
+    limit: 1000,
+  });
+  totalContractes = contracts.length;
+  anomalies = runAllAnalysis(contracts);
+} catch (e) {
+  error = e instanceof Error ? e.message : 'Error desconegut carregant dades';
+}
+
+const totalAnomalies = anomalies.length;
+const byType = anomalies.reduce(
+  (acc, a) => {
+    acc[a.tipus] = (acc[a.tipus] || 0) + 1;
+    return acc;
+  },
+  {} as Record<string, number>
+);
+const bySeverity = anomalies.reduce(
+  (acc, a) => {
+    acc[a.gravetat] = (acc[a.gravetat] || 0) + 1;
+    return acc;
+  },
+  {} as Record<string, number>
+);
+
+const fraccionamentAnomalies = anomalies.filter((a) => a.tipus === 'fraccionament');
+const concentracioAnomalies = anomalies.filter((a) => a.tipus === 'concentracio');
+---
+
+<DefaultLayout
+  title="El Detector"
+  description="Deteccio automatica de patrons anomals en la contractacio publica de Catalunya"
+  section="detector"
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <!-- Header -->
+    <section>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">El Detector</h1>
+      <p class="text-sm text-gray-500 mb-4">
+        Analisi automatica de patrons anomals en la contractacio publica.
+        Examinem contractes publicats per identificar possibles irregularitats.
+      </p>
+
+      <div class="border-l-2 border-amber-400 bg-amber-50 pl-4 py-3 pr-4 rounded-r">
+        <p class="text-xs text-amber-800">
+          Les anomalies detectades son <strong>patrons estadistics</strong>, no proves d'irregularitats.
+          Un patro anomal pot tenir explicacions legitimes.
+          <a href="/detector/metodologia" class="underline hover:text-amber-900">Metodologia</a>.
+        </p>
+      </div>
+    </section>
+
+    {error ? (
+      <section class="py-12 text-center">
+        <p class="text-sm text-gray-500 mb-2">No s'han pogut carregar les dades</p>
+        <p class="text-xs text-gray-400">{error}</p>
+      </section>
+    ) : (
+      <>
+        <!-- KPIs -->
+        <section>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <StatCard label="Contractes analitzats" value={formatNumber(totalContractes)} />
+            <StatCard label="Anomalies detectades" value={formatNumber(totalAnomalies)} />
+            <StatCard label="Severitat alta" value={formatNumber(bySeverity['alta'] || 0)} />
+            <StatCard label="Severitat mitjana" value={formatNumber(bySeverity['mitjana'] || 0)} />
+          </div>
+        </section>
+
+        <!-- Type summary -->
+        <section>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <div class="flex items-center gap-2 border border-gray-200 rounded px-3 py-1.5">
+              <span class="h-2 w-2 rounded-full bg-red-500"></span>
+              <span class="text-gray-500">Fraccionament:</span>
+              <span class="font-medium text-gray-900">{byType['fraccionament'] || 0}</span>
+            </div>
+            <div class="flex items-center gap-2 border border-gray-200 rounded px-3 py-1.5">
+              <span class="h-2 w-2 rounded-full bg-purple-500"></span>
+              <span class="text-gray-500">Concentracio:</span>
+              <span class="font-medium text-gray-900">{byType['concentracio'] || 0}</span>
+            </div>
+          </div>
+        </section>
+
+        {totalAnomalies === 0 ? (
+          <section class="py-12 text-center">
+            <p class="text-lg font-medium text-gray-900 mb-1">Cap anomalia detectada</p>
+            <p class="text-sm text-gray-500">
+              No s'han trobat patrons sospitosos en els {formatNumber(totalContractes)} contractes analitzats.
+            </p>
+          </section>
+        ) : (
+          <>
+            {fraccionamentAnomalies.length > 0 && (
+              <section>
+                <div class="flex items-center gap-2 mb-4">
+                  <h2 class="text-lg font-bold text-gray-900">Fraccionament de contractes</h2>
+                  <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{fraccionamentAnomalies.length}</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-4">
+                  Contractes dividits en imports menors per evitar llindars de licitacio publica.
+                </p>
+                <div class="grid gap-4">
+                  {fraccionamentAnomalies.map((anomalia) => (
+                    <AnomalyCard anomalia={anomalia} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {concentracioAnomalies.length > 0 && (
+              <section>
+                <div class="flex items-center gap-2 mb-4">
+                  <h2 class="text-lg font-bold text-gray-900">Concentracio de proveidors</h2>
+                  <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{concentracioAnomalies.length}</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-4">
+                  Proveidors amb percentatge elevat dels contractes d'un organ.
+                </p>
+                <div class="grid gap-4">
+                  {concentracioAnomalies.map((anomalia) => (
+                    <AnomalyCard anomalia={anomalia} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
+        )}
+
+        <section class="border-t border-gray-100 pt-6 text-center">
+          <p class="text-xs text-gray-400">
+            Dades de l'API de Transparencia Catalunya · Analisi: {new Date().toLocaleDateString('ca-ES')}
+          </p>
+          <a href="/detector/metodologia" class="text-xs text-gray-500 hover:text-gray-700 underline">
+            Metodologia completa
+          </a>
+        </section>
+      </>
+    )}
+  </div>
+</DefaultLayout>

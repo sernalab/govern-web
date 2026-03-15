@@ -1,0 +1,41 @@
+---
+import type { DashboardStats } from '@lib/types';
+import { formatCompactNumber } from '@lib/utils';
+
+interface Props {
+  stats: DashboardStats | null;
+}
+
+const { stats } = Astro.props;
+
+const volumenTotal = stats
+  ? (stats.importTotalContractes || 0) + (stats.importTotalSubvencions || 0)
+  : null;
+---
+
+<section class="py-10 border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    {stats ? (
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <p class="text-2xl font-bold text-gray-900">{formatCompactNumber(stats.totalContractes)}</p>
+          <p class="text-sm text-gray-500 mt-0.5">contractes publics</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-gray-900">{formatCompactNumber(stats.totalSubvencions)}</p>
+          <p class="text-sm text-gray-500 mt-0.5">subvencions</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-gray-900">{stats.totalCasosCorrupcio > 0 ? formatCompactNumber(stats.totalCasosCorrupcio) : '---'}</p>
+          <p class="text-sm text-gray-500 mt-0.5">casos corrupcio</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-gray-900">{volumenTotal ? formatCompactNumber(volumenTotal) + ' €' : '---'}</p>
+          <p class="text-sm text-gray-500 mt-0.5">volum total</p>
+        </div>
+      </div>
+    ) : (
+      <p class="text-sm text-gray-400">Dades no disponibles en aquest moment</p>
+    )}
+  </div>
+</section>

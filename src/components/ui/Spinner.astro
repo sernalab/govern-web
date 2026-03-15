@@ -1,0 +1,21 @@
+---
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { size = 'md' } = Astro.props;
+
+const sizeClasses: Record<string, string> = {
+  sm: 'w-5 h-5 border-2',
+  md: 'w-8 h-8 border-3',
+  lg: 'w-12 h-12 border-4',
+};
+---
+
+<div class="flex items-center justify-center py-8">
+  <div class:list={[
+    'rounded-full border-gray-200 border-t-emerald-600 animate-spin',
+    sizeClasses[size],
+  ]} role="status" aria-label="Cargando">
+  </div>
+</div>

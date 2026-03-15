@@ -1,0 +1,19 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+---
+
+<DefaultLayout title="404">
+  <section class="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
+    <p class="text-7xl font-bold text-gray-200 select-none mb-4">404</p>
+    <h1 class="text-xl font-bold text-gray-900 mb-2">Pagina no trobada</h1>
+    <p class="text-sm text-gray-500 max-w-sm mb-8">
+      La pagina que busques no existeix o ha estat moguda.
+    </p>
+    <a
+      href="/"
+      class="inline-flex items-center px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-800 transition-colors"
+    >
+      Tornar a l'inici
+    </a>
+  </section>
+</DefaultLayout>

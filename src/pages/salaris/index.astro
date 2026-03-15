@@ -1,0 +1,72 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import StatCard from '@components/ui/StatCard.astro';
+import SalaryComparator from '@components/sections/SalaryComparator.tsx';
+import DataExplorer from '@components/sections/DataExplorer.tsx';
+import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
+import { formatCurrency, formatNumber } from '@lib/utils';
+
+let totalRecords: number | null = null;
+let maxSalary: string | null = null;
+
+try {
+  const baseUrl = `https://${SOCRATA_DOMAIN}/resource/${DATASETS.retribucions_alts_carrecs}.json`;
+
+  const [statsRes, countRes] = await Promise.all([
+    fetch(`${baseUrl}?$select=max(retribucio_anual_prevista)&$order=:id&$limit=1`),
+    fetch(`${baseUrl}?$select=count(*)`),
+  ]);
+
+  if (statsRes.ok) {
+    const d = await statsRes.json();
+    maxSalary = d?.[0]?.max_retribucio_anual_prevista ?? null;
+  }
+  if (countRes.ok) {
+    const d = await countRes.json();
+    totalRecords = Number(d?.[0]?.count ?? 0);
+  }
+} catch (e) {
+  console.error('Error fetching salary data:', e);
+}
+---
+
+<DefaultLayout title="Retribucions de carrecs publics" description="Retribucions d'alts carrecs de la Generalitat de Catalunya" section="salaris">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <section>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Retribucions de carrecs publics</h1>
+      <p class="text-sm text-gray-500 mb-6">Alts carrecs de la Generalitat de Catalunya — Font: Transparencia Catalunya</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <StatCard
+          label="Carrecs registrats"
+          value={totalRecords !== null ? formatNumber(totalRecords) : '---'}
+        />
+        <StatCard
+          label="Retribucio maxima"
+          value={maxSalary ?? '---'}
+        />
+      </div>
+    </section>
+
+    <section>
+      <DataExplorer
+        client:load
+        title="Explorador de retribucions"
+        dataset={DATASETS.retribucions_alts_carrecs}
+        domain={SOCRATA_DOMAIN}
+        dataSource="socrata"
+        columns={[
+          { key: 'cognoms_nom', label: 'Nom', format: 'text' },
+          { key: 'denominacio_lloc', label: 'Carrec', format: 'text' },
+          { key: 'departament', label: 'Departament', format: 'text' },
+          { key: 'retribucio_anual_prevista', label: 'Retribucio anual', format: 'text' },
+        ]}
+        searchField="cognoms_nom"
+        defaultOrder="retribucio_anual_prevista DESC"
+      />
+    </section>
+
+    <section>
+      <SalaryComparator client:load />
+    </section>
+  </div>
+</DefaultLayout>

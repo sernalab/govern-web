@@ -1,0 +1,68 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import StatCard from '@components/ui/StatCard.astro';
+import DataExplorer from '@components/sections/DataExplorer.tsx';
+import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
+import { formatCurrency, formatNumber } from '@lib/utils';
+
+let totalSubvencions: number | null = null;
+let totalImport: number | null = null;
+
+try {
+  const catUrl = `https://${SOCRATA_DOMAIN}/resource/${DATASETS.subvencions_concedides}.json`;
+
+  const [countRes, sumRes] = await Promise.all([
+    fetch(`${catUrl}?$select=count(*)`),
+    fetch(`${catUrl}?$select=sum(import_subvenci_pr_stec_ajut)`),
+  ]);
+
+  if (countRes.ok) {
+    const d = await countRes.json();
+    totalSubvencions = Number(d?.[0]?.count ?? 0);
+  }
+  if (sumRes.ok) {
+    const d = await sumRes.json();
+    totalImport = Number(d?.[0]?.sum_import_subvenci_pr_stec_ajut ?? 0);
+  }
+} catch (e) {
+  console.error('Error fetching subvencions stats:', e);
+}
+---
+
+<DefaultLayout title="Subvencions" description="Subvencions concedides per la Generalitat de Catalunya" section="subvencions">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <section>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Subvencions</h1>
+      <p class="text-sm text-gray-500 mb-6">Registre d'Ajuts i Subvencions de Catalunya (RAISC) — Font: Transparencia Catalunya</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <StatCard
+          label="Total subvencions"
+          value={totalSubvencions !== null ? formatNumber(totalSubvencions) : '---'}
+        />
+        <StatCard
+          label="Import total concedit"
+          value={totalImport !== null ? formatCurrency(totalImport) : '---'}
+        />
+      </div>
+    </section>
+
+    <section>
+      <DataExplorer
+        client:load
+        title="Subvencions concedides"
+        dataset={DATASETS.subvencions_concedides}
+        domain={SOCRATA_DOMAIN}
+        dataSource="socrata"
+        columns={[
+          { key: 'objecte_de_la_convocat_ria', label: 'Convocatoria', format: 'text' },
+          { key: 'ra_social_del_beneficiari', label: 'Beneficiari', format: 'text' },
+          { key: 'import_subvenci_pr_stec_ajut', label: 'Import', format: 'currency' },
+          { key: 'data_concessi', label: 'Data', format: 'date' },
+          { key: 'entitat_oo_aa_o_departament_1', label: 'Entitat', format: 'text' },
+        ]}
+        searchField="objecte_de_la_convocat_ria"
+        defaultOrder="data_concessi DESC"
+      />
+    </section>
+  </div>
+</DefaultLayout>

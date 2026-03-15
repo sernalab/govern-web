@@ -1,0 +1,79 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import StatCard from '@components/ui/StatCard.astro';
+import BudgetTreemap from '@components/charts/BudgetTreemap.tsx';
+import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
+import { formatCurrency, formatNumber } from '@lib/utils';
+
+const currentYear = new Date().getFullYear();
+
+interface BudgetNode {
+  name: string;
+  value: number;
+}
+
+let totalBudget: number | null = null;
+let sectionCount: number | null = null;
+let budgetData: BudgetNode[] = [];
+
+try {
+  const baseUrl = `https://${SOCRATA_DOMAIN}/resource/${DATASETS.pressupostos_generalitat}.json`;
+
+  const [sectRes, totalRes] = await Promise.all([
+    fetch(`${baseUrl}?$select=nom_secci,sum(import_sense_consolidar)&$group=nom_secci&$order=sum_import_sense_consolidar DESC&$limit=50&$where=ingr_s_despesa='D'`),
+    fetch(`${baseUrl}?$select=sum(import_sense_consolidar),count(*)&$where=ingr_s_despesa='D'`),
+  ]);
+
+  if (sectRes.ok) {
+    const sects = await sectRes.json();
+    budgetData = sects.map((d: Record<string, string>) => ({
+      name: d.nom_secci ?? 'Sense seccio',
+      value: Number(d.sum_import_sense_consolidar ?? 0),
+    }));
+    sectionCount = sects.length;
+  }
+
+  if (totalRes.ok) {
+    const d = await totalRes.json();
+    totalBudget = Number(d?.[0]?.sum_import_sense_consolidar ?? 0);
+  }
+} catch (e) {
+  console.error('Error fetching budget data:', e);
+}
+---
+
+<DefaultLayout title="Pressupostos" description="Pressupostos de la Generalitat de Catalunya" section="pressupostos">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <section>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Pressupostos</h1>
+      <p class="text-sm text-gray-500 mb-6">Pressupostos de la Generalitat de Catalunya — Font: Transparencia Catalunya</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StatCard
+          label="Pressupost total (despesa)"
+          value={totalBudget !== null ? formatCurrency(totalBudget) : '---'}
+        />
+        <StatCard
+          label="Seccions"
+          value={sectionCount !== null ? formatNumber(sectionCount) : '---'}
+        />
+        <StatCard
+          label="Exercici"
+          value={String(currentYear)}
+        />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Distribucio per seccio</h2>
+      {budgetData.length > 0 ? (
+        <div class="border border-gray-200 rounded-lg bg-white p-4">
+          <BudgetTreemap client:load data={budgetData} />
+        </div>
+      ) : (
+        <div class="text-center py-16 text-gray-400">
+          <p>No hi ha dades de pressupost disponibles</p>
+        </div>
+      )}
+    </section>
+  </div>
+</DefaultLayout>

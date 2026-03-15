@@ -1,0 +1,72 @@
+---
+import type { DashboardStats } from '@lib/types';
+import { formatCompactNumber } from '@lib/utils';
+
+interface Props {
+  stats: DashboardStats | null;
+}
+
+const { stats } = Astro.props;
+
+const totalVolume = stats
+  ? (stats.importTotalContractes || 0) + (stats.importTotalSubvencions || 0)
+  : null;
+---
+
+<section class="bg-gray-950 text-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+    <div class="max-w-3xl">
+      <p class="text-gray-400 text-sm font-medium mb-4 tracking-wide uppercase">
+        Dades publiques de Catalunya
+      </p>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6 tracking-tight">
+        On van els teus diners?
+      </h1>
+      <p class="text-lg sm:text-xl text-gray-400 leading-relaxed mb-10 max-w-2xl">
+        Explora contractes, subvencions, salaris de carrecs publics i pressupostos de la Generalitat. Dades reals, actualitzades, sense filtres.
+      </p>
+    </div>
+
+    {stats && (
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-gray-800 rounded-lg overflow-hidden mb-10">
+        <div class="bg-gray-900 p-5 sm:p-6">
+          <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.totalContractes)}</p>
+          <p class="text-xs text-gray-500 mt-1">contractes publics</p>
+        </div>
+        <div class="bg-gray-900 p-5 sm:p-6">
+          <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.totalSubvencions)}</p>
+          <p class="text-xs text-gray-500 mt-1">subvencions</p>
+        </div>
+        <div class="bg-gray-900 p-5 sm:p-6">
+          <p class="text-2xl sm:text-3xl font-bold text-white">{totalVolume ? formatCompactNumber(totalVolume) + ' €' : '---'}</p>
+          <p class="text-xs text-gray-500 mt-1">volum total gestionat</p>
+        </div>
+        <div class="bg-gray-900 p-5 sm:p-6">
+          <p class="text-2xl sm:text-3xl font-bold text-white">{stats.totalCasosCorrupcio}</p>
+          <p class="text-xs text-gray-500 mt-1">casos de corrupcio</p>
+        </div>
+      </div>
+    )}
+
+    <div class="flex flex-wrap gap-3">
+      <a
+        href="/contractes"
+        class="inline-flex items-center px-5 py-2.5 bg-white text-gray-900 text-sm font-medium rounded hover:bg-gray-100 transition-colors"
+      >
+        Explorar contractes
+      </a>
+      <a
+        href="/subvencions"
+        class="inline-flex items-center px-5 py-2.5 border border-gray-700 text-gray-300 text-sm font-medium rounded hover:border-gray-500 hover:text-white transition-colors"
+      >
+        Subvencions
+      </a>
+      <a
+        href="/corrupcio"
+        class="inline-flex items-center px-5 py-2.5 border border-gray-700 text-gray-300 text-sm font-medium rounded hover:border-gray-500 hover:text-white transition-colors"
+      >
+        Casos de corrupcio
+      </a>
+    </div>
+  </div>
+</section>

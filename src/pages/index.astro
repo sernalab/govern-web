@@ -1,11 +1,125 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import Hero from '@components/sections/Hero.astro';
+import RecentActivity from '@components/sections/RecentActivity.astro';
+import BarChart from '@components/charts/BarChart';
+import DoughnutChart from '@components/charts/DoughnutChart';
+import type { DashboardStats, Contracte, Subvencio } from '@lib/types';
+import type { ContractsByYearRow, ContractsByTypeRow } from '@lib/data-fetcher';
+import {
+  fetchDashboardStats,
+  fetchContractsByYear,
+  fetchContractsByType,
+  fetchRecentContracts,
+  fetchRecentSubvencions,
+} from '@lib/data-fetcher';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+let stats: DashboardStats | null = null;
+let contractsByYearData: ContractsByYearRow[] | null = null;
+let contractsByTypeData: ContractsByTypeRow[] | null = null;
+let recentContracts: Contracte[] | null = null;
+let recentSubvencions: Subvencio[] | null = null;
+
+try {
+  [stats, contractsByYearData, contractsByTypeData, recentContracts, recentSubvencions] = await Promise.all([
+    fetchDashboardStats(),
+    fetchContractsByYear(),
+    fetchContractsByType(),
+    fetchRecentContracts(5),
+    fetchRecentSubvencions(5),
+  ]);
+} catch (err) {
+  console.error('[index] data fetch failed:', err);
+}
+
+const contractsByYear = contractsByYearData
+  ? {
+      labels: contractsByYearData.filter(r => r.any >= 2015).map((r) => String(r.any)),
+      data: contractsByYearData.filter(r => r.any >= 2015).map((r) => r.total),
+    }
+  : null;
+
+const contractsByType = contractsByTypeData
+  ? {
+      labels: contractsByTypeData.slice(0, 5).map((r) => r.tipus_contracte.replace(/^\d+\.\s*/, '')),
+      data: contractsByTypeData.slice(0, 5).map((r) => r.total),
+    }
+  : null;
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<DefaultLayout
+  title="Govern"
+  description="Transparencia i dades publiques de Catalunya. Contractes, subvencions, salaris, pressupostos i casos de corrupcio."
+  section="inicio"
+>
+  <Hero stats={stats} />
+
+  <!-- Charts -->
+  <section class="py-12 sm:py-16 bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-baseline justify-between mb-8">
+        <h2 class="text-xl font-bold text-gray-900">Contractacio publica</h2>
+        <a href="/contractes" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+          Veure tot &rarr;
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <p class="text-sm text-gray-500 mb-4">Evolucio anual (des de 2015)</p>
+          {contractsByYear ? (
+            <BarChart
+              client:load
+              labels={contractsByYear.labels}
+              data={contractsByYear.data}
+              label="Contractes"
+            />
+          ) : (
+            <div class="bg-gray-50 rounded-lg p-8 text-center">
+              <p class="text-sm text-gray-400">Dades no disponibles</p>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <p class="text-sm text-gray-500 mb-4">Per tipologia</p>
+          {contractsByType ? (
+            <DoughnutChart
+              client:load
+              labels={contractsByType.labels}
+              data={contractsByType.data}
+            />
+          ) : (
+            <div class="bg-gray-50 rounded-lg p-8 text-center">
+              <p class="text-sm text-gray-400">Dades no disponibles</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Activity -->
+  <RecentActivity contracts={recentContracts} subvencions={recentSubvencions} />
+
+  <!-- Explore more -->
+  <section class="py-12 bg-gray-50 border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-6">Explora</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="/salaris" class="group block bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 transition-colors">
+          <p class="font-semibold text-gray-900 mb-1 text-sm">Salaris de carrecs publics</p>
+          <p class="text-xs text-gray-500">Retribucions dels alts carrecs de la Generalitat</p>
+        </a>
+        <a href="/pressupostos" class="group block bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 transition-colors">
+          <p class="font-semibold text-gray-900 mb-1 text-sm">Pressupostos</p>
+          <p class="text-xs text-gray-500">On es destinen els pressupostos publics</p>
+        </a>
+        <a href="/detector" class="group block bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-400 transition-colors">
+          <p class="font-semibold text-gray-900 mb-1 text-sm">El Detector</p>
+          <p class="text-xs text-gray-500">Analisi de patrons sospitosos en la contractacio</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</DefaultLayout>

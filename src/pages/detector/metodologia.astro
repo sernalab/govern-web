@@ -1,0 +1,122 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+---
+
+<DefaultLayout
+  title="Metodologia — El Detector"
+  description="Metodologia d'analisi de patrons anomals en la contractacio publica."
+  section="detector"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+    <section>
+      <a href="/detector" class="inline-flex items-center text-gray-400 hover:text-gray-700 transition-colors text-xs mb-4">
+        &larr; Tornar al Detector
+      </a>
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">Metodologia</h1>
+      <p class="text-sm text-gray-500">Com funciona El Detector i que busca en les dades de contractacio publica.</p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-gray-900 mb-2">Que es El Detector?</h2>
+      <p class="text-sm text-gray-500 leading-relaxed">
+        Eina d'analisi automatica que examina contractes publics de l'API de Transparencia Catalunya
+        per identificar patrons que podrien indicar irregularitats.
+      </p>
+    </section>
+
+    <!-- Fraccionament -->
+    <section class="border-t border-gray-100 pt-8">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-50 text-xs font-bold text-red-600">1</span>
+        <h2 class="text-lg font-semibold text-gray-900">Fraccionament de contractes</h2>
+      </div>
+
+      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Que busca</p>
+      <p class="text-sm text-gray-500 leading-relaxed mb-4">
+        Dividir un contracte gran en multiples petits per evitar llindars de licitacio publica.
+        Serveis &lt; 15.000 EUR i obres &lt; 40.000 EUR s'adjudiquen directament.
+      </p>
+
+      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Algorisme</p>
+      <ol class="ml-4 list-decimal space-y-1 text-sm text-gray-500 mb-4">
+        <li>Agrupa contractes per organ + adjudicatari + any</li>
+        <li>Filtra imports entre 50%-100% del llindar (zona sospitosa)</li>
+        <li>3+ contractes en zona sospitosa = anomalia</li>
+        <li>Severitat: 3-4 (baixa), 4-5 (mitjana), 6+ (alta)</li>
+      </ol>
+
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 text-left text-xs text-gray-500">
+              <th class="pb-2">Tipus</th>
+              <th class="pb-2">Llindar</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700 text-sm">
+            <tr class="border-b border-gray-100">
+              <td class="py-1.5">Serveis i subministraments</td>
+              <td class="py-1.5">15.000 EUR</td>
+            </tr>
+            <tr>
+              <td class="py-1.5">Obres</td>
+              <td class="py-1.5">40.000 EUR</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Concentracio -->
+    <section class="border-t border-gray-100 pt-8">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-50 text-xs font-bold text-purple-600">2</span>
+        <h2 class="text-lg font-semibold text-gray-900">Concentracio de proveidors</h2>
+      </div>
+
+      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Que busca</p>
+      <p class="text-sm text-gray-500 leading-relaxed mb-4">
+        Proveidors que acumulen un percentatge excessiu de contractes d'un organisme,
+        indicant possible favoritisme.
+      </p>
+
+      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Algorisme</p>
+      <ol class="ml-4 list-decimal space-y-1 text-sm text-gray-500">
+        <li>Agrupa contractes per organ</li>
+        <li>Calcula % de cada proveidor (minim 5 contractes)</li>
+        <li>&gt;30% = anomalia</li>
+        <li>Severitat: 30-45% (baixa), 45-60% (mitjana), 60%+ (alta)</li>
+      </ol>
+    </section>
+
+    <!-- Limitacions -->
+    <section class="border-t border-gray-100 pt-8">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">Limitacions</h2>
+      <ul class="ml-4 list-disc space-y-1.5 text-sm text-gray-500">
+        <li>Analitzem els ultims 1.000 contractes (mostra limitada)</li>
+        <li>Molts patrons anomals tenen explicacions legitimes</li>
+        <li>Dades incompletes en bases de dades originals</li>
+        <li>Analisi temporal — varia segons moment de consulta</li>
+      </ul>
+    </section>
+
+    <!-- Avis legal -->
+    <section class="border-t border-gray-100 pt-8">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">Avis legal</h2>
+      <div class="border-l-2 border-amber-400 bg-amber-50 pl-4 py-3 pr-4 rounded-r text-xs text-amber-800 space-y-2">
+        <p>
+          Analisi estadistica de dades publiques. No constitueix acusacio ni prova d'irregularitat.
+        </p>
+        <p>
+          Dades de l'API de Transparencia de la Generalitat de Catalunya, mostrades tal com es publiquen.
+        </p>
+      </div>
+    </section>
+
+    <section class="border-t border-gray-100 pt-8">
+      <a href="/detector" class="inline-flex items-center px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-800 transition-colors">
+        &larr; Tornar al Detector
+      </a>
+    </section>
+  </div>
+</DefaultLayout>

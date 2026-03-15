@@ -1,0 +1,75 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import LegalDisclaimer from '../components/ui/LegalDisclaimer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  section?: string;
+  showDisclaimer?: boolean;
+}
+
+const {
+  title,
+  description = 'Transparencia i dades publiques de Catalunya',
+  section,
+  showDisclaimer = false,
+} = Astro.props;
+
+const fullTitle = title === 'Govern' ? title : `${title} — Govern`;
+---
+
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{fullTitle}</title>
+    <ClientRouter />
+  </head>
+  <body class="min-h-screen bg-white text-gray-900 flex flex-col">
+    <div id="nav-progress"></div>
+    <Header section={section} />
+    <main class="flex-1 w-full pt-14">
+      {showDisclaimer && <LegalDisclaimer />}
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      document.addEventListener('astro:before-preparation', () => {
+        const bar = document.getElementById('nav-progress');
+        if (bar) {
+          bar.className = 'loading';
+        }
+      });
+
+      document.addEventListener('astro:after-swap', () => {
+        const bar = document.getElementById('nav-progress');
+        if (bar) {
+          bar.className = 'done';
+          setTimeout(() => { bar.className = ''; }, 400);
+        }
+      });
+
+      document.addEventListener('astro:page-load', () => {
+        const bar = document.getElementById('nav-progress');
+        if (bar) {
+          bar.className = 'done';
+          setTimeout(() => { bar.className = ''; }, 400);
+        }
+      });
+    </script>
+  </body>
+</html>

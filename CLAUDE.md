@@ -106,6 +106,13 @@ govern-web/
 - Props tipadas con interface
 - Tailwind para estilos, scoped solo si necesario
 
+## Skills
+
+### Impeccable Commands (Refinamiento de calidad)
+Consulta `.skills/impeccable/` para tecnicas estructuradas de refinamiento de diseno, UX y codigo. Los agentes deben aplicar estos comandos como parte del workflow de calidad antes de shipping. Ver `.skills/impeccable/README.md` para el mapeo de comandos a agentes.
+
+---
+
 ## Git
 - Branch: `main`
 - Commits: Conventional Commits (`feat:`, `fix:`, `docs:`, etc.)

@@ -1,0 +1,590 @@
+[
+  {
+    "slug": "caso-gurtel",
+    "nom": "Caso Gürtel",
+    "descripcio": "Trama de corrupción política vinculada al PP que operó entre 1999 y 2005 en Madrid y Valencia. La red liderada por Francisco Correa obtenía contratos públicos a cambio de comisiones y financiaba ilegalmente al partido. La sentencia de 2018 supuso la primera condena a un partido político por beneficiarse de una trama corrupta.",
+    "comunitat": "Comunidad Valenciana",
+    "partit": "PP",
+    "import_estimat": 120000000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "francisco-correa",
+        "nom": "Francisco Correa",
+        "carrec": "Empresario, líder de la trama",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "51 años de prisión por asociación ilícita, blanqueo de capitales y cohecho",
+        "pena": "51 años de prisión"
+      },
+      {
+        "slug": "luis-barcenas",
+        "nom": "Luis Bárcenas",
+        "carrec": "Tesorero del PP",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "29 años de prisión por fraude fiscal, blanqueo de capitales y cohecho",
+        "pena": "29 años de prisión"
+      },
+      {
+        "slug": "alvaro-perez-el-bigotes",
+        "nom": "Álvaro Pérez 'El Bigotes'",
+        "carrec": "Responsable de la trama en Valencia",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho, fraude y blanqueo de capitales",
+        "pena": "12 años de prisión"
+      },
+      {
+        "slug": "pablo-crespo",
+        "nom": "Pablo Crespo",
+        "carrec": "Número dos de la trama",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por asociación ilícita, cohecho y blanqueo",
+        "pena": "37 años de prisión"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Nacional, Sala de lo Penal, Sección 2ª, nº 20/2018 de 17 de mayo",
+    "data_inici": "2009-02-06",
+    "data_sentencia": "2018-05-24"
+  },
+  {
+    "slug": "caso-ere",
+    "nom": "Caso ERE de Andalucía",
+    "descripcio": "Fraude en las ayudas sociolaborales y a empresas en crisis de la Junta de Andalucía entre 2001 y 2010. Se desviaron fondos públicos mediante un sistema de ayudas sin control, a través de expedientes de regulación de empleo y ayudas directas. Afectó a altos cargos del PSOE andaluz.",
+    "comunitat": "Andalucía",
+    "partit": "PSOE",
+    "import_estimat": 680000000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "jose-antonio-grinan",
+        "nom": "José Antonio Griñán",
+        "carrec": "Presidente de la Junta de Andalucía (2009-2013)",
+        "partit": "PSOE",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación y malversación continuada",
+        "pena": "6 años de prisión y 15 años de inhabilitación"
+      },
+      {
+        "slug": "manuel-chaves",
+        "nom": "Manuel Chaves",
+        "carrec": "Presidente de la Junta de Andalucía (1990-2009)",
+        "partit": "PSOE",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación continuada",
+        "pena": "9 años de inhabilitación"
+      },
+      {
+        "slug": "magdalena-alvarez",
+        "nom": "Magdalena Álvarez",
+        "carrec": "Consejera de Economía y Hacienda de la Junta",
+        "partit": "PSOE",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenada por prevaricación continuada",
+        "pena": "9 años de inhabilitación"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de Sevilla, Sección 1ª, nº 490/2019 de 19 de noviembre",
+    "data_inici": "2011-01-01",
+    "data_sentencia": "2019-11-19"
+  },
+  {
+    "slug": "caso-palau",
+    "nom": "Caso Palau de la Música",
+    "descripcio": "Desvío de fondos de la Fundació Orfeó Català-Palau de la Música por parte de su presidente Fèlix Millet y el vicepresidente Jordi Montull. Se expoliaron más de 30 millones de euros destinados a la institución cultural, parte de los cuales se destinaron a financiar CDC.",
+    "comunitat": "Catalunya",
+    "partit": "CDC",
+    "import_estimat": 33000000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "felix-millet",
+        "nom": "Fèlix Millet",
+        "carrec": "Presidente de la Fundació Orfeó Català-Palau de la Música",
+        "partit": "CDC",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por malversación de fondos, apropiación indebida y fraude fiscal",
+        "pena": "9 años y 8 meses de prisión"
+      },
+      {
+        "slug": "jordi-montull",
+        "nom": "Jordi Montull",
+        "carrec": "Vicepresidente de la Fundació Orfeó Català-Palau de la Música",
+        "partit": "CDC",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por apropiación indebida y fraude fiscal",
+        "pena": "7 años y 6 meses de prisión"
+      },
+      {
+        "slug": "daniel-oscariz",
+        "nom": "Daniel Osàcar",
+        "carrec": "Tesorero de CDC",
+        "partit": "CDC",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por apropiación indebida",
+        "pena": "4 años de prisión"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de Barcelona, Sección 10ª, de 28 de febrero de 2017",
+    "data_inici": "2009-07-23",
+    "data_sentencia": "2017-02-28"
+  },
+  {
+    "slug": "caso-noos",
+    "nom": "Caso Nóos",
+    "descripcio": "Caso de corrupción vinculado a Iñaki Urdangarin, duque de Palma y yerno del rey Juan Carlos I. El Instituto Nóos, dirigido por Urdangarin y Diego Torres, desvió fondos públicos de eventos deportivos organizados para las comunidades de Valencia y Baleares.",
+    "comunitat": "Illes Balears",
+    "partit": "Casa Real",
+    "import_estimat": 6100000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "inaki-urdangarin",
+        "nom": "Iñaki Urdangarin",
+        "carrec": "Duque de Palma, presidente del Instituto Nóos",
+        "partit": "Casa Real",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por malversación, prevaricación, fraude fiscal, tráfico de influencias",
+        "pena": "5 años y 10 meses de prisión"
+      },
+      {
+        "slug": "diego-torres",
+        "nom": "Diego Torres",
+        "carrec": "Socio del Instituto Nóos",
+        "partit": "Independiente",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por malversación, prevaricación, fraude fiscal, tráfico de influencias",
+        "pena": "8 años y 6 meses de prisión"
+      },
+      {
+        "slug": "jaume-matas-noos",
+        "nom": "Jaume Matas",
+        "carrec": "President del Govern Balear (2003-2007)",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación y malversación por los convenios con el Instituto Nóos",
+        "pena": "3 años y 8 meses de prisión"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de Palma de Mallorca, Sección 1ª, de 17 de febrero de 2017",
+    "data_inici": "2010-07-29",
+    "data_sentencia": "2017-02-17"
+  },
+  {
+    "slug": "caso-punica",
+    "nom": "Caso Púnica",
+    "descripcio": "Red de corrupción que operaba en la Comunidad de Madrid y otros municipios, liderada por el empresario David Marjaliza y con implicación de políticos del PP. La trama amañaba contratos públicos municipales a cambio de comisiones.",
+    "comunitat": "Comunidad de Madrid",
+    "partit": "PP",
+    "import_estimat": 250000000,
+    "estat": "en_curs",
+    "persones": [
+      {
+        "slug": "francisco-granados",
+        "nom": "Francisco Granados",
+        "carrec": "Senador y exsecretario general del PP de Madrid",
+        "partit": "PP",
+        "estat_judicial": "investigat",
+        "sentencia": null,
+        "pena": null
+      },
+      {
+        "slug": "david-marjaliza",
+        "nom": "David Marjaliza",
+        "carrec": "Empresario, líder de la trama",
+        "partit": "PP",
+        "estat_judicial": "investigat",
+        "sentencia": null,
+        "pena": null
+      },
+      {
+        "slug": "alfonso-bosch",
+        "nom": "Alfonso Bosch",
+        "carrec": "Exalcalde de Valdemoro",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho",
+        "pena": "4 años de prisión"
+      }
+    ],
+    "font_judicial": "Juzgado Central de Instrucción nº 6, Audiencia Nacional, Diligencias Previas 96/2014",
+    "data_inici": "2014-10-27",
+    "data_sentencia": null
+  },
+  {
+    "slug": "caso-malaya",
+    "nom": "Caso Malaya (Operación Ballena Blanca)",
+    "descripcio": "Macrocausa de corrupción urbanística en Marbella que implicó al equipo de gobierno municipal. La red liderada por Juan Antonio Roca recaudó millones en comisiones por recalificaciones urbanísticas y concesión de licencias de obra irregulares.",
+    "comunitat": "Andalucía",
+    "partit": "GIL/Independiente",
+    "import_estimat": 240000000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "juan-antonio-roca",
+        "nom": "Juan Antonio Roca",
+        "carrec": "Asesor de Urbanismo del Ayuntamiento de Marbella",
+        "partit": "GIL",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho, malversación, prevaricación y blanqueo de capitales",
+        "pena": "11 años de prisión"
+      },
+      {
+        "slug": "marisol-yague",
+        "nom": "Marisol Yagüe",
+        "carrec": "Alcaldesa de Marbella (2003-2006)",
+        "partit": "GIL",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenada por prevaricación y cohecho",
+        "pena": "6 años de prisión"
+      },
+      {
+        "slug": "julian-munoz",
+        "nom": "Julián Muñoz",
+        "carrec": "Alcalde de Marbella (2002-2003)",
+        "partit": "GIL",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho, malversación y prevaricación",
+        "pena": "6 años de prisión"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de Málaga, Sección 1ª, de 4 de octubre de 2013",
+    "data_inici": "2006-03-29",
+    "data_sentencia": "2013-10-04"
+  },
+  {
+    "slug": "caso-pujol",
+    "nom": "Caso Pujol",
+    "descripcio": "Investigación judicial sobre el patrimonio oculto de la familia del expresident de la Generalitat de Catalunya Jordi Pujol. La familia habría acumulado un patrimonio no declarado durante décadas, con fondos ocultos en el extranjero procedentes de comisiones ilegales.",
+    "comunitat": "Catalunya",
+    "partit": "CDC",
+    "import_estimat": 70000000,
+    "estat": "en_curs",
+    "persones": [
+      {
+        "slug": "jordi-pujol-soley",
+        "nom": "Jordi Pujol i Soley",
+        "carrec": "President de la Generalitat de Catalunya (1980-2003)",
+        "partit": "CDC",
+        "estat_judicial": "investigat",
+        "sentencia": null,
+        "pena": null
+      },
+      {
+        "slug": "jordi-pujol-ferrusola",
+        "nom": "Jordi Pujol Ferrusola",
+        "carrec": "Empresario, hijo del expresident",
+        "partit": "CDC",
+        "estat_judicial": "investigat",
+        "sentencia": null,
+        "pena": null
+      },
+      {
+        "slug": "oleguer-pujol",
+        "nom": "Oleguer Pujol Ferrusola",
+        "carrec": "Empresario, hijo del expresident",
+        "partit": "CDC",
+        "estat_judicial": "investigat",
+        "sentencia": null,
+        "pena": null
+      }
+    ],
+    "font_judicial": "Audiencia Nacional, Juzgado Central de Instrucción nº 5, Diligencias Previas 188/2014",
+    "data_inici": "2014-09-01",
+    "data_sentencia": null
+  },
+  {
+    "slug": "caso-bankia",
+    "nom": "Caso Bankia (Tarjetas Black)",
+    "descripcio": "Uso fraudulento de tarjetas de crédito corporativas opacas ('tarjetas black') por parte de consejeros y directivos de Caja Madrid y Bankia entre 2003 y 2012. Se gastaron más de 15 millones de euros en gastos personales sin justificar ni declarar fiscalmente.",
+    "comunitat": "Comunidad de Madrid",
+    "partit": "PP",
+    "import_estimat": 15500000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "rodrigo-rato",
+        "nom": "Rodrigo Rato",
+        "carrec": "Presidente de Bankia y exministro de Economía",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por apropiación indebida y administración desleal por las tarjetas black",
+        "pena": "4 años y 6 meses de prisión"
+      },
+      {
+        "slug": "miguel-blesa",
+        "nom": "Miguel Blesa",
+        "carrec": "Presidente de Caja Madrid (1996-2010)",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por apropiación indebida (fallecido en 2017 antes de entrar en prisión)",
+        "pena": "6 años de prisión"
+      },
+      {
+        "slug": "ildefonso-sanchez-barcoj",
+        "nom": "Ildefonso Sánchez Barcoj",
+        "carrec": "Director general adjunto de Caja Madrid",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por apropiación indebida",
+        "pena": "3 años de prisión"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Nacional, Sala de lo Penal, Sección 4ª, de 23 de febrero de 2017",
+    "data_inici": "2014-10-06",
+    "data_sentencia": "2017-02-23"
+  },
+  {
+    "slug": "caso-pretoria",
+    "nom": "Caso Pretoria",
+    "descripcio": "Trama de corrupción urbanística en Santa Coloma de Gramenet (Barcelona) que afectó al PSC. La red cobraba comisiones ilegales por adjudicaciones de obras públicas y recalificaciones urbanísticas en el área metropolitana de Barcelona.",
+    "comunitat": "Catalunya",
+    "partit": "PSC",
+    "import_estimat": 18000000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "bartomeu-muñoz",
+        "nom": "Bartomeu Muñoz",
+        "carrec": "Alcalde de Santa Coloma de Gramenet (1991-2009)",
+        "partit": "PSC",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho y tráfico de influencias",
+        "pena": "5 años de prisión"
+      },
+      {
+        "slug": "lluis-prenafeta",
+        "nom": "Lluís Prenafeta",
+        "carrec": "Exsecretario general de Presidència de la Generalitat",
+        "partit": "CDC",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por tráfico de influencias y cohecho",
+        "pena": "4 años de prisión"
+      },
+      {
+        "slug": "macià-alavedra",
+        "nom": "Macià Alavedra",
+        "carrec": "Exconseller de la Generalitat",
+        "partit": "CDC",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por tráfico de influencias",
+        "pena": "3 años de prisión"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de Barcelona, Sección 6ª, de 22 de julio de 2013",
+    "data_inici": "2009-10-28",
+    "data_sentencia": "2013-07-22"
+  },
+  {
+    "slug": "caso-palma-arena",
+    "nom": "Caso Palma Arena",
+    "descripcio": "Sobrecostes y comisiones ilegales en la construcción del Palma Arena, velódromo de Palma de Mallorca construido para los Campeonatos del Mundo de Ciclismo en Pista 2007. El coste final triplicó el presupuesto inicial, con desvío de fondos públicos.",
+    "comunitat": "Illes Balears",
+    "partit": "PP",
+    "import_estimat": 48000000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "jaume-matas",
+        "nom": "Jaume Matas",
+        "carrec": "President del Govern Balear (2003-2007)",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación, malversación, fraude y tráfico de influencias",
+        "pena": "6 años de prisión"
+      },
+      {
+        "slug": "bartolome-cursach",
+        "nom": "Bartolomé Cursach",
+        "carrec": "Empresario de ocio nocturno, beneficiario de la trama",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho activo",
+        "pena": "3 años de prisión"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de Palma de Mallorca, Sección 1ª, de 10 de marzo de 2017",
+    "data_inici": "2010-11-03",
+    "data_sentencia": "2017-03-10"
+  },
+  {
+    "slug": "caso-pokemon",
+    "nom": "Caso Pokémon",
+    "descripcio": "Trama de corrupción en la Diputación Provincial de Lugo vinculada al PP. La operación policial reveló una red de amaño de contratos públicos, prevaricación y malversación de caudales públicos por parte de cargos de la diputación.",
+    "comunitat": "Galicia",
+    "partit": "PP",
+    "import_estimat": 2800000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "jose-ramon-orozco",
+        "nom": "José Ramón Orozco",
+        "carrec": "Presidente de la Diputación de Lugo",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación y malversación de caudales públicos",
+        "pena": "9 años de inhabilitación"
+      },
+      {
+        "slug": "maria-jose-bravo",
+        "nom": "María José Bravo",
+        "carrec": "Interventora de la Diputación de Lugo",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenada por prevaricación",
+        "pena": "7 años de inhabilitación"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de Lugo, Sección 1ª, de 18 de diciembre de 2018",
+    "data_inici": "2011-06-01",
+    "data_sentencia": "2018-12-18"
+  },
+  {
+    "slug": "caso-brugal",
+    "nom": "Caso Brugal",
+    "descripcio": "Trama de corrupción vinculada a la gestión de residuos en la provincia de Alicante. Empresarios del sector de la basura pagaron comisiones a políticos del PP a cambio de la adjudicación de contratos de recogida y tratamiento de residuos urbanos.",
+    "comunitat": "Comunidad Valenciana",
+    "partit": "PP",
+    "import_estimat": 6700000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "angel-fenoll",
+        "nom": "Ángel Fenoll",
+        "carrec": "Empresario del sector de residuos",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho activo y tráfico de influencias",
+        "pena": "7 años de prisión"
+      },
+      {
+        "slug": "jose-joaquin-ripoll",
+        "nom": "José Joaquín Ripoll",
+        "carrec": "Presidente de la Diputación de Alicante",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho pasivo",
+        "pena": "4 años de prisión"
+      },
+      {
+        "slug": "enrique-crespo",
+        "nom": "Enrique Crespo",
+        "carrec": "Alcalde de Orihuela",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación urbanística",
+        "pena": "9 años de inhabilitación"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de Alicante, Sección 2ª, de 2 de febrero de 2016",
+    "data_inici": "2009-03-10",
+    "data_sentencia": "2016-02-02"
+  },
+  {
+    "slug": "caso-campeon",
+    "nom": "Caso Campeón (Caso Baltar)",
+    "descripcio": "Corrupción en la Diputación Provincial de Ourense bajo la presidencia de José Luis Baltar. Se investigó la contratación irregular de centenares de personas afines al PP en la diputación, constituyendo una red clientelar de empleo público.",
+    "comunitat": "Galicia",
+    "partit": "PP",
+    "import_estimat": 5000000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "jose-luis-baltar",
+        "nom": "José Luis Baltar",
+        "carrec": "Presidente de la Diputación de Ourense (1990-2012)",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación administrativa en contrataciones irregulares",
+        "pena": "4 años de inhabilitación"
+      },
+      {
+        "slug": "rosendo-fernandez",
+        "nom": "Rosendo Fernández",
+        "carrec": "Vicepresidente de la Diputación de Ourense",
+        "partit": "PP",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación",
+        "pena": "9 años de inhabilitación"
+      }
+    ],
+    "font_judicial": "Sentencia Tribunal Superior de Justicia de Galicia, Sala de lo Penal, de 19 de noviembre de 2015",
+    "data_inici": "2012-03-01",
+    "data_sentencia": "2015-11-19"
+  },
+  {
+    "slug": "caso-mercurio",
+    "nom": "Caso Mercurio",
+    "descripcio": "Trama de corrupción urbanística en el Ayuntamiento de León vinculada al PSOE. Se investigó el cobro de comisiones ilegales a cambio de concesiones urbanísticas y adjudicaciones de obras municipales.",
+    "comunitat": "Castilla y León",
+    "partit": "PSOE",
+    "import_estimat": 3500000,
+    "estat": "condemnat",
+    "persones": [
+      {
+        "slug": "francisco-fernandez-alvarez",
+        "nom": "Francisco Fernández Álvarez",
+        "carrec": "Alcalde de León (1999-2003)",
+        "partit": "PSOE",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por prevaricación y cohecho",
+        "pena": "2 años de prisión y 8 años de inhabilitación"
+      },
+      {
+        "slug": "carlos-canedo",
+        "nom": "Carlos Cañedo",
+        "carrec": "Empresario vinculado a la trama",
+        "partit": "PSOE",
+        "estat_judicial": "condemnat",
+        "sentencia": "Condenado por cohecho activo",
+        "pena": "3 años de prisión"
+      }
+    ],
+    "font_judicial": "Sentencia Audiencia Provincial de León, Sección 3ª, de 14 de julio de 2014",
+    "data_inici": "2009-11-01",
+    "data_sentencia": "2014-07-14"
+  },
+  {
+    "slug": "caso-3-percent",
+    "nom": "Caso 3%",
+    "descripcio": "Investigación sobre la presunta financiación ilegal de Convergència Democràtica de Catalunya mediante el cobro sistemático de comisiones del 3% sobre obras públicas adjudicadas por la Generalitat. El caso investiga décadas de presunta recaudación irregular.",
+    "comunitat": "Catalunya",
+    "partit": "CDC",
+    "import_estimat": 40000000,
+    "estat": "en_curs",
+    "persones": [
+      {
+        "slug": "andreu-viloca",
+        "nom": "Andreu Viloca",
+        "carrec": "Extesorero de CDC",
+        "partit": "CDC",
+        "estat_judicial": "investigat",
+        "sentencia": null,
+        "pena": null
+      },
+      {
+        "slug": "germà-gordó",
+        "nom": "Germà Gordó",
+        "carrec": "Exconseller de Justícia de la Generalitat",
+        "partit": "CDC",
+        "estat_judicial": "investigat",
+        "sentencia": null,
+        "pena": null
+      },
+      {
+        "slug": "david-madueno",
+        "nom": "David Madueño",
+        "carrec": "Empresario, intermediario",
+        "partit": "CDC",
+        "estat_judicial": "investigat",
+        "sentencia": null,
+        "pena": null
+      }
+    ],
+    "font_judicial": "Juzgado de Instrucción nº 1 de El Vendrell, Diligencias Previas 642/2015",
+    "data_inici": "2015-05-20",
+    "data_sentencia": null
+  }
+]

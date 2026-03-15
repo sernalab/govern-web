@@ -1,0 +1,33 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-gray-950 text-gray-400 mt-auto">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+    <div class="flex flex-col gap-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <p class="text-white font-bold text-lg tracking-tight mb-1">govern</p>
+          <p class="text-sm text-gray-500">
+            Transparencia i dades publiques de Catalunya
+          </p>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-gray-500">
+          <a href="/espanya" class="hover:text-gray-300 transition-colors">Dades d'Espanya</a>
+          <span class="text-gray-700">·</span>
+          <a href="/detector" class="hover:text-gray-300 transition-colors">Detector</a>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <p class="text-xs text-gray-600">
+          Dades de <span class="text-gray-500">Transparencia Catalunya (Socrata)</span>, <span class="text-gray-500">BDNS</span>, <span class="text-gray-500">datos.gob.es</span> i <span class="text-gray-500">CGPJ</span>.
+          Tota la informacio es d'acces public.
+        </p>
+        <p class="text-xs text-gray-600">
+          &copy; {year}
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

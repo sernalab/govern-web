@@ -1,0 +1,25 @@
+---
+interface Props {
+  variant: 'condenado' | 'investigado' | 'absuelto' | 'en_curso' | 'outline';
+  text?: string;
+  class?: string;
+}
+
+const { variant, text, class: className = '' } = Astro.props;
+
+const variantClasses: Record<string, string> = {
+  condenado: 'bg-red-50 text-red-700 border-red-200',
+  investigado: 'bg-amber-50 text-amber-700 border-amber-200',
+  absuelto: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  en_curso: 'bg-blue-50 text-blue-700 border-blue-200',
+  outline: 'bg-white text-gray-600 border-gray-200',
+};
+---
+
+<span class:list={[
+  'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border whitespace-nowrap',
+  variantClasses[variant] || variantClasses['outline'],
+  className,
+]}>
+  {text || <slot />}
+</span>

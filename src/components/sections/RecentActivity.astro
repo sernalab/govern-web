@@ -1,0 +1,81 @@
+---
+import { formatCurrency, formatDate } from '@lib/utils';
+import type { Contracte, Subvencio } from '@lib/types';
+
+interface Props {
+  contracts: Contracte[] | null;
+  subvencions: Subvencio[] | null;
+}
+
+const { contracts, subvencions } = Astro.props;
+---
+
+<section class="py-12 sm:py-16 bg-white border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-8">Activitat recent</h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Ultims contractes -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-semibold text-gray-700">Ultims contractes</h3>
+          <a href="/contractes" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">Veure tot &rarr;</a>
+        </div>
+        <div class="divide-y divide-gray-100">
+          {contracts && contracts.length > 0 ? (
+            contracts.map((contract) => (
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-gray-900 truncate">
+                    {contract.descripcio_expedient || 'Sense descripcio'}
+                  </p>
+                  <p class="text-xs text-gray-400 mt-0.5">
+                    {contract.organisme_contractant || ''} · {contract.data_adjudicacio ? formatDate(contract.data_adjudicacio) : ''}
+                  </p>
+                </div>
+                <span class="text-sm font-medium text-gray-900 tabular-nums whitespace-nowrap">
+                  {contract.import_adjudicacio ? formatCurrency(contract.import_adjudicacio) : '---'}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p class="text-sm text-gray-400 py-4">
+              {contracts === null ? "No s'han pogut carregar les dades" : "No hi ha contractes recents"}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <!-- Ultimes subvencions -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-semibold text-gray-700">Ultimes subvencions</h3>
+          <a href="/subvencions" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">Veure tot &rarr;</a>
+        </div>
+        <div class="divide-y divide-gray-100">
+          {subvencions && subvencions.length > 0 ? (
+            subvencions.map((sub) => (
+              <div class="py-3 flex items-start justify-between gap-3">
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-gray-900 truncate">
+                    {sub.ra_social_del_beneficiari || sub.objecte_de_la_convocat_ria || 'Sense descripcio'}
+                  </p>
+                  <p class="text-xs text-gray-400 mt-0.5">
+                    {sub.entitat_oo_aa_o_departament_1 || ''} · {sub.data_concessi ? formatDate(sub.data_concessi) : ''}
+                  </p>
+                </div>
+                <span class="text-sm font-medium text-gray-900 tabular-nums whitespace-nowrap">
+                  {sub.import_subvenci_pr_stec_ajut ? formatCurrency(sub.import_subvenci_pr_stec_ajut) : '---'}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p class="text-sm text-gray-400 py-4">
+              {subvencions === null ? "No s'han pogut carregar les dades" : "No hi ha subvencions recents"}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
