@@ -4,8 +4,7 @@ import StatCard from '@components/ui/StatCard.astro';
 import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import Badge from '@components/ui/Badge.astro';
 import BarChart from '@components/charts/BarChart.tsx';
-import SpainMap from '@components/charts/SpainMap.tsx';
-import { formatCurrency, formatNumber, formatCompactNumber } from '@lib/utils';
+import { formatCurrency, formatNumber, formatCompactNumber, formatDate } from '@lib/utils';
 import type { CasCorrupcio } from '@lib/types';
 
 import casos from '@data/casos-corrupcion.json';
@@ -17,37 +16,37 @@ const totalPersones = typedCasos.reduce((acc, cas) => acc + cas.persones.length,
 const totalCondemnats = typedCasos.reduce((acc, cas) => acc + cas.persones.filter(p => p.estat_judicial === 'condemnat').length, 0);
 const totalImport = typedCasos.reduce((acc, cas) => acc + cas.import_estimat, 0);
 
+// Chart data — separate arrays for BarChart
 const casosByParty: Record<string, number> = {};
 for (const cas of typedCasos) {
   casosByParty[cas.partit] = (casosByParty[cas.partit] || 0) + 1;
 }
-const partyChartData = Object.entries(casosByParty)
-  .sort((a, b) => b[1] - a[1])
-  .map(([label, value]) => ({ label, value }));
+const partyEntries = Object.entries(casosByParty).sort((a, b) => b[1] - a[1]);
+const partyLabels = partyEntries.map(([label]) => label);
+const partyData = partyEntries.map(([, value]) => value);
 
+// By community
 const casosByCommunity: Record<string, number> = {};
 for (const cas of typedCasos) {
   casosByCommunity[cas.comunitat] = (casosByCommunity[cas.comunitat] || 0) + 1;
 }
-const communityMapData = Object.entries(casosByCommunity)
-  .map(([region, value]) => ({ region, value }));
+const communityEntries = Object.entries(casosByCommunity).sort((a, b) => b[1] - a[1]);
+const communityLabels = communityEntries.map(([label]) => label);
+const communityData = communityEntries.map(([, value]) => value);
+
+// Sort cases by import
+const sortedCasos = [...typedCasos].sort((a, b) => b.import_estimat - a.import_estimat);
 
 function estatToVariant(estat: string): 'condenado' | 'investigado' | 'absuelto' | 'en_curso' {
   const map: Record<string, 'condenado' | 'investigado' | 'absuelto' | 'en_curso'> = {
-    condemnat: 'condenado',
-    investigat: 'investigado',
-    absolt: 'absuelto',
-    en_curs: 'en_curso',
+    condemnat: 'condenado', investigat: 'investigado', absolt: 'absuelto', en_curs: 'en_curso',
   };
   return map[estat] || 'en_curso';
 }
 
 function estatToLabel(estat: string): string {
   const map: Record<string, string> = {
-    condemnat: 'Condemnat',
-    investigat: 'Investigat',
-    absolt: 'Absolt',
-    en_curs: 'En curs',
+    condemnat: 'Condemnat', investigat: 'Investigat', absolt: 'Absolt', en_curs: 'En curs',
   };
   return map[estat] || estat;
 }
@@ -57,16 +56,15 @@ function estatToLabel(estat: string): string {
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Corrupcio a Espanya</h1>
-      <p class="text-sm text-gray-500 mb-2">
-        Dades publiques de casos de corrupcio politica amb sentencies fermes i procediments en curs.
+      <p class="text-sm text-gray-500 mb-4">
+        Casos documentats de corrupcio politica amb procediments judicials.
       </p>
       <DataSourceBanner
         source="CENDOJ, CGPJ i fonts judicials publiques"
         sourceUrl="https://www.poderjudicial.es/cgpj/es/Temas/Transparencia/"
         scope="Casos de corrupcio politica a Espanya amb procediments judicials documentats"
         notes={[
-          'Inclou casos de totes les comunitats autonomes — els imports son estimacions basades en informacio judicial publica',
-          'L\'estat judicial (condemnat, investigat, absolt) reflecteix l\'ultima informacio disponible',
+          'Els imports son estimacions basades en informacio judicial publica',
           'Un cas "en curs" significa que el procediment judicial no ha conclòs — no implica culpabilitat',
         ]}
       />
@@ -78,7 +76,7 @@ function estatToLabel(estat: string): string {
         <StatCard label="Casos registrats" value={formatNumber(totalCasos)} />
         <StatCard label="Persones implicades" value={formatNumber(totalPersones)} />
         <StatCard label="Condemnats" value={formatNumber(totalCondemnats)} />
-        <StatCard label="Import estimat total" value={formatCompactNumber(totalImport) + ' €'} />
+        <StatCard label="Import estimat" value={formatCompactNumber(totalImport) + ' €'} />
       </div>
     </section>
 
@@ -89,17 +87,22 @@ function estatToLabel(estat: string): string {
           <h2 class="text-sm font-semibold text-gray-700 mb-4">Per partit politic</h2>
           <BarChart
             client:load
-            data={partyChartData}
-            title="Casos per partit"
+            labels={partyLabels}
+            data={partyData}
+            label="Casos"
             color="#ef4444"
+            horizontal={true}
           />
         </div>
         <div class="border border-gray-200 rounded-lg bg-white p-5">
           <h2 class="text-sm font-semibold text-gray-700 mb-4">Per comunitat autonoma</h2>
-          <SpainMap
+          <BarChart
             client:load
-            data={communityMapData}
-            title="Casos per comunitat"
+            labels={communityLabels}
+            data={communityData}
+            label="Casos"
+            color="#3f3f46"
+            horizontal={true}
           />
         </div>
       </div>
@@ -109,9 +112,9 @@ function estatToLabel(estat: string): string {
     <section>
       <h2 class="text-lg font-bold text-gray-900 mb-4">Tots els casos</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {typedCasos.map((cas) => (
+        {sortedCasos.map((cas) => (
           <a href={`/corrupcio/casos/${cas.slug}`} class="block group border border-gray-200 rounded-lg p-4 bg-white hover:border-gray-400 transition-colors">
-            <div class="flex items-start justify-between gap-2 mb-3">
+            <div class="flex items-start justify-between gap-2 mb-2">
               <h3 class="text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
                 {cas.nom}
               </h3>
@@ -119,14 +122,24 @@ function estatToLabel(estat: string): string {
                 {estatToLabel(cas.estat)}
               </Badge>
             </div>
+
+            <p class="text-xs text-gray-500 mb-3 line-clamp-2">{cas.descripcio}</p>
+
             <div class="flex flex-wrap gap-1.5 text-xs text-gray-500 mb-3">
               <span class="bg-gray-50 px-2 py-0.5 rounded">{cas.comunitat}</span>
               <span class="bg-gray-50 px-2 py-0.5 rounded">{cas.partit}</span>
+              <span class="bg-gray-50 px-2 py-0.5 rounded">{cas.persones.length} implicats</span>
             </div>
+
             <div class="flex justify-between items-center text-xs">
-              <span class="font-medium text-gray-700">
+              <span class="font-semibold text-gray-900">
                 {formatCurrency(cas.import_estimat)}
               </span>
+              {cas.data_sentencia ? (
+                <span class="text-gray-400">Sentencia: {formatDate(cas.data_sentencia)}</span>
+              ) : cas.data_inici ? (
+                <span class="text-gray-400">Inici: {formatDate(cas.data_inici)}</span>
+              ) : null}
             </div>
           </a>
         ))}
