@@ -527,9 +527,9 @@ export default function DataExplorer({
             </table>
           </div>
 
-          <div class="flex items-center justify-between mt-3 text-xs flex-wrap gap-2">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-3 text-xs gap-2">
             <span class="text-gray-400">
-              {total.toLocaleString('ca-ES')} resultats · Pàgina {page + 1} de {totalPages.toLocaleString('ca-ES')} · Dades en temps real des de l'API
+              {total.toLocaleString('ca-ES')} resultats · Pàgina {page + 1} de {totalPages.toLocaleString('ca-ES')}
             </span>
             <div class="flex items-center gap-1.5">
               {dataSource === 'socrata' && (
