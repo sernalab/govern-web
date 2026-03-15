@@ -33,18 +33,18 @@ try {
 }
 ---
 
-<DefaultLayout title="Contractes Publics" description="Explorador de contractes publics de la Generalitat de Catalunya" section="contractes">
+<DefaultLayout title="Contractes Públics" description="Explorador de contractes públics de la Generalitat de Catalunya" section="contractes">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
-      <h1 class="text-2xl font-bold text-gray-900 mb-1">Contractes publics</h1>
-      <p class="text-sm text-gray-500 mb-4">Registre public de contractes de Catalunya</p>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Contractes públics</h1>
+      <p class="text-sm text-gray-500 mb-4">Registre públic de contractes de Catalunya</p>
       <DataSourceBanner
-        source="Transparencia Catalunya (Socrata)"
+        source="Transparència Catalunya (Socrata)"
         sourceUrl="https://analisi.transparenciacatalunya.cat"
-        scope="Tots els contractes publics de la Generalitat i entitats locals de Catalunya des de 1998"
+        scope="Tots els contractes públics de la Generalitat i entitats locals de Catalunya des de 1998"
         notes={[
           'Les dades inclouen contractes en totes les fases: adjudicats, formalitzats i liquidats',
-          'Imports en euros, IVA inclos segons la font original',
+          'Imports en euros, IVA inclòs segons la font original',
         ]}
       />
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
@@ -57,7 +57,7 @@ try {
           value={totalAmount !== null ? formatCurrency(totalAmount) : '---'}
         />
         <StatCard
-          label="Valor mitja"
+          label="Valor mitjà"
           value={avgValue !== null ? formatCurrency(avgValue) : '---'}
         />
       </div>
@@ -71,7 +71,7 @@ try {
         domain={SOCRATA_DOMAIN}
         dataSource="socrata"
         columns={[
-          { key: 'descripcio_expedient', label: 'Descripcio', format: 'text' },
+          { key: 'descripcio_expedient', label: 'Descripció', format: 'text' },
           { key: 'import_adjudicacio', label: 'Import', format: 'currency' },
           { key: 'data_adjudicacio', label: 'Data', format: 'date' },
           { key: 'adjudicatari', label: 'Adjudicatari', format: 'text' },

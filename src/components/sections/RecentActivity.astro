@@ -15,10 +15,10 @@ const { contracts, subvencions } = Astro.props;
     <h2 class="text-xl font-bold text-gray-900 mb-8">Activitat recent</h2>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Ultims contractes -->
+      <!-- Últims contractes -->
       <div>
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-sm font-semibold text-gray-700">Ultims contractes</h3>
+          <h3 class="text-sm font-semibold text-gray-700">Últims contractes</h3>
           <a href="/contractes" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">Veure tot &rarr;</a>
         </div>
         <div class="divide-y divide-gray-100">
@@ -27,7 +27,7 @@ const { contracts, subvencions } = Astro.props;
               <div class="py-3 flex items-start justify-between gap-3">
                 <div class="flex-1 min-w-0">
                   <p class="text-sm text-gray-900 truncate">
-                    {contract.descripcio_expedient || 'Sense descripcio'}
+                    {contract.descripcio_expedient || 'Sense descripció'}
                   </p>
                   <p class="text-xs text-gray-400 mt-0.5">
                     {contract.organisme_contractant || ''} · {contract.data_adjudicacio ? formatDate(contract.data_adjudicacio) : ''}
@@ -46,10 +46,10 @@ const { contracts, subvencions } = Astro.props;
         </div>
       </div>
 
-      <!-- Ultimes subvencions -->
+      <!-- Últimes subvencions -->
       <div>
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-sm font-semibold text-gray-700">Ultimes subvencions</h3>
+          <h3 class="text-sm font-semibold text-gray-700">Últimes subvencions</h3>
           <a href="/subvencions" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">Veure tot &rarr;</a>
         </div>
         <div class="divide-y divide-gray-100">
@@ -58,7 +58,7 @@ const { contracts, subvencions } = Astro.props;
               <div class="py-3 flex items-start justify-between gap-3">
                 <div class="flex-1 min-w-0">
                   <p class="text-sm text-gray-900 truncate">
-                    {sub.ra_social_del_beneficiari || sub.objecte_de_la_convocat_ria || 'Sense descripcio'}
+                    {sub.ra_social_del_beneficiari || sub.objecte_de_la_convocat_ria || 'Sense descripció'}
                   </p>
                   <p class="text-xs text-gray-400 mt-0.5">
                     {sub.entitat_oo_aa_o_departament_1 || ''} · {sub.data_concessi ? formatDate(sub.data_concessi) : ''}

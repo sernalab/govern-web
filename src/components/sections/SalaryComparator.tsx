@@ -80,7 +80,7 @@ export default function SalaryComparator() {
   return (
     <div class="space-y-6">
       <div class="flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-gray-900">Comparador de Retribucions</h2>
+        <h2 class="text-xl font-semibold text-gray-900">Comparador de retribucions</h2>
         {compared.length > 0 && (
           <button
             onClick={() => setCompared([])}
@@ -111,7 +111,7 @@ export default function SalaryComparator() {
                 <p class="text-gray-400 text-xs mb-3">{person.departament}</p>
                 <div class="space-y-1">
                   <div class="flex items-baseline justify-between">
-                    <span class="text-xs text-gray-500">Retribucio bruta</span>
+                    <span class="text-xs text-gray-500">Retribució bruta</span>
                     <span class="text-lg font-mono font-semibold text-emerald-600">
                       {formatCurrency(salary)}
                     </span>

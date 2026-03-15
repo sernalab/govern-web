@@ -4,7 +4,7 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
 
 <DefaultLayout
   title="Metodologia — El Detector"
-  description="Metodologia d'analisi de patrons anomals en la contractacio publica."
+  description="Metodologia d'anàlisi de patrons anòmals en la contractació pública."
   section="detector"
 >
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-10">
@@ -13,13 +13,13 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
         &larr; Tornar al Detector
       </a>
       <h1 class="text-2xl font-bold text-gray-900 mb-2">Metodologia</h1>
-      <p class="text-sm text-gray-500">Com funciona El Detector i que busca en les dades de contractacio publica.</p>
+      <p class="text-sm text-gray-500">Com funciona El Detector i que busca en les dades de contractació pública.</p>
     </section>
 
     <section>
-      <h2 class="text-lg font-semibold text-gray-900 mb-2">Que es El Detector?</h2>
+      <h2 class="text-lg font-semibold text-gray-900 mb-2">Què és El Detector?</h2>
       <p class="text-sm text-gray-500 leading-relaxed">
-        Eina d'analisi automatica que examina contractes publics de l'API de Transparencia Catalunya
+        Eina d'anàlisi automàtica que examina contractes públics de l'API de Transparència Catalunya
         per identificar patrons que podrien indicar irregularitats.
       </p>
     </section>
@@ -31,15 +31,15 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
         <h2 class="text-lg font-semibold text-gray-900">Fraccionament de contractes</h2>
       </div>
 
-      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Que busca</p>
+      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Què busca</p>
       <p class="text-sm text-gray-500 leading-relaxed mb-4">
-        Dividir un contracte gran en multiples petits per evitar llindars de licitacio publica.
+        Dividir un contracte gran en múltiples petits per evitar llindars de licitació pública.
         Serveis &lt; 15.000 EUR i obres &lt; 40.000 EUR s'adjudiquen directament.
       </p>
 
       <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Algorisme</p>
       <ol class="ml-4 list-decimal space-y-1 text-sm text-gray-500 mb-4">
-        <li>Agrupa contractes per organ + adjudicatari + any</li>
+        <li>Agrupa contractes per òrgan + adjudicatari + any</li>
         <li>Filtra imports entre 50%-100% del llindar (zona sospitosa)</li>
         <li>3+ contractes en zona sospitosa = anomalia</li>
         <li>Severitat: 3-4 (baixa), 4-5 (mitjana), 6+ (alta)</li>
@@ -67,23 +67,23 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
       </div>
     </section>
 
-    <!-- Concentracio -->
+    <!-- Concentració -->
     <section class="border-t border-gray-100 pt-8">
       <div class="flex items-center gap-2 mb-4">
         <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-50 text-xs font-bold text-purple-600">2</span>
-        <h2 class="text-lg font-semibold text-gray-900">Concentracio de proveidors</h2>
+        <h2 class="text-lg font-semibold text-gray-900">Concentració de proveïdors</h2>
       </div>
 
-      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Que busca</p>
+      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Què busca</p>
       <p class="text-sm text-gray-500 leading-relaxed mb-4">
-        Proveidors que acumulen un percentatge excessiu de contractes d'un organisme,
+        Proveïdors que acumulen un percentatge excessiu de contractes d'un organisme,
         indicant possible favoritisme.
       </p>
 
       <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Algorisme</p>
       <ol class="ml-4 list-decimal space-y-1 text-sm text-gray-500">
-        <li>Agrupa contractes per organ</li>
-        <li>Calcula % de cada proveidor (minim 5 contractes)</li>
+        <li>Agrupa contractes per òrgan</li>
+        <li>Calcula % de cada proveidor (mínim 5 contractes)</li>
         <li>&gt;30% = anomalia</li>
         <li>Severitat: 30-45% (baixa), 45-60% (mitjana), 60%+ (alta)</li>
       </ol>
@@ -93,22 +93,22 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
     <section class="border-t border-gray-100 pt-8">
       <h2 class="text-lg font-semibold text-gray-900 mb-3">Limitacions</h2>
       <ul class="ml-4 list-disc space-y-1.5 text-sm text-gray-500">
-        <li>Analitzem els ultims 1.000 contractes (mostra limitada)</li>
-        <li>Molts patrons anomals tenen explicacions legitimes</li>
+        <li>Analitzem els últims 1.000 contractes (mostra limitada)</li>
+        <li>Molts patrons anomals tenen explicacions legítimes</li>
         <li>Dades incompletes en bases de dades originals</li>
-        <li>Analisi temporal — varia segons moment de consulta</li>
+        <li>Anàlisi temporal — varia segons moment de consulta</li>
       </ul>
     </section>
 
-    <!-- Avis legal -->
+    <!-- Avís legal -->
     <section class="border-t border-gray-100 pt-8">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">Avis legal</h2>
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">Avís legal</h2>
       <div class="border-l-2 border-amber-400 bg-amber-50 pl-4 py-3 pr-4 rounded-r text-xs text-amber-800 space-y-2">
         <p>
-          Analisi estadistica de dades publiques. No constitueix acusacio ni prova d'irregularitat.
+          Anàlisi estadística de dades públiques. No constitueix acusació ni prova d'irregularitat.
         </p>
         <p>
-          Dades de l'API de Transparencia de la Generalitat de Catalunya, mostrades tal com es publiquen.
+          Dades de l'API de Transparència de la Generalitat de Catalunya, mostrades tal com es publiquen.
         </p>
       </div>
     </section>

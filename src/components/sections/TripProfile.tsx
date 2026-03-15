@@ -199,7 +199,7 @@ export default function TripProfile({ domain, dataset }: TripProfileProps) {
                 {trips.map((trip, i) => (
                   <div key={i} style={{ borderRadius: '8px', border: '1px solid #e4e4e7', padding: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <p style={{ fontSize: '12px', fontWeight: 500, color: '#18181b' }}>{trip.destinaci || 'Sense destinacio'}</p>
+                      <p style={{ fontSize: '12px', fontWeight: 500, color: '#18181b' }}>{trip.destinaci || 'Sense destinació'}</p>
                       <span style={{ fontSize: '13px', fontWeight: 700, color: '#18181b', flexShrink: 0 }}>{fmtCurrency(safeNum(trip.total_despeses))}</span>
                     </div>
                     <p style={{ fontSize: '11px', color: '#71717a', marginBottom: '6px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>

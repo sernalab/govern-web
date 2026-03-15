@@ -28,7 +28,7 @@ try {
   if (sectRes.ok) {
     const sects = await sectRes.json();
     budgetData = sects.map((d: Record<string, string>) => ({
-      name: d.nom_secci ?? 'Sense seccio',
+      name: d.nom_secci ?? 'Sense secció',
       value: Number(d.sum_import_sense_consolidar ?? 0),
     }));
     sectionCount = sects.length;
@@ -49,12 +49,12 @@ try {
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Pressupostos</h1>
       <p class="text-sm text-gray-500 mb-4">Pressupostos de la Generalitat de Catalunya</p>
       <DataSourceBanner
-        source="Transparencia Catalunya (Socrata)"
+        source="Transparència Catalunya (Socrata)"
         sourceUrl="https://analisi.transparenciacatalunya.cat"
-        scope="Pressupostos consolidats de despesa de la Generalitat, agrupats per seccio"
+        scope="Pressupostos consolidats de despesa de la Generalitat, agrupats per secció"
         notes={[
-          'Imports sense consolidar — poden incloure transferencies internes entre seccions',
-          'La distribucio mostra l\'ultima actualitzacio disponible al portal',
+          'Imports sense consolidar — poden incloure transferències internes entre seccions',
+          'La distribució mostra l\'última actualització disponible al portal',
         ]}
       />
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
@@ -74,7 +74,7 @@ try {
     </section>
 
     <section>
-      <h2 class="text-lg font-semibold text-gray-900 mb-4">Distribucio per seccio</h2>
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Distribució per secció</h2>
       {budgetData.length > 0 ? (
         <div class="border border-gray-200 rounded-lg bg-white p-4">
           <BudgetTreemap client:load data={budgetData} />

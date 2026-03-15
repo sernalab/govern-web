@@ -57,7 +57,7 @@ const concentracioAnomalies = anomalies.filter((a) => a.tipus === 'concentracio'
 
 <DefaultLayout
   title="El Detector"
-  description="Deteccio automatica de patrons anomals en la contractacio publica de Catalunya"
+  description="Detecció automàtica de patrons anòmals en la contractació pública de Catalunya"
   section="detector"
 >
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
@@ -65,14 +65,14 @@ const concentracioAnomalies = anomalies.filter((a) => a.tipus === 'concentracio'
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">El Detector</h1>
       <p class="text-sm text-gray-500 mb-4">
-        Analisi automatica de patrons anomals en la contractacio publica.
+        Anàlisi automàtica de patrons anòmals en la contractació pública.
         Examinem contractes publicats per identificar possibles irregularitats.
       </p>
 
       <div class="border-l-2 border-amber-400 bg-amber-50 pl-4 py-3 pr-4 rounded-r">
         <p class="text-xs text-amber-800">
-          Les anomalies detectades son <strong>patrons estadistics</strong>, no proves d'irregularitats.
-          Un patro anomal pot tenir explicacions legitimes.
+          Les anomalies detectades són <strong>patrons estadístics</strong>, no proves d'irregularitats.
+          Un patró anòmal pot tenir explicacions legítimes.
           <a href="/detector/metodologia" class="underline hover:text-amber-900">Metodologia</a>.
         </p>
       </div>
@@ -105,7 +105,7 @@ const concentracioAnomalies = anomalies.filter((a) => a.tipus === 'concentracio'
             </div>
             <div class="flex items-center gap-2 border border-gray-200 rounded px-3 py-1.5">
               <span class="h-2 w-2 rounded-full bg-purple-500"></span>
-              <span class="text-gray-500">Concentracio:</span>
+              <span class="text-gray-500">Concentració:</span>
               <span class="font-medium text-gray-900">{byType['concentracio'] || 0}</span>
             </div>
           </div>
@@ -127,7 +127,7 @@ const concentracioAnomalies = anomalies.filter((a) => a.tipus === 'concentracio'
                   <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{fraccionamentAnomalies.length}</span>
                 </div>
                 <p class="text-xs text-gray-500 mb-4">
-                  Contractes dividits en imports menors per evitar llindars de licitacio publica.
+                  Contractes dividits en imports menors per evitar llindars de licitació pública.
                 </p>
                 <div class="grid gap-4">
                   {fraccionamentAnomalies.map((anomalia) => (
@@ -140,11 +140,11 @@ const concentracioAnomalies = anomalies.filter((a) => a.tipus === 'concentracio'
             {concentracioAnomalies.length > 0 && (
               <section>
                 <div class="flex items-center gap-2 mb-4">
-                  <h2 class="text-lg font-bold text-gray-900">Concentracio de proveidors</h2>
+                  <h2 class="text-lg font-bold text-gray-900">Concentració de proveïdors</h2>
                   <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{concentracioAnomalies.length}</span>
                 </div>
                 <p class="text-xs text-gray-500 mb-4">
-                  Proveidors amb percentatge elevat dels contractes d'un organ.
+                  Proveïdors amb percentatge elevat dels contractes d'un òrgan.
                 </p>
                 <div class="grid gap-4">
                   {concentracioAnomalies.map((anomalia) => (
@@ -158,7 +158,7 @@ const concentracioAnomalies = anomalies.filter((a) => a.tipus === 'concentracio'
 
         <section class="border-t border-gray-100 pt-6 text-center">
           <p class="text-xs text-gray-400">
-            Dades de l'API de Transparencia Catalunya · Analisi: {new Date().toLocaleDateString('ca-ES')}
+            Dades de l'API de Transparència Catalunya · Anàlisi: {new Date().toLocaleDateString('ca-ES')}
           </p>
           <a href="/detector/metodologia" class="text-xs text-gray-500 hover:text-gray-700 underline">
             Metodologia completa

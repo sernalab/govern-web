@@ -37,13 +37,13 @@ function estatToLabel(estat: string): string {
   return map[estat] || estat;
 }
 
-const timelineEvents: { date: string; title: string; description?: string; type?: 'inicio' | 'investigacion' | 'juicio' | 'sentencia' }[] = [];
+const timelineEvents: { date: string; title: string; description?: string; type?: 'inicio' | 'investigación' | 'juicio' | 'sentencia' }[] = [];
 
 if (cas.data_inici) {
   timelineEvents.push({
     date: cas.data_inici,
-    title: 'Inici de la investigacio',
-    description: `S'inicia la investigacio judicial del ${cas.nom}`,
+    title: 'Inici de la investigació',
+    description: `S'inicia la investigació judicial del ${cas.nom}`,
     type: 'inicio',
   });
 }
@@ -51,7 +51,7 @@ if (cas.data_inici) {
 if (cas.data_sentencia) {
   timelineEvents.push({
     date: cas.data_sentencia,
-    title: 'Sentencia',
+    title: 'Sentència',
     description: cas.font_judicial,
     type: 'sentencia',
   });
@@ -78,23 +78,23 @@ const absoltCount = cas.persones.filter(p => p.estat_judicial === 'absolt').leng
       </div>
       <p class="text-sm text-gray-500 leading-relaxed mb-4">{cas.descripcio}</p>
       <DataSourceBanner
-        source="Elaboracio propia a partir de fonts publiques"
+        source="Elaboració pròpia a partir de fonts públiques"
         scope="Dades recopilades manualment — poden contenir errors o no estar actualitzades"
         notes={[
-          'Aquesta informacio es orientativa i no constitueix una font judicial oficial',
-          'Els imports son estimacions basades en informacio publicada en mitjans i resolucions judicials',
-          'Per a informacio judicial verificada, consulteu el CENDOJ (poderjudicial.es)',
+          'Aquesta informació és orientativa i no constitueix una font judicial oficial',
+          'Els imports són estimacions basades en informació publicada en mitjans i resolucions judicials',
+          'Per a informació judicial verificada, consulteu el CENDOJ (poderjudicial.es)',
         ]}
       />
     </section>
 
     <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="border border-gray-200 rounded-lg p-4">
-        <p class="text-xs text-gray-500 mb-1">Comunitat autonoma</p>
+        <p class="text-xs text-gray-500 mb-1">Comunitat autònoma</p>
         <p class="text-sm font-semibold text-gray-900">{cas.comunitat}</p>
       </div>
       <div class="border border-gray-200 rounded-lg p-4">
-        <p class="text-xs text-gray-500 mb-1">Partit politic</p>
+        <p class="text-xs text-gray-500 mb-1">Partit polític</p>
         <p class="text-sm font-semibold text-gray-900">{cas.partit}</p>
       </div>
       <div class="border border-gray-200 rounded-lg p-4">
@@ -138,7 +138,7 @@ const absoltCount = cas.persones.filter(p => p.estat_judicial === 'absolt').leng
           )}
         </div>
         <p class="text-xs text-gray-400 mt-4 text-center">
-          No es mostren noms individuals per precaucio legal. Consulteu les fonts judicials oficials per a detalls.
+          No es mostren noms individuals per precaució legal. Consulteu les fonts judicials oficials per a detalls.
         </p>
       </div>
     </section>
@@ -148,13 +148,13 @@ const absoltCount = cas.persones.filter(p => p.estat_judicial === 'absolt').leng
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         {cas.data_inici && (
           <div>
-            <dt class="text-xs text-gray-400">Inici investigacio</dt>
+            <dt class="text-xs text-gray-400">Inici investigació</dt>
             <dd class="text-gray-900">{formatDate(cas.data_inici)}</dd>
           </div>
         )}
         {cas.data_sentencia && (
           <div>
-            <dt class="text-xs text-gray-400">Sentencia</dt>
+            <dt class="text-xs text-gray-400">Sentència</dt>
             <dd class="text-gray-900">{formatDate(cas.data_sentencia)}</dd>
           </div>
         )}

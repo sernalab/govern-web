@@ -4,7 +4,7 @@ import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import DataExplorer from '@components/sections/DataExplorer.tsx';
 ---
 
-<DefaultLayout title="Subvencions - Espanya (BDNS)" description="Concessions de subvencions de l'administracio estatal des de la Base de Datos Nacional de Subvenciones" section="espanya">
+<DefaultLayout title="Subvencions - Espanya (BDNS)" description="Concessions de subvencions de l'administració estatal des de la Base de Datos Nacional de Subvenciones" section="espanya">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <a href="/espanya" class="inline-flex items-center text-gray-400 hover:text-gray-700 transition-colors text-xs mb-4">
@@ -17,10 +17,10 @@ import DataExplorer from '@components/sections/DataExplorer.tsx';
       <DataSourceBanner
         source="BDNS — Ministeri d'Hisenda"
         sourceUrl="https://www.pap.hacienda.gob.es/bdnstrans/GE/es/inicio"
-        scope="Concessions de subvencions de totes les administracions publiques d'Espanya"
+        scope="Concessions de subvencions de totes les administracions públiques d'Espanya"
         notes={[
-          'Dades de l\'API publica de la BDNS — pot no incloure concessions en tramit',
-          'Els imports reflecteixen la concessio, no necessariament l\'import final justificat',
+          'Dades de l\'API pública de la BDNS — pot no incloure concessions en tràmit',
+          'Els imports reflecteixen la concessió, no necessàriament l\'import final justificat',
         ]}
       />
     </section>
@@ -33,11 +33,11 @@ import DataExplorer from '@components/sections/DataExplorer.tsx';
         domain="www.pap.hacienda.gob.es/bdnstrans/api"
         dataSource="bdns"
         columns={[
-          { key: 'descripcion', label: 'Descripcio', format: 'text' },
+          { key: 'descripcion', label: 'Descripció', format: 'text' },
           { key: 'beneficiario', label: 'Beneficiari', format: 'text' },
           { key: 'importe', label: 'Import', format: 'currency' },
           { key: 'fechaConcesion', label: 'Data', format: 'date' },
-          { key: 'organo', label: 'Organ', format: 'text' },
+          { key: 'organo', label: 'Òrgan', format: 'text' },
         ]}
         searchField="descripcion"
         defaultOrder="fechaConcesion DESC"

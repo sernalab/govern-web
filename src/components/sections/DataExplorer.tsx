@@ -21,9 +21,9 @@ interface DataExplorerProps {
 
 const FIELD_LABELS: Record<string, string> = {
   // Contracts
-  situaci_contractual: 'Situacio contractual',
+  situaci_contractual: 'Situació contractual',
   exercici: 'Exercici',
-  subjecte_ambit: 'Ambit',
+  subjecte_ambit: 'Àmbit',
   agrupacio_organisme: 'Departament',
   id_agrupacio_organisme: 'ID departament',
   id_organisme_contractant: 'ID organisme',
@@ -31,13 +31,13 @@ const FIELD_LABELS: Record<string, string> = {
   codi_expedient: 'Codi expedient',
   procediment_adjudicacio: 'Procediment',
   tipus_contracte: 'Tipus de contracte',
-  descripcio_expedient: 'Descripcio',
+  descripcio_expedient: 'Descripció',
   contracte: 'Contracte',
   numero_lot: 'Lot',
   codi_cpv: 'Codi CPV',
   adjudicatari: 'Adjudicatari',
-  import_adjudicacio: 'Import adjudicacio',
-  data_adjudicacio: 'Data adjudicacio',
+  import_adjudicacio: 'Import adjudicació',
+  data_adjudicacio: 'Data adjudicació',
   lot_desert: 'Lot desert',
   dies_durada: 'Dies durada',
   mesos_durada: 'Mesos durada',
@@ -46,50 +46,50 @@ const FIELD_LABELS: Record<string, string> = {
   clau: 'Clau',
   codi_raisc: 'Codi RAISC',
   codi_bdns: 'Codi BDNS',
-  discriminador_de_la_concessi: 'Discriminador concessio',
-  objecte_de_la_convocat_ria: 'Objecte convocatoria',
-  t_tol_convocat_ria_catal: 'Titol (catala)',
-  t_tol_convocat_ria_castell: 'Titol (castella)',
+  discriminador_de_la_concessi: 'Discriminador concessió',
+  objecte_de_la_convocat_ria: 'Objecte convocatòria',
+  t_tol_convocat_ria_catal: 'Títol (català)',
+  t_tol_convocat_ria_castell: 'Títol (castellà)',
   bases_reguladores_url_catal: 'Bases reguladores',
   bases_reguladores_url_castell: 'Bases reguladores (ES)',
   ra_social_del_beneficiari: 'Beneficiari',
   cif_beneficiari: 'CIF beneficiari',
-  import_subvenci_pr_stec_ajut: 'Import subvencio',
+  import_subvenci_pr_stec_ajut: 'Import subvenció',
   import_ajuda_equivalent: 'Import ajuda equivalent',
-  data_concessi: 'Data concessio',
+  data_concessi: 'Data concessió',
   entitat_oo_aa_o_departament: 'Entitat (codi)',
   entitat_oo_aa_o_departament_1: 'Entitat',
-  any_de_la_convocat_ria: 'Any convocatoria',
+  any_de_la_convocat_ria: 'Any convocatòria',
   subfinalitat_codi: 'Subfinalitat (codi)',
   subfinalitat: 'Subfinalitat',
   finalitat_rais_codi: 'Finalitat RAIS (codi)',
   finalitat_rais: 'Finalitat RAIS',
-  finalitat_p_blica_codi: 'Finalitat publica (codi)',
-  finalitat_p_blica: 'Finalitat publica',
+  finalitat_p_blica_codi: 'Finalitat pública (codi)',
+  finalitat_p_blica: 'Finalitat pública',
   tipus_d_instument_d_ajut: 'Instrument (codi)',
   tipus_d_instument_d_ajut_1: 'Instrument d\'ajut',
-  aplicaci_pressupost_ria: 'Aplicacio pressupostaria',
+  aplicaci_pressupost_ria: 'Aplicació pressupostària',
   tipus_de_beneficiaris_codi: 'Tipus beneficiari (codi)',
   tipus_de_beneficiaris: 'Tipus de beneficiari',
   codi_territorial: 'Codi territorial',
-  administraci_codi: 'Administracio (codi)',
-  administraci_: 'Administracio',
-  departament_o_entitat_local_d_adscripci_codi: 'Dept. adscripcio (codi)',
-  departament_o_entitat_local_d_adscripci_: 'Dept. adscripcio',
+  administraci_codi: 'Administració (codi)',
+  administraci_: 'Administració',
+  departament_o_entitat_local_d_adscripci_codi: 'Dept. adscripció (codi)',
+  departament_o_entitat_local_d_adscripci_: 'Dept. adscripció',
   // Salaries
   cognoms_nom: 'Nom',
-  denominacio_lloc: 'Carrec',
+  denominacio_lloc: 'Càrrec',
   departament: 'Departament',
-  retribucio_anual_prevista: 'Retribucio anual',
-  vinculacio: 'Vinculacio',
+  retribucio_anual_prevista: 'Retribució anual',
+  vinculacio: 'Vinculació',
   sexe: 'Sexe',
-  inici_periode: 'Inici periode',
+  inici_periode: 'Inici període',
   // BDNS
-  descripcion: 'Descripcio',
+  descripcion: 'Descripció',
   beneficiario: 'Beneficiari',
   importe: 'Import',
-  fechaConcesion: 'Data concessio',
-  organo: 'Organ',
+  fechaConcesion: 'Data concessió',
+  organo: 'Òrgan',
 };
 
 const CURRENCY_FIELDS = new Set([
@@ -292,7 +292,7 @@ function DetailModal({
                         rel="noopener noreferrer"
                         class="text-blue-600 hover:text-blue-800 underline text-xs"
                       >
-                        Obrir enllac
+                        Obrir enllaç
                       </a>
                     ) : (
                       formatDetailValue(key, value)
@@ -529,7 +529,7 @@ export default function DataExplorer({
 
           <div class="flex items-center justify-between mt-3 text-xs flex-wrap gap-2">
             <span class="text-gray-400">
-              {total.toLocaleString('ca-ES')} resultats · Pagina {page + 1} de {totalPages.toLocaleString('ca-ES')} · Dades en temps real des de l'API
+              {total.toLocaleString('ca-ES')} resultats · Pàgina {page + 1} de {totalPages.toLocaleString('ca-ES')} · Dades en temps real des de l'API
             </span>
             <div class="flex items-center gap-1.5">
               {dataSource === 'socrata' && (
@@ -558,7 +558,7 @@ export default function DataExplorer({
                 disabled={page >= totalPages - 1}
                 class="px-3 py-1.5 rounded bg-gray-900 text-white hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-xs"
               >
-                Seguent
+                Següent
               </button>
             </div>
           </div>

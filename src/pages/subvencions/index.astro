@@ -36,12 +36,12 @@ try {
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Subvencions</h1>
       <p class="text-sm text-gray-500 mb-4">Registre d'Ajuts i Subvencions de Catalunya (RAISC)</p>
       <DataSourceBanner
-        source="Transparencia Catalunya (Socrata)"
+        source="Transparència Catalunya (Socrata)"
         sourceUrl="https://analisi.transparenciacatalunya.cat"
-        scope="Subvencions concedides per la Generalitat i entitats publiques de Catalunya"
+        scope="Subvencions concedides per la Generalitat i entitats públiques de Catalunya"
         notes={[
-          'Inclou subvencions, prestecs i ajuts de totes les entitats del sector public catala',
-          'Les dates corresponen a la data de concessio, no de pagament efectiu',
+          'Inclou subvencions, préstecs i ajuts de totes les entitats del sector públic català',
+          'Les dates corresponen a la data de concessió, no de pagament efectiu',
         ]}
       />
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
@@ -64,7 +64,7 @@ try {
         domain={SOCRATA_DOMAIN}
         dataSource="socrata"
         columns={[
-          { key: 'objecte_de_la_convocat_ria', label: 'Convocatoria', format: 'text' },
+          { key: 'objecte_de_la_convocat_ria', label: 'Convocatòria', format: 'text' },
           { key: 'ra_social_del_beneficiari', label: 'Beneficiari', format: 'text' },
           { key: 'import_subvenci_pr_stec_ajut', label: 'Import', format: 'currency' },
           { key: 'data_concessi', label: 'Data', format: 'date' },

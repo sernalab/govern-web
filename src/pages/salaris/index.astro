@@ -31,19 +31,19 @@ try {
 }
 ---
 
-<DefaultLayout title="Retribucions de carrecs publics" description="Retribucions d'alts carrecs de la Generalitat de Catalunya" section="salaris">
+<DefaultLayout title="Retribucions de càrrecs públics" description="Retribucions d'alts càrrecs de la Generalitat de Catalunya" section="salaris">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
-      <h1 class="text-2xl font-bold text-gray-900 mb-1">Retribucions de carrecs publics</h1>
-      <p class="text-sm text-gray-500 mb-4">Alts carrecs de la Generalitat de Catalunya</p>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Retribucions de càrrecs públics</h1>
+      <p class="text-sm text-gray-500 mb-4">Alts càrrecs de la Generalitat de Catalunya</p>
       <DataSourceBanner
-        source="Transparencia Catalunya (Socrata)"
+        source="Transparència Catalunya (Socrata)"
         sourceUrl="https://analisi.transparenciacatalunya.cat"
-        scope="Retribucions anuals previstes dels alts carrecs de la Generalitat"
+        scope="Retribucions anuals previstes dels alts càrrecs de la Generalitat"
         notes={[
-          'Son retribucions brutes anuals previstes, no salaris nets percebuts',
+          'Són retribucions brutes anuals previstes, no salaris nets percebuts',
           'No inclou dietes, indemnitzacions ni retribucions variables',
-          'Les dades corresponen a la darrera actualitzacio del portal de transparencia',
+          'Les dades corresponen a la darrera actualització del portal de transparència',
         ]}
       />
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
@@ -52,7 +52,7 @@ try {
           value={totalRecords !== null ? formatNumber(totalRecords) : '---'}
         />
         <StatCard
-          label="Retribucio maxima"
+          label="Retribució màxima"
           value={maxSalary ?? '---'}
         />
       </div>
@@ -67,9 +67,9 @@ try {
         dataSource="socrata"
         columns={[
           { key: 'cognoms_nom', label: 'Nom', format: 'text' },
-          { key: 'denominacio_lloc', label: 'Carrec', format: 'text' },
+          { key: 'denominacio_lloc', label: 'Càrrec', format: 'text' },
           { key: 'departament', label: 'Departament', format: 'text' },
-          { key: 'retribucio_anual_prevista', label: 'Retribucio anual', format: 'text' },
+          { key: 'retribucio_anual_prevista', label: 'Retribució anual', format: 'text' },
         ]}
         searchField="cognoms_nom"
         defaultOrder="retribucio_anual_prevista DESC"

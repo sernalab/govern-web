@@ -46,35 +46,35 @@ function parseSalary(s: string | undefined): number {
 
 <DefaultLayout
   title="Govern"
-  description="On van els teus diners? Dades publiques de contractes, subvencions i salaris de Catalunya."
+  description="On van els teus diners? Dades públiques de contractes, subvencions i salaris de Catalunya."
   section="inicio"
 >
   <!-- Hero -->
   <section class="bg-gray-950 text-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-      <p class="text-gray-500 text-xs font-medium mb-6 tracking-widest uppercase">Dades publiques de Catalunya</p>
+      <p class="text-gray-500 text-xs font-medium mb-6 tracking-widest uppercase">Dades públiques de Catalunya</p>
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
         On van els teus<br />diners?
       </h1>
       {totalVolume && (
         <p class="text-lg sm:text-xl text-gray-400 mb-4">
-          <span class="text-white font-semibold">{formatCompactNumber(totalVolume)} €</span> gestionats en contractes i subvencions publiques
+          <span class="text-white font-semibold">{formatCompactNumber(totalVolume)} €</span> gestionats en contractes i subvencions públiques
           <span class="text-gray-600">· 1998–2026</span>
         </p>
       )}
       <p class="text-sm text-gray-500 max-w-xl mb-10">
-        Dades reals de l'API de Transparencia Catalunya. Sense filtres, sense opinions. Tu decideixes.
+        Dades reals de l'API de Transparència Catalunya. Sense filtres, sense opinions. Tu decideixes.
       </p>
 
       {stats && (
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-gray-800 rounded-lg overflow-hidden">
           <div class="bg-gray-900 p-5">
             <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.totalContractes)}</p>
-            <p class="text-xs text-gray-500 mt-1">contractes publics</p>
+            <p class="text-xs text-gray-500 mt-1">contractes públics</p>
           </div>
           <div class="bg-gray-900 p-5">
             <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.importTotalContractes)} €</p>
-            <p class="text-xs text-gray-500 mt-1">en contractacio</p>
+            <p class="text-xs text-gray-500 mt-1">en contractació</p>
           </div>
           <div class="bg-gray-900 p-5">
             <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.totalSubvencions)}</p>
@@ -82,19 +82,19 @@ function parseSalary(s: string | undefined): number {
           </div>
           <div class="bg-gray-900 p-5">
             <p class="text-2xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.importTotalSubvencions)} €</p>
-            <p class="text-xs text-gray-500 mt-1">en ajuts publics</p>
+            <p class="text-xs text-gray-500 mt-1">en ajuts públics</p>
           </div>
         </div>
       )}
     </div>
   </section>
 
-  <!-- 1. Les empreses que mes cobren -->
+  <!-- 1. Les empreses que més cobren -->
   {topCompanies.length > 0 && (
     <section class="py-12 sm:py-16 border-b border-gray-100">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">Les empreses que mes cobren</h2>
-        <p class="text-sm text-gray-500 mb-8">Ranking d'empreses per volum total de contractes publics acumulats</p>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Les empreses que més cobren</h2>
+        <p class="text-sm text-gray-500 mb-8">Ranking d'empreses per volum total de contractes públics acumulats</p>
 
         <div class="space-y-3">
           {topCompanies.map((company, i) => {
@@ -133,7 +133,7 @@ function parseSalary(s: string | undefined): number {
     <section class="py-12 sm:py-16 bg-gray-50 border-b border-gray-100">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <h2 class="text-2xl font-bold text-gray-900 mb-2">On van les subvencions?</h2>
-        <p class="text-sm text-gray-500 mb-8">Distribucio per finalitat publica de totes les subvencions concedides</p>
+        <p class="text-sm text-gray-500 mb-8">Distribució per finalitat pública de totes les subvencions concedides</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {subsByPurpose.map((item) => {
@@ -161,12 +161,12 @@ function parseSalary(s: string | undefined): number {
     </section>
   )}
 
-  <!-- 3. Que cobren els carrecs publics -->
+  <!-- 3. Què cobren els càrrecs públics -->
   {salaryData.president && (
     <section class="py-12 sm:py-16 border-b border-gray-100">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">Que cobren els carrecs publics?</h2>
-        <p class="text-sm text-gray-500 mb-8">Retribucions brutes anuals previstes dels alts carrecs de la Generalitat</p>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Què cobren els càrrecs públics?</h2>
+        <p class="text-sm text-gray-500 mb-8">Retribucions brutes anuals previstes dels alts càrrecs de la Generalitat</p>
 
         <div class="max-w-2xl">
           <!-- President -->
@@ -194,7 +194,7 @@ function parseSalary(s: string | undefined): number {
           </div>
 
           <p class="text-xs text-gray-400 mt-4">
-            402 alts carrecs registrats. Retribucions brutes, sense dietes ni variables.
+            402 alts càrrecs registrats. Retribucions brutes, sense dietes ni variables.
           </p>
         </div>
 
@@ -212,7 +212,7 @@ function parseSalary(s: string | undefined): number {
     <section class="py-12 sm:py-16 bg-gray-50 border-b border-gray-100">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <h2 class="text-2xl font-bold text-gray-900 mb-2">Contractes del dia a dia</h2>
-        <p class="text-sm text-gray-500 mb-8">Petits contractes reals que mostren en que es gasten els diners publics al detall</p>
+        <p class="text-sm text-gray-500 mb-8">Petits contractes reals que mostren en què es gasten els diners públics al detall</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {curiousContracts.map((c) => (
@@ -231,25 +231,25 @@ function parseSalary(s: string | undefined): number {
     </section>
   )}
 
-  <!-- 5. Mes seccions -->
+  <!-- 5. Més seccions -->
   <section class="py-12 sm:py-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <h2 class="text-xl font-bold text-gray-900 mb-6">Aprofundeix</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <a href="/contractes" class="group block bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-400 transition-colors">
           <p class="font-semibold text-gray-900 text-sm mb-1">Contractes</p>
-          <p class="text-xs text-gray-500">Cerca entre {stats ? formatCompactNumber(stats.totalContractes) : '3,5M'} contractes publics</p>
+          <p class="text-xs text-gray-500">Cerca entre {stats ? formatCompactNumber(stats.totalContractes) : '3,5M'} contractes públics</p>
         </a>
         <a href="/subvencions" class="group block bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-400 transition-colors">
           <p class="font-semibold text-gray-900 text-sm mb-1">Subvencions</p>
-          <p class="text-xs text-gray-500">Qui rep ajuts publics i per que</p>
+          <p class="text-xs text-gray-500">Qui rep ajuts públics i per què</p>
         </a>
         <a href="/viatges" class="group block bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-400 transition-colors">
           <p class="font-semibold text-gray-900 text-sm mb-1">Viatges oficials</p>
-          <p class="text-xs text-gray-500">On viatgen i quant gasten els carrecs publics</p>
+          <p class="text-xs text-gray-500">On viatgen i quant gasten els càrrecs públics</p>
         </a>
         <a href="/corrupcio" class="group block bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-400 transition-colors">
-          <p class="font-semibold text-gray-900 text-sm mb-1">Corrupcio</p>
+          <p class="font-semibold text-gray-900 text-sm mb-1">Corrupció</p>
           <p class="text-xs text-gray-500">{stats ? stats.totalCasosCorrupcio : ''} casos documentats a Espanya</p>
         </a>
       </div>
@@ -260,9 +260,9 @@ function parseSalary(s: string | undefined): number {
   <section class="pb-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <DataSourceBanner
-        source="Transparencia Catalunya (Socrata)"
+        source="Transparència Catalunya (Socrata)"
         sourceUrl="https://analisi.transparenciacatalunya.cat"
-        scope="Contractes, subvencions i retribucions del sector public catala"
+        scope="Contractes, subvencions i retribucions del sector públic català"
       />
     </div>
   </section>

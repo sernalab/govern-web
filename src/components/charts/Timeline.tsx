@@ -19,15 +19,15 @@ const typeColors: Record<string, { bg: string; border: string; text: string }> =
 };
 
 const typeLabels: Record<string, string> = {
-  inicio: 'Inicio',
-  investigacion: 'Investigacion',
-  juicio: 'Juicio',
-  sentencia: 'Sentencia',
+  inicio: 'Inici',
+  investigacion: 'Investigació',
+  juicio: 'Judici',
+  sentencia: 'Sentència',
 };
 
 function formatTimelineDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('es-ES', {
+  return date.toLocaleDateString('ca-ES', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

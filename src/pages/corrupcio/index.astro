@@ -52,19 +52,19 @@ function estatToLabel(estat: string): string {
 }
 ---
 
-<DefaultLayout title="Corrupcio a Espanya" description="Casos de corrupcio politica a Espanya amb dades de sentencies fermes" section="corrupcio" showDisclaimer={true}>
+<DefaultLayout title="Corrupció a Espanya" description="Casos de corrupció política a Espanya amb dades de sentències fermes" section="corrupcio" showDisclaimer={true}>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
-      <h1 class="text-2xl font-bold text-gray-900 mb-1">Corrupcio a Espanya</h1>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Corrupció a Espanya</h1>
       <p class="text-sm text-gray-500 mb-4">
-        Casos documentats de corrupcio politica amb procediments judicials.
+        Casos documentats de corrupció política amb procediments judicials.
       </p>
       <DataSourceBanner
-        source="CENDOJ, CGPJ i fonts judicials publiques"
+        source="CENDOJ, CGPJ i fonts judicials públiques"
         sourceUrl="https://www.poderjudicial.es/cgpj/es/Temas/Transparencia/"
-        scope="Casos de corrupcio politica a Espanya amb procediments judicials documentats"
+        scope="Casos de corrupció política a Espanya amb procediments judicials documentats"
         notes={[
-          'Els imports son estimacions basades en informacio judicial publica',
+          'Els imports són estimacions basades en informació judicial pública',
           'Un cas "en curs" significa que el procediment judicial no ha conclòs — no implica culpabilitat',
         ]}
       />
@@ -84,7 +84,7 @@ function estatToLabel(estat: string): string {
     <section>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="border border-gray-200 rounded-lg bg-white p-5">
-          <h2 class="text-sm font-semibold text-gray-700 mb-4">Per partit politic</h2>
+          <h2 class="text-sm font-semibold text-gray-700 mb-4">Per partit polític</h2>
           <BarChart
             client:load
             labels={partyLabels}
@@ -95,7 +95,7 @@ function estatToLabel(estat: string): string {
           />
         </div>
         <div class="border border-gray-200 rounded-lg bg-white p-5">
-          <h2 class="text-sm font-semibold text-gray-700 mb-4">Per comunitat autonoma</h2>
+          <h2 class="text-sm font-semibold text-gray-700 mb-4">Per comunitat autònoma</h2>
           <BarChart
             client:load
             labels={communityLabels}
@@ -136,7 +136,7 @@ function estatToLabel(estat: string): string {
                 {formatCurrency(cas.import_estimat)}
               </span>
               {cas.data_sentencia ? (
-                <span class="text-gray-400">Sentencia: {formatDate(cas.data_sentencia)}</span>
+                <span class="text-gray-400">Sentència: {formatDate(cas.data_sentencia)}</span>
               ) : cas.data_inici ? (
                 <span class="text-gray-400">Inici: {formatDate(cas.data_inici)}</span>
               ) : null}
