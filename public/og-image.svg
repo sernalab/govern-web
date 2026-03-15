@@ -1,0 +1,9 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#09090b"/>
+  <text x="80" y="260" font-family="Inter, system-ui, sans-serif" font-size="72" font-weight="700" fill="white">govern</text>
+  <text x="80" y="320" font-family="Inter, system-ui, sans-serif" font-size="28" fill="#71717a">/cat</text>
+  <text x="80" y="400" font-family="Inter, system-ui, sans-serif" font-size="32" fill="#a1a1aa">Transparencia i dades publiques</text>
+  <text x="80" y="445" font-family="Inter, system-ui, sans-serif" font-size="32" fill="#a1a1aa">de Catalunya</text>
+  <text x="80" y="530" font-family="Inter, system-ui, sans-serif" font-size="18" fill="#52525b">Contractes · Subvencions · Salaris · Pressupostos · Corrupcio</text>
+  <rect x="80" y="270" width="60" height="4" rx="2" fill="#71717a"/>
+</svg>
