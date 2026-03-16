@@ -5,7 +5,7 @@ import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://govern.es',
+  site: 'https://elteugovern.cat',
   output: 'static',
   integrations: [preact(), sitemap()],
   vite: {
