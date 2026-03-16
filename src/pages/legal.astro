@@ -4,51 +4,146 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
 
 <DefaultLayout
   title="Avís legal i privacitat"
-  description="Avís legal, privacitat i condicions d'ús d'elteugovern."
+  description="Avís legal, privacitat i condicions d'ús d'elteugovern.cat"
 >
-  <section class="py-16 sm:py-24">
+  <section class="py-12 sm:py-16">
     <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-12">Avís legal i privacitat</h1>
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">Avís legal i privacitat</h1>
+      <p class="text-xs text-gray-400 mb-10">Última actualització: març de 2026</p>
 
-      <div class="space-y-10 text-gray-700 text-[15px] leading-relaxed">
-        <div>
-          <h2 class="text-lg font-semibold text-gray-900 mb-3">Qui som</h2>
-          <p>
-            elteugovern és un projecte independent de visualització de dades públiques de Catalunya.
-            No som un organisme oficial ni tenim cap vinculació amb la Generalitat de Catalunya.
+      <div class="space-y-10 text-sm text-gray-600 leading-relaxed">
+
+        <!-- Resum curt -->
+        <div class="border-l-2 border-gray-200 pl-4 py-1">
+          <p class="text-gray-700">
+            elteugovern.cat és un projecte independent de visualització de dades públiques.
+            No recollim dades personals, no usem cookies i no requerim registre.
           </p>
         </div>
 
+        <!-- Qui som -->
         <div>
-          <h2 class="text-lg font-semibold text-gray-900 mb-3">Dades mostrades</h2>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Qui som</h2>
           <p>
-            Les dades provenen d'APIs públiques oficials (Transparència Catalunya via Socrata, BDNS).
-            Es mostren tal com es publiquen, sense modificació ni validació per part nostra.
-            Els imports agregats són sumes directes dels registres publicats i poden no ser comparables entre si.
-            La secció de corrupció utilitza dades d'elaboració pròpia basades en fonts judicials públiques i té caràcter orientatiu.
+            elteugovern.cat és un projecte independent de visualització de dades públiques de Catalunya.
+            No som un organisme oficial ni tenim cap vinculació institucional amb la Generalitat de Catalunya
+            ni amb cap altra administració pública.
+          </p>
+          <p class="mt-2">
+            El responsable del projecte és <strong>sernalab</strong>.
           </p>
         </div>
 
+        <!-- Dades mostrades -->
         <div>
-          <h2 class="text-lg font-semibold text-gray-900 mb-3">Privacitat</h2>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Dades mostrades</h2>
           <p>
-            No recollim dades personals. No utilitzem cookies de rastreig. No requerim registre d'usuari.
+            Totes les dades provenen directament d'APIs públiques oficials, sense modificació ni validació per part nostra:
+          </p>
+          <ul class="list-disc pl-5 mt-2 space-y-1">
+            <li><strong>Transparència Catalunya (Socrata)</strong> — contractes, subvencions, retribucions, pressupostos, viatges oficials</li>
+            <li><strong>BDNS (Ministeri d'Hisenda)</strong> — subvencions d'àmbit estatal</li>
+          </ul>
+          <p class="mt-2">
+            Els imports agregats són sumes directes dels registres publicats i <strong>poden no ser comparables ni sumables entre si</strong>:
+            les bases de dades originals no garanteixen cobertura completa, alguns organismes s'han anat incorporant gradualment,
+            i la cobertura és parcial per a anys anteriors a 2017.
+          </p>
+          <p class="mt-2">
+            La secció de corrupció (en construcció) utilitza dades d'elaboració pròpia basades en fonts judicials públiques
+            i té caràcter exclusivament orientatiu.
+          </p>
+          <p class="mt-2">
+            Per a dades oficials i verificades, consulteu directament les fonts originals:
+            <a href="https://analisi.transparenciacatalunya.cat" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-900 transition-colors">Dades Obertes Catalunya</a>.
           </p>
         </div>
 
+        <!-- Privacitat -->
         <div>
-          <h2 class="text-lg font-semibold text-gray-900 mb-3">Responsabilitat</h2>
-          <p>
-            elteugovern no es fa responsable d'errors o omissions en les dades originals.
-            Per a dades oficials i verificades, consulteu directament les fonts originals.
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Privacitat i dades personals</h2>
+          <p>No hi ha registre d'usuari. No recollim dades personals. En concret:</p>
+          <ul class="list-disc pl-5 mt-2 space-y-1">
+            <li>No utilitzem cookies de rastreig ni de tercers</li>
+            <li>No requerim registre, login ni cap dada personal</li>
+            <li>No venem ni cedim dades per a finalitats comercials</li>
+          </ul>
+          <p class="mt-3">
+            <strong>Dades tècniques mínimes:</strong> el servei d'hosting (Netlify) pot recollir dades tècniques de navegació
+            (adreça IP, user-agent) necessàries per operar el servei. Aquestes dades es tracten segons la
+            <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-900 transition-colors">política de privacitat de Netlify</a>.
+          </p>
+          <p class="mt-2">
+            Si en el futur s'afegeixen funcionalitats que requereixin consentiment previ (analítica, alertes, newsletter),
+            s'activaran exclusivament amb el mecanisme corresponent.
           </p>
         </div>
 
+        <!-- Base jurídica -->
         <div>
-          <h2 class="text-lg font-semibold text-gray-900 mb-3">Contacte</h2>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Base jurídica</h2>
           <p>
-            Per a consultes, rectificacions o exercici de drets, contacteu amb nosaltres a
-            <a href="mailto:contacte@elteugovern.cat" class="text-gray-900 underline underline-offset-2 hover:text-gray-600 transition-colors">contacte@elteugovern.cat</a>.
+            El tractament de dades tècniques mínimes d'operació es basa en l'<strong>interès legítim</strong> (article 6.1.f del RGPD)
+            per garantir la seguretat i el funcionament del servei.
+          </p>
+          <p class="mt-2">
+            Qualsevol futur tractament que requereixi consentiment es basarà en l'<strong>article 6.1.a del RGPD</strong>.
+          </p>
+        </div>
+
+        <!-- Responsabilitat -->
+        <div>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Limitació de responsabilitat</h2>
+          <p>
+            elteugovern.cat no es fa responsable de:
+          </p>
+          <ul class="list-disc pl-5 mt-2 space-y-1">
+            <li>Errors, omissions o inexactituds en les dades originals publicades per les administracions</li>
+            <li>Interrupcions del servei de les APIs externes de les quals depèn el contingut</li>
+            <li>Decisions preses a partir de la informació mostrada en aquesta web</li>
+          </ul>
+          <p class="mt-2">
+            Les dades es reprodueixen tal com les publiquen les fonts oficials.
+            Qualsevol anàlisi o agregació (rankings, totals, comparatives) és merament informativa.
+          </p>
+        </div>
+
+        <!-- Drets -->
+        <div>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Drets de les persones usuàries</h2>
+          <p>
+            Podeu exercir els drets d'accés, rectificació, supressió, oposició, limitació i portabilitat
+            quan siguin aplicables, contactant amb nosaltres.
+          </p>
+          <p class="mt-2">
+            També teniu dret a presentar una reclamació davant l'<strong>Agència Espanyola de Protecció de Dades (AEPD)</strong>
+            si considereu que el tractament de les vostres dades no s'ajusta a la normativa vigent.
+          </p>
+        </div>
+
+        <!-- Propietat intel·lectual -->
+        <div>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Propietat intel·lectual</h2>
+          <p>
+            Les dades mostrades són d'accés públic i pertanyen a les administracions que les publiquen.
+            El disseny, codi i estructura d'elteugovern.cat són propietat del projecte.
+          </p>
+        </div>
+
+        <!-- Contacte -->
+        <div>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Contacte</h2>
+          <p>
+            Per a consultes, sol·licituds de rectificació o exercici de drets, podeu escriure a
+            <a href="mailto:legal@elteugovern.cat" class="text-gray-900 underline underline-offset-2 hover:text-gray-600 transition-colors">legal@elteugovern.cat</a>.
+          </p>
+        </div>
+
+        <!-- Canvis -->
+        <div>
+          <h2 class="text-base font-semibold text-gray-900 mb-2">Canvis en aquesta política</h2>
+          <p>
+            Aquesta pàgina es revisarà si canvia el funcionament del web, els proveïdors tècnics o la normativa aplicable.
           </p>
         </div>
       </div>
