@@ -33,7 +33,8 @@
       "mcp__govern__cercar_retribucions_alts_carrecs",
       "mcp__govern__cercar_viatges_alts_carrecs",
       "mcp__govern__cercar_agenda_lobbies",
-      "WebFetch(domain:www.subvencions.cat)"
+      "WebFetch(domain:www.subvencions.cat)",
+      "Bash(npx astro:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
