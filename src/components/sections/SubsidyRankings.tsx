@@ -35,17 +35,44 @@ export default function SubsidyRankings({ domain, dataset }: Props) {
   async function fetchData(selectedYear: string) {
     setLoading(true);
     const base = `https://${domain}/resource/${dataset}.json`;
-    const yearFilter = selectedYear === 'Tot'
-      ? ''
-      : `$where=any_de_la_convocat_ria='${selectedYear}'&`;
+    const yf = selectedYear === 'Tot' ? '' : `any_de_la_convocat_ria='${selectedYear}' AND `;
+
+    function buildUrl(select: string, group: string, where: string, limit = 8): string {
+      const params = new URLSearchParams({
+        '$select': select,
+        '$group': group,
+        '$order': 'total DESC',
+        '$limit': String(limit),
+        '$where': `${yf}${where}`,
+      });
+      return `${base}?${params.toString()}`;
+    }
+
+    function buildSimpleUrl(select: string): string {
+      const params = new URLSearchParams({ '$select': select });
+      if (selectedYear !== 'Tot') params.set('$where', `any_de_la_convocat_ria='${selectedYear}'`);
+      return `${base}?${params.toString()}`;
+    }
 
     try {
       const [benRes, orgRes, finRes, totalRes, countRes] = await Promise.all([
-        fetch(`${base}?${yearFilter}$select=ra_social_del_beneficiari,sum(import_subvenci_pr_stec_ajut) as total&$group=ra_social_del_beneficiari&$order=total DESC&$limit=8&$where=${selectedYear === 'Tot' ? '' : `any_de_la_convocat_ria='${selectedYear}' AND `}ra_social_del_beneficiari IS NOT NULL AND ra_social_del_beneficiari != 'Benef. no publicable' AND ra_social_del_beneficiari != 'Persona física'`),
-        fetch(`${base}?${yearFilter}$select=entitat_oo_aa_o_departament_1,sum(import_subvenci_pr_stec_ajut) as total&$group=entitat_oo_aa_o_departament_1&$order=total DESC&$limit=8&$where=${selectedYear === 'Tot' ? '' : `any_de_la_convocat_ria='${selectedYear}' AND `}entitat_oo_aa_o_departament_1 IS NOT NULL`),
-        fetch(`${base}?${yearFilter}$select=finalitat_p_blica,sum(import_subvenci_pr_stec_ajut) as total&$group=finalitat_p_blica&$order=total DESC&$limit=8&$where=${selectedYear === 'Tot' ? '' : `any_de_la_convocat_ria='${selectedYear}' AND `}finalitat_p_blica IS NOT NULL`),
-        fetch(`${base}?$select=sum(import_subvenci_pr_stec_ajut) as total${selectedYear === 'Tot' ? '' : `&$where=any_de_la_convocat_ria='${selectedYear}'`}`),
-        fetch(`${base}?$select=count(*) as total${selectedYear === 'Tot' ? '' : `&$where=any_de_la_convocat_ria='${selectedYear}'`}`),
+        fetch(buildUrl(
+          'ra_social_del_beneficiari,sum(import_subvenci_pr_stec_ajut) as total',
+          'ra_social_del_beneficiari',
+          "ra_social_del_beneficiari IS NOT NULL AND ra_social_del_beneficiari != 'Benef. no publicable' AND ra_social_del_beneficiari != 'Persona física'"
+        )),
+        fetch(buildUrl(
+          'entitat_oo_aa_o_departament_1,sum(import_subvenci_pr_stec_ajut) as total',
+          'entitat_oo_aa_o_departament_1',
+          'entitat_oo_aa_o_departament_1 IS NOT NULL'
+        )),
+        fetch(buildUrl(
+          'finalitat_p_blica,sum(import_subvenci_pr_stec_ajut) as total',
+          'finalitat_p_blica',
+          'finalitat_p_blica IS NOT NULL'
+        )),
+        fetch(buildSimpleUrl('sum(import_subvenci_pr_stec_ajut) as total')),
+        fetch(buildSimpleUrl('count(*) as total')),
       ]);
 
       const [benData, orgData, finData, totalData, countData] = await Promise.all([
