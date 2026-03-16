@@ -97,10 +97,11 @@ const destData = topDestinations.map(d => d.count);
     <section>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <StatCard label="Viatges registrats" value={formatNumber(totalTrips)} />
-        <StatCard label="Despesa total" value={formatCurrency(totalSpent)} />
-        <StatCard label="Cost mitjà" value={formatCurrency(avgCost)} />
+        <StatCard label="Despesa total (2017–2026)" value={formatCurrency(totalSpent)} />
+        <StatCard label="Cost mitjà per viatge" value={formatCurrency(avgCost)} />
         <StatCard label="Destinacions" value={formatNumber(topDestinations.length) + '+'} />
       </div>
+      <p class="text-[10px] text-gray-400 mt-2">Dades acumulades des del 2017 fins avui</p>
     </section>
 
     <!-- Charts + top trips -->
