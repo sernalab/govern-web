@@ -1,0 +1,57 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+---
+
+<DefaultLayout
+  title="Avís legal i privacitat"
+  description="Avís legal, privacitat i condicions d'ús d'elteugovern."
+>
+  <section class="py-16 sm:py-24">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-12">Avís legal i privacitat</h1>
+
+      <div class="space-y-10 text-gray-700 text-[15px] leading-relaxed">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-3">Qui som</h2>
+          <p>
+            elteugovern és un projecte independent de visualització de dades públiques de Catalunya.
+            No som un organisme oficial ni tenim cap vinculació amb la Generalitat de Catalunya.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-3">Dades mostrades</h2>
+          <p>
+            Les dades provenen d'APIs públiques oficials (Transparència Catalunya via Socrata, BDNS).
+            Es mostren tal com es publiquen, sense modificació ni validació per part nostra.
+            Els imports agregats són sumes directes dels registres publicats i poden no ser comparables entre si.
+            La secció de corrupció utilitza dades d'elaboració pròpia basades en fonts judicials públiques i té caràcter orientatiu.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-3">Privacitat</h2>
+          <p>
+            No recollim dades personals. No utilitzem cookies de rastreig. No requerim registre d'usuari.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-3">Responsabilitat</h2>
+          <p>
+            elteugovern no es fa responsable d'errors o omissions en les dades originals.
+            Per a dades oficials i verificades, consulteu directament les fonts originals.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-3">Contacte</h2>
+          <p>
+            Per a consultes, rectificacions o exercici de drets, contacteu amb nosaltres a
+            <a href="mailto:contacte@elteugovern.cat" class="text-gray-900 underline underline-offset-2 hover:text-gray-600 transition-colors">contacte@elteugovern.cat</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</DefaultLayout>
