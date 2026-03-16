@@ -3,11 +3,13 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
 import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import { formatCurrency, formatCompactNumber } from '@lib/utils';
 import type { DashboardStats, Contracte, CarrecPublic } from '@lib/types';
-import type { TopCompanyRow, SubventionsByPurposeRow } from '@lib/data-fetcher';
+import type { TopCompanyRow, SubventionsByPurposeRow, TopBeneficiaryRow, TopOrganismeRow } from '@lib/data-fetcher';
 import {
   fetchDashboardStats,
   fetchTopCompanies,
   fetchSubventionsByPurpose,
+  fetchTopBeneficiaries,
+  fetchTopOrganismes,
   fetchCuriousContracts,
   fetchSalaryComparison,
 } from '@lib/data-fetcher';
@@ -15,14 +17,18 @@ import {
 let stats: DashboardStats | null = null;
 let topCompanies: TopCompanyRow[] = [];
 let subsByPurpose: SubventionsByPurposeRow[] = [];
+let topBeneficiaries: TopBeneficiaryRow[] = [];
+let topOrganismes: TopOrganismeRow[] = [];
 let curiousContracts: Contracte[] = [];
 let salaryData: { president: CarrecPublic | null; directors: CarrecPublic[] } = { president: null, directors: [] };
 
 try {
-  [stats, topCompanies, subsByPurpose, curiousContracts, salaryData] = await Promise.all([
+  [stats, topCompanies, subsByPurpose, topBeneficiaries, topOrganismes, curiousContracts, salaryData] = await Promise.all([
     fetchDashboardStats(),
     fetchTopCompanies(7),
     fetchSubventionsByPurpose(8),
+    fetchTopBeneficiaries(8),
+    fetchTopOrganismes(8),
     fetchCuriousContracts(6),
     fetchSalaryComparison(),
   ]);
@@ -156,6 +162,50 @@ function parseSalary(s: string | undefined): number {
           <a href="/subvencions" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">
             Explora totes les subvencions &rarr;
           </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 2b. Rankings subvencions -->
+  {(topBeneficiaries.length > 0 || topOrganismes.length > 0) && (
+    <section class="py-12 sm:py-16 border-b border-gray-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {topBeneficiaries.length > 0 && (
+            <div>
+              <h2 class="text-lg font-bold text-gray-900 mb-2">Qui rep més subvencions?</h2>
+              <p class="text-xs text-gray-500 mb-4">Top beneficiaris per import total acumulat</p>
+              <div class="divide-y divide-gray-100">
+                {topBeneficiaries.map((b, i) => (
+                  <div class="py-2.5 flex items-baseline justify-between gap-3">
+                    <div class="flex items-baseline gap-2 min-w-0">
+                      <span class="text-xs text-gray-400 tabular-nums w-4 shrink-0">{i + 1}</span>
+                      <span class="text-sm text-gray-900 truncate">{b.beneficiari}</span>
+                    </div>
+                    <span class="text-sm font-semibold text-gray-900 tabular-nums shrink-0">{formatCompactNumber(b.import_total)} €</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {topOrganismes.length > 0 && (
+            <div>
+              <h2 class="text-lg font-bold text-gray-900 mb-2">Qui concedeix més?</h2>
+              <p class="text-xs text-gray-500 mb-4">Top organismes per volum de subvencions atorgades</p>
+              <div class="divide-y divide-gray-100">
+                {topOrganismes.map((o, i) => (
+                  <div class="py-2.5 flex items-baseline justify-between gap-3">
+                    <div class="flex items-baseline gap-2 min-w-0">
+                      <span class="text-xs text-gray-400 tabular-nums w-4 shrink-0">{i + 1}</span>
+                      <span class="text-sm text-gray-900 truncate">{o.organisme}</span>
+                    </div>
+                    <span class="text-sm font-semibold text-gray-900 tabular-nums shrink-0">{formatCompactNumber(o.import_total)} €</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

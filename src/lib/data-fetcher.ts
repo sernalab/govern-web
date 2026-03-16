@@ -25,6 +25,17 @@ export interface TopCompanyRow {
   import_total: number;
 }
 
+export interface TopBeneficiaryRow {
+  beneficiari: string;
+  total: number;
+  import_total: number;
+}
+
+export interface TopOrganismeRow {
+  organisme: string;
+  import_total: number;
+}
+
 export interface SubventionsByPurposeRow {
   finalitat: string;
   total: number;
@@ -104,6 +115,41 @@ export async function fetchSubventionsByPurpose(limit: number = 10): Promise<Sub
   return rows.map((row) => ({
     finalitat: row.finalitat_p_blica,
     total: parseFloat(row.total) || 0,
+  }));
+}
+
+/** Top subsidy recipients by total amount */
+export async function fetchTopBeneficiaries(limit: number = 10): Promise<TopBeneficiaryRow[]> {
+  const rows = await querySocrata<{ ra_social_del_beneficiari: string; total: string; import_total: string }>({
+    dataset: DATASETS.subvencions_concedides,
+    select: 'ra_social_del_beneficiari, count(*) as total, sum(import_subvenci_pr_stec_ajut) as import_total',
+    group: 'ra_social_del_beneficiari',
+    where: "ra_social_del_beneficiari IS NOT NULL AND ra_social_del_beneficiari != 'Benef. no publicable' AND ra_social_del_beneficiari != 'Persona física'",
+    order: 'import_total DESC',
+    limit,
+  });
+
+  return rows.map((row) => ({
+    beneficiari: row.ra_social_del_beneficiari,
+    total: parseInt(row.total, 10),
+    import_total: parseFloat(row.import_total) || 0,
+  }));
+}
+
+/** Top granting organisations by total amount */
+export async function fetchTopOrganismes(limit: number = 10): Promise<TopOrganismeRow[]> {
+  const rows = await querySocrata<{ entitat_oo_aa_o_departament_1: string; import_total: string }>({
+    dataset: DATASETS.subvencions_concedides,
+    select: 'entitat_oo_aa_o_departament_1, sum(import_subvenci_pr_stec_ajut) as import_total',
+    group: 'entitat_oo_aa_o_departament_1',
+    where: 'entitat_oo_aa_o_departament_1 IS NOT NULL',
+    order: 'import_total DESC',
+    limit,
+  });
+
+  return rows.map((row) => ({
+    organisme: row.entitat_oo_aa_o_departament_1,
+    import_total: parseFloat(row.import_total) || 0,
   }));
 }
 
