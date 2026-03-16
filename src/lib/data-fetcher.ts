@@ -83,6 +83,52 @@ export async function fetchDashboardStats(): Promise<DashboardStats> {
   };
 }
 
+export interface AnnualStats {
+  year: string;
+  contractes: number;
+  importContractes: number;
+  subvencions: number;
+  importSubvencions: number;
+}
+
+/** Stats for a specific year (contracts + subsidies) */
+export async function fetchAnnualStats(year: string): Promise<AnnualStats> {
+  const [contractCount, contractSum, subCount, subSum] = await Promise.all([
+    querySocrata<{ total: string }>({
+      dataset: DATASETS.contractes,
+      select: 'count(*) as total',
+      where: `exercici='${year}'`,
+      limit: 1,
+    }),
+    querySocrata<{ total: string }>({
+      dataset: DATASETS.contractes,
+      select: 'sum(import_adjudicacio) as total',
+      where: `exercici='${year}'`,
+      limit: 1,
+    }),
+    querySocrata<{ total: string }>({
+      dataset: DATASETS.subvencions_concedides,
+      select: 'count(*) as total',
+      where: `any_de_la_convocat_ria='${year}'`,
+      limit: 1,
+    }),
+    querySocrata<{ total: string }>({
+      dataset: DATASETS.subvencions_concedides,
+      select: 'sum(import_subvenci_pr_stec_ajut) as total',
+      where: `any_de_la_convocat_ria='${year}'`,
+      limit: 1,
+    }),
+  ]);
+
+  return {
+    year,
+    contractes: parseInt(contractCount[0]?.total || '0', 10),
+    importContractes: parseFloat(contractSum[0]?.total || '0') || 0,
+    subvencions: parseInt(subCount[0]?.total || '0', 10),
+    importSubvencions: parseFloat(subSum[0]?.total || '0') || 0,
+  };
+}
+
 /** Top companies by total contract volume */
 export async function fetchTopCompanies(limit: number = 10): Promise<TopCompanyRow[]> {
   const rows = await querySocrata<{ adjudicatari: string; total: string; import_total: string }>({
