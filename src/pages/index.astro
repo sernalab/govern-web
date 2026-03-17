@@ -2,6 +2,7 @@
 import DefaultLayout from '@layouts/DefaultLayout.astro';
 import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import SubsidyRankings from '@components/sections/SubsidyRankings.tsx';
+import DataSlider from '@components/sections/DataSlider.tsx';
 import { formatCurrency, formatCompactNumber } from '@lib/utils';
 import { getEquivalences } from '@lib/equivalences';
 import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
@@ -40,6 +41,52 @@ const annualVolume = annual
 const heroEquivalences = annualVolume ? getEquivalences(annualVolume) : [];
 
 const maxCompanyAmount = topCompanies.length > 0 ? topCompanies[0].import_total : 1;
+
+// Build slider data from real fetched data
+const sliderSlides = [
+  annual && {
+    icon: '📊',
+    stat: formatCompactNumber(annual.importContractes) + ' €',
+    label: 'en contractes públics el 2024',
+    detail: formatCompactNumber(annual.contractes) + ' contractes adjudicats',
+    link: '/contractes',
+  },
+  annual && {
+    icon: '🎓',
+    stat: formatCompactNumber(annual.importSubvencions) + ' €',
+    label: 'en subvencions concedides el 2024',
+    detail: formatCompactNumber(annual.subvencions) + ' concessions registrades',
+    link: '/subvencions',
+  },
+  topCompanies[0] && {
+    icon: '🏢',
+    stat: formatCompactNumber(topCompanies[0].import_total) + ' €',
+    label: topCompanies[0].adjudicatari,
+    detail: 'Empresa amb més volum de contractes públics acumulats',
+    link: '/cerca',
+  },
+  salaryData.president && {
+    icon: '🏛',
+    stat: salaryData.president.retribucio_anual_prevista || '',
+    label: 'retribució del President',
+    detail: salaryData.president.cognoms_nom || '',
+    link: '/salaris',
+  },
+  {
+    icon: '✈',
+    stat: '1.384',
+    label: 'viatges oficials a l\'estranger',
+    detail: '4,2M € en despeses des del 2017',
+    link: '/viatges',
+  },
+  {
+    icon: '🔍',
+    stat: 'Cerca',
+    label: 'qualsevol empresa o entitat',
+    detail: 'Descobreix quant ha rebut en diners públics',
+    link: '/cerca',
+  },
+].filter(Boolean) as { icon: string; stat: string; label: string; detail: string; link?: string }[];
 
 function parseSalary(s: string | undefined): number {
   if (!s) return 0;
@@ -91,7 +138,7 @@ function parseSalary(s: string | undefined): number {
       )}
 
       {heroEquivalences.length > 0 && (
-        <div class="flex flex-wrap gap-2 mt-6">
+        <div class="flex flex-wrap gap-2 mt-6 mb-8">
           <span class="text-xs text-gray-600">Això equival a</span>
           {heroEquivalences.map((eq) => (
             <span class="text-xs bg-gray-800 text-gray-300 px-2.5 py-1 rounded-full">
@@ -99,6 +146,10 @@ function parseSalary(s: string | undefined): number {
             </span>
           ))}
         </div>
+      )}
+
+      {sliderSlides.length > 0 && (
+        <DataSlider client:load slides={sliderSlides} />
       )}
     </div>
   </section>
