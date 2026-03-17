@@ -1,0 +1,40 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro';
+import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
+import EntitySearch from '@components/sections/EntitySearch.tsx';
+import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
+---
+
+<DefaultLayout
+  title="Cerca entitat"
+  description="Cerca qualsevol empresa, entitat o ajuntament i descobreix quant ha rebut en contractes i subvencions públiques de Catalunya."
+  section="cerca"
+  keywords="cerca, empresa, entitat, contractes, subvencions, diners públics, Catalunya"
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <section>
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Cerca una entitat</h1>
+      <p class="text-sm text-gray-500 mb-4">
+        Descobreix quant ha rebut qualsevol empresa, ajuntament o entitat en contractes i subvencions públiques.
+      </p>
+      <DataSourceBanner
+        source="Transparència Catalunya (Socrata)"
+        sourceUrl="https://analisi.transparenciacatalunya.cat"
+        scope="Cerca simultània a contractes públics i subvencions del RAISC"
+        notes={[
+          'Les dades mostren l\'acumulat des de l\'inici del registre fins avui',
+          'Les equivalències són orientatives, basades en costos mitjans públics',
+        ]}
+      />
+    </section>
+
+    <section>
+      <EntitySearch
+        client:load
+        contractDataset={DATASETS.contractes}
+        subsidyDataset={DATASETS.subvencions_concedides}
+        domain={SOCRATA_DOMAIN}
+      />
+    </section>
+  </div>
+</DefaultLayout>

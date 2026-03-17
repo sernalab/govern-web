@@ -37,7 +37,8 @@
       "Bash(npx astro:*)",
       "Bash(curl:*)",
       "WebFetch(domain:www.dondominio.com)",
-      "mcp__claude_ai_Canva__generate-design"
+      "mcp__claude_ai_Canva__generate-design",
+      "WebFetch(domain:www.menjometre.cat)"
     ]
   },
   "enableAllProjectMcpServers": true,

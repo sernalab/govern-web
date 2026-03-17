@@ -6,11 +6,11 @@ interface Props {
 const { section } = Astro.props;
 
 const links = [
+  { label: 'Cerca', href: '/cerca', id: 'cerca' },
   { label: 'Contractes', href: '/contractes', id: 'contractes' },
   { label: 'Subvencions', href: '/subvencions', id: 'subvencions' },
   { label: 'Salaris', href: '/salaris', id: 'salaris' },
   { label: 'Viatges', href: '/viatges', id: 'viatges' },
-  { label: 'Corrupció', href: '/corrupcio', id: 'corrupcio', wip: true },
 ];
 
 function linkClass(id: string, wip?: boolean): string {

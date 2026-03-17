@@ -3,6 +3,7 @@ import DefaultLayout from '@layouts/DefaultLayout.astro';
 import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import SubsidyRankings from '@components/sections/SubsidyRankings.tsx';
 import { formatCurrency, formatCompactNumber } from '@lib/utils';
+import { getEquivalences } from '@lib/equivalences';
 import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
 import type { DashboardStats, Contracte, CarrecPublic } from '@lib/types';
 import type { TopCompanyRow, AnnualStats } from '@lib/data-fetcher';
@@ -35,6 +36,8 @@ try {
 const annualVolume = annual
   ? annual.importContractes + annual.importSubvencions
   : null;
+
+const heroEquivalences = annualVolume ? getEquivalences(annualVolume) : [];
 
 const maxCompanyAmount = topCompanies.length > 0 ? topCompanies[0].import_total : 1;
 
@@ -84,6 +87,17 @@ function parseSalary(s: string | undefined): number {
             <p class="text-xl sm:text-3xl font-bold text-white">{formatCompactNumber(annual.subvencions)}</p>
             <p class="text-[10px] sm:text-xs text-gray-500 mt-1">concessions registrades</p>
           </div>
+        </div>
+      )}
+
+      {heroEquivalences.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-6">
+          <span class="text-xs text-gray-600">Això equival a</span>
+          {heroEquivalences.map((eq) => (
+            <span class="text-xs bg-gray-800 text-gray-300 px-2.5 py-1 rounded-full">
+              {eq.icon} {eq.text}
+            </span>
+          ))}
         </div>
       )}
     </div>
