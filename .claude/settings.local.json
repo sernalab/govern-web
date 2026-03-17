@@ -34,7 +34,10 @@
       "mcp__govern__cercar_viatges_alts_carrecs",
       "mcp__govern__cercar_agenda_lobbies",
       "WebFetch(domain:www.subvencions.cat)",
-      "Bash(npx astro:*)"
+      "Bash(npx astro:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:www.dondominio.com)",
+      "mcp__claude_ai_Canva__generate-design"
     ]
   },
   "enableAllProjectMcpServers": true,

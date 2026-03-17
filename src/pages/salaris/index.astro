@@ -31,7 +31,23 @@ try {
 }
 ---
 
-<DefaultLayout title="Retribucions de càrrecs públics" description="Retribucions d'alts càrrecs de la Generalitat de Catalunya" section="salaris">
+<DefaultLayout
+  title="Retribucions de càrrecs públics"
+  description="Retribucions d'alts càrrecs de la Generalitat de Catalunya"
+  section="salaris"
+  keywords="salaris, retribucions, alts càrrecs, Generalitat, Catalunya"
+  jsonLdExtra={{
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Retribucions d\'alts càrrecs de Catalunya',
+    description: 'Retribucions anuals previstes dels alts càrrecs de la Generalitat de Catalunya.',
+    url: 'https://elteugovern.cat/salaris',
+    provider: {
+      '@type': 'Organization',
+      name: 'Transparència Catalunya',
+    },
+  }}
+>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Retribucions de càrrecs públics</h1>

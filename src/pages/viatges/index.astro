@@ -75,7 +75,23 @@ const destLabels = topDestinations.map(d => d.label);
 const destData = topDestinations.map(d => d.count);
 ---
 
-<DefaultLayout title="Viatges oficials" description="On viatgen els alts càrrecs de la Generalitat? Destins, motius i despeses detallades." section="viatges">
+<DefaultLayout
+  title="Viatges oficials"
+  description="On viatgen els alts càrrecs de la Generalitat? Destins, motius i despeses detallades."
+  section="viatges"
+  keywords="viatges oficials, despeses, alts càrrecs, transparència"
+  jsonLdExtra={{
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Viatges oficials dels alts càrrecs de Catalunya',
+    description: 'Viatges a l\'estranger dels alts càrrecs de la Generalitat amb despeses desglossades.',
+    url: 'https://elteugovern.cat/viatges',
+    provider: {
+      '@type': 'Organization',
+      name: 'Transparència Catalunya',
+    },
+  }}
+>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">On viatgen els teus polítics?</h1>

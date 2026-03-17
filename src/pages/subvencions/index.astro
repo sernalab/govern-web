@@ -30,7 +30,23 @@ try {
 }
 ---
 
-<DefaultLayout title="Subvencions" description="Subvencions concedides per la Generalitat de Catalunya" section="subvencions">
+<DefaultLayout
+  title="Subvencions"
+  description="Subvencions concedides per la Generalitat de Catalunya"
+  section="subvencions"
+  keywords="subvencions, ajuts, RAISC, beneficiaris, Catalunya"
+  jsonLdExtra={{
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Subvencions concedides de Catalunya',
+    description: 'Registre d\'ajuts i subvencions concedides per la Generalitat i entitats públiques de Catalunya.',
+    url: 'https://elteugovern.cat/subvencions',
+    provider: {
+      '@type': 'Organization',
+      name: 'Transparència Catalunya',
+    },
+  }}
+>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Subvencions</h1>

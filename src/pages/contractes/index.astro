@@ -33,7 +33,23 @@ try {
 }
 ---
 
-<DefaultLayout title="Contractes Públics" description="Explorador de contractes públics de la Generalitat de Catalunya" section="contractes">
+<DefaultLayout
+  title="Contractes Públics"
+  description="Explorador de contractes públics de la Generalitat de Catalunya"
+  section="contractes"
+  keywords="contractes públics, licitacions, adjudicacions, Catalunya, Generalitat"
+  jsonLdExtra={{
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Contractes públics de Catalunya',
+    description: 'Registre complet de contractes públics de la Generalitat i entitats locals de Catalunya.',
+    url: 'https://elteugovern.cat/contractes',
+    provider: {
+      '@type': 'Organization',
+      name: 'Transparència Catalunya',
+    },
+  }}
+>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
     <section>
       <h1 class="text-2xl font-bold text-gray-900 mb-1">Contractes públics</h1>
