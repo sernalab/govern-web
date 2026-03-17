@@ -127,6 +127,16 @@ function DetailPanel({ detail, onClose, domain, dataset }: { detail: DetailData;
   );
 }
 
+interface YearCache {
+  beneficiaris: RankingRow[];
+  organismes: RankingRow[];
+  finalitats: RankingRow[];
+  totalImport: number;
+  totalCount: number;
+}
+
+const yearCache = new Map<string, YearCache>();
+
 export default function SubsidyRankings({ domain, dataset }: Props) {
   const [year, setYear] = useState('2025');
   const [beneficiaris, setBeneficiaris] = useState<RankingRow[]>([]);
@@ -139,6 +149,16 @@ export default function SubsidyRankings({ domain, dataset }: Props) {
   const [detailLoading, setDetailLoading] = useState(false);
 
   useEffect(() => {
+    const cached = yearCache.get(year);
+    if (cached) {
+      setBeneficiaris(cached.beneficiaris);
+      setOrganismes(cached.organismes);
+      setFinalitats(cached.finalitats);
+      setTotalImport(cached.totalImport);
+      setTotalCount(cached.totalCount);
+      setLoading(false);
+      return;
+    }
     fetchData(year);
   }, [year]);
 
@@ -193,20 +213,34 @@ export default function SubsidyRankings({ domain, dataset }: Props) {
         countRes.ok ? countRes.json() : [{ total: '0' }],
       ]);
 
-      setBeneficiaris(benData.map((r: Record<string, string>) => ({
+      const parsedBen = benData.map((r: Record<string, string>) => ({
         name: r.ra_social_del_beneficiari,
         amount: parseFloat(r.total) || 0,
-      })));
-      setOrganismes(orgData.map((r: Record<string, string>) => ({
+      }));
+      const parsedOrg = orgData.map((r: Record<string, string>) => ({
         name: r.entitat_oo_aa_o_departament_1,
         amount: parseFloat(r.total) || 0,
-      })));
-      setFinalitats(finData.map((r: Record<string, string>) => ({
+      }));
+      const parsedFin = finData.map((r: Record<string, string>) => ({
         name: r.finalitat_p_blica,
         amount: parseFloat(r.total) || 0,
-      })));
-      setTotalImport(parseFloat(totalData[0]?.total) || 0);
-      setTotalCount(parseInt(countData[0]?.total) || 0);
+      }));
+      const parsedImport = parseFloat(totalData[0]?.total) || 0;
+      const parsedCount = parseInt(countData[0]?.total) || 0;
+
+      setBeneficiaris(parsedBen);
+      setOrganismes(parsedOrg);
+      setFinalitats(parsedFin);
+      setTotalImport(parsedImport);
+      setTotalCount(parsedCount);
+
+      yearCache.set(selectedYear, {
+        beneficiaris: parsedBen,
+        organismes: parsedOrg,
+        finalitats: parsedFin,
+        totalImport: parsedImport,
+        totalCount: parsedCount,
+      });
     } catch {
       // silenced
     } finally {
