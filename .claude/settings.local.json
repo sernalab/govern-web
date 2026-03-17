@@ -38,7 +38,8 @@
       "Bash(curl:*)",
       "WebFetch(domain:www.dondominio.com)",
       "mcp__claude_ai_Canva__generate-design",
-      "WebFetch(domain:www.menjometre.cat)"
+      "WebFetch(domain:www.menjometre.cat)",
+      "mcp__govern__consultar_taules_salarials"
     ]
   },
   "enableAllProjectMcpServers": true,

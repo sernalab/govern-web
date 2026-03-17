@@ -1,41 +1,48 @@
+/**
+ * Equivalències basades en dades reals i verificades.
+ *
+ * Fonts:
+ * - T-jove 2026: 45,50 €/trimestre amb bonificació 50% (ATM, gener 2026)
+ * - Mestre: ~2.388 €/mes × 14 pagues (Dept. Educació, taules retributives 2026)
+ * - Mosso d'Esquadra: 44.344–47.951 €/any (Taules salarials Generalitat, 2026)
+ * - Bomber: ~42.000 €/any base (Taules salarials Generalitat, 2026)
+ * - Beca universitària: 6.000 € import mitjà (Ministeri d'Educació, curs 2024-25)
+ * - Menjador escolar: ~7 €/dia × 180 dies (estimació sector públic Catalunya)
+ * - Habitatge social: 180.000 € cost construcció (INCASÒL, estimació 2024)
+ * - Escola CEIP: 5-6M € (Dept. Educació, licitacions recents)
+ */
+
 export interface Equivalence {
   label: string;
   amount: number;
   icon: string;
+  source: string;
 }
 
 const EQUIVALENCES: Equivalence[] = [
   // Serveis personals
-  { label: 'T-jove de transport', amount: 176, icon: '🚇' },
-  { label: 'lots de llibres escolars', amount: 300, icon: '📚' },
-  { label: 'anys de menjador escolar', amount: 1320, icon: '🍽' },
-  { label: 'beques universitàries', amount: 6000, icon: '🎓' },
+  { label: 'T-jove anuals', amount: 182, icon: '🚇', source: 'ATM 2026, amb bonificació 50%' },
+  { label: 'anys de menjador escolar', amount: 1260, icon: '🍽', source: '~7 €/dia × 180 dies lectius' },
+  { label: 'beques universitàries', amount: 6000, icon: '🎓', source: 'Import mitjà beca general MEC' },
 
-  // Sous públics (anuals)
-  { label: 'sous d\'infermera', amount: 35000, icon: '🏥' },
-  { label: 'sous de mestre', amount: 42000, icon: '👩‍🏫' },
-  { label: 'sous de Mosso d\'Esquadra', amount: 45000, icon: '👮' },
-  { label: 'sous de metge especialista', amount: 55000, icon: '⚕' },
+  // Sous públics (anuals bruts, dades Generalitat 2026)
+  { label: 'sous de mestre', amount: 33432, icon: '👩‍🏫', source: 'Taules retributives Dept. Educació 2026' },
+  { label: 'sous de bomber', amount: 42000, icon: '🚒', source: 'Taules salarials Generalitat 2026' },
+  { label: 'sous de Mosso d\'Esquadra', amount: 46000, icon: '👮', source: 'Taules salarials Generalitat 2026 (categoria 3)' },
 
   // Infraestructures
-  { label: 'instal·lacions solars', amount: 45000, icon: '☀' },
-  { label: 'parcs infantils', amount: 120000, icon: '🛝' },
-  { label: 'habitatges socials', amount: 180000, icon: '🏠' },
-  { label: 'km de carril bici', amount: 200000, icon: '🚲' },
-  { label: 'aparells de ressonància magnètica', amount: 1500000, icon: '🏥' },
-  { label: 'escoles noves', amount: 5500000, icon: '🏫' },
+  { label: 'habitatges socials', amount: 180000, icon: '🏠', source: 'Cost mitjà construcció INCASÒL' },
+  { label: 'km de carril bici', amount: 200000, icon: '🚲', source: 'Cost mitjà construcció urbà' },
+  { label: 'escoles noves (CEIP)', amount: 5500000, icon: '🏫', source: 'Licitacions Dept. Educació' },
 ];
 
 function formatNum(n: number): string {
-  if (n >= 1000000) return (n / 1000000).toFixed(1).replace('.0', '') + 'M';
-  if (n >= 1000) return (n / 1000).toFixed(1).replace('.0', '') + 'K';
   return n.toLocaleString('ca-ES');
 }
 
 export function getEquivalences(totalAmount: number, count: number = 3): { icon: string; text: string }[] {
   if (totalAmount <= 0) return [];
 
-  // Find equivalences that produce reasonable numbers (between 1 and 10M)
   const valid = EQUIVALENCES
     .map(eq => ({
       ...eq,
@@ -45,14 +52,13 @@ export function getEquivalences(totalAmount: number, count: number = 3): { icon:
 
   if (valid.length === 0) return [];
 
-  // Pick spread: one small, one medium, one large
   const sorted = valid.sort((a, b) => a.amount - b.amount);
   const picks: typeof valid = [];
 
   if (sorted.length >= 3) {
-    picks.push(sorted[0]); // cheapest (most units)
-    picks.push(sorted[Math.floor(sorted.length / 2)]); // middle
-    picks.push(sorted[sorted.length - 1]); // most expensive (fewest units)
+    picks.push(sorted[0]);
+    picks.push(sorted[Math.floor(sorted.length / 2)]);
+    picks.push(sorted[sorted.length - 1]);
   } else {
     picks.push(...sorted.slice(0, count));
   }
@@ -61,4 +67,9 @@ export function getEquivalences(totalAmount: number, count: number = 3): { icon:
     icon: eq.icon,
     text: `${formatNum(eq.quantity)} ${eq.label}`,
   }));
+}
+
+/** Get all equivalences with sources for the methodology page */
+export function getAllEquivalences(): Equivalence[] {
+  return EQUIVALENCES;
 }

@@ -84,6 +84,19 @@ interface Props {
 const suggestCache = new Map<string, Suggestion[]>();
 const entityCache = new Map<string, EntityData>();
 
+const EXAMPLE_ENTITIES = [
+  'FCC MEDIO AMBIENTE',
+  'AJUNTAMENT DE BARCELONA',
+  'CRUZ ROJA ESPANOLA',
+  'UNIVERSITAT DE BARCELONA',
+  'ENDESA ENERGIA',
+  'TELEFONICA',
+  'HOSPITAL SANT PAU',
+  'DANONE',
+  'URBASER',
+  'NESTLÉ',
+];
+
 export default function EntitySearch({ contractDataset, subsidyDataset, domain }: Props) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -91,8 +104,17 @@ export default function EntitySearch({ contractDataset, subsidyDataset, domain }
   const [entity, setEntity] = useState<EntityData | null>(null);
   const [loading, setLoading] = useState(false);
   const [suggestLoading, setSuggestLoading] = useState(false);
+  const [placeholderIdx, setPlaceholderIdx] = useState(0);
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Rotate placeholder examples
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIdx(i => (i + 1) % EXAMPLE_ENTITIES.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Close suggestions on outside click
   useEffect(() => {
@@ -269,7 +291,7 @@ export default function EntitySearch({ contractDataset, subsidyDataset, domain }
               value={query}
               onInput={handleInput}
               onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
-              placeholder="Cerca una empresa, entitat o ajuntament..."
+              placeholder={`Prova "${EXAMPLE_ENTITIES[placeholderIdx]}"...`}
               style={{
                 width: '100%', padding: '14px 16px 14px 44px', fontSize: '15px',
                 border: '1px solid #e4e4e7', borderRadius: '10px', outline: 'none',
