@@ -2,7 +2,7 @@
 import DefaultLayout from '@layouts/DefaultLayout.astro';
 import DataSourceBanner from '@components/ui/DataSourceBanner.astro';
 import SubsidyRankings from '@components/sections/SubsidyRankings.tsx';
-import DataSlider from '@components/sections/DataSlider.tsx';
+import HeroSlider from '@components/sections/HeroSlider.tsx';
 import { formatCurrency, formatCompactNumber } from '@lib/utils';
 import { getEquivalences } from '@lib/equivalences';
 import { SOCRATA_DOMAIN, DATASETS } from '@data/datasets';
@@ -42,51 +42,54 @@ const heroEquivalences = annualVolume ? getEquivalences(annualVolume) : [];
 
 const maxCompanyAmount = topCompanies.length > 0 ? topCompanies[0].import_total : 1;
 
-// Build slider data from real fetched data
-const sliderSlides = [
-  annual && {
-    icon: '📊',
-    stat: formatCompactNumber(annual.importContractes) + ' €',
-    label: 'en contractes públics el 2024',
-    detail: formatCompactNumber(annual.contractes) + ' contractes adjudicats',
-    link: '/contractes',
-  },
-  annual && {
-    icon: '🎓',
-    stat: formatCompactNumber(annual.importSubvencions) + ' €',
-    label: 'en subvencions concedides el 2024',
-    detail: formatCompactNumber(annual.subvencions) + ' concessions registrades',
-    link: '/subvencions',
+// Build hero slides from real data
+const heroSlides = [
+  annualVolume && {
+    topLabel: 'Dades públiques de Catalunya',
+    headline: 'On van els teus diners?',
+    stat: formatCompactNumber(annualVolume) + ' €',
+    statLabel: 'en contractes i subvencions · 2024',
+    description: 'Dades reals de l\'API de Transparència Catalunya. Sense filtres, sense opinions. Tu decideixes.',
+    cta: 'Explorar dades',
+    ctaLink: '/contractes',
   },
   topCompanies[0] && {
-    icon: '🏢',
+    topLabel: 'Contractació pública',
+    headline: 'Saps quines empreses reben més diners públics?',
     stat: formatCompactNumber(topCompanies[0].import_total) + ' €',
-    label: topCompanies[0].adjudicatari,
-    detail: 'Empresa amb més volum de contractes públics acumulats',
-    link: '/cerca',
+    statLabel: topCompanies[0].adjudicatari,
+    description: 'L\'empresa amb més volum de contractes públics acumulats a Catalunya. Consulta el ranking complet.',
+    cta: 'Veure ranking',
+    ctaLink: '/cerca',
   },
   salaryData.president && {
-    icon: '🏛',
+    topLabel: 'Retribucions públiques',
+    headline: 'Què cobren els teus càrrecs públics?',
     stat: salaryData.president.retribucio_anual_prevista || '',
-    label: 'retribució del President',
-    detail: salaryData.president.cognoms_nom || '',
-    link: '/salaris',
+    statLabel: 'retribució anual del President',
+    description: 'Tots els Directors Generals cobren exactament 99.346 €. El President, 146.635 €. Dades oficials de la Generalitat.',
+    cta: 'Veure salaris',
+    ctaLink: '/salaris',
   },
   {
-    icon: '✈',
+    topLabel: 'Viatges oficials',
+    headline: 'On viatgen els teus polítics?',
     stat: '1.384',
-    label: 'viatges oficials a l\'estranger',
-    detail: '4,2M € en despeses des del 2017',
-    link: '/viatges',
+    statLabel: 'viatges a l\'estranger des del 2017',
+    description: 'Brussels, París, Ginebra. Cada viatge amb el desglos de despeses: hotel, transport, dietes. Tot públic.',
+    cta: 'Veure viatges',
+    ctaLink: '/viatges',
   },
   {
-    icon: '🔍',
+    topLabel: 'Buscador d\'entitats',
+    headline: 'Cerca qualsevol empresa o entitat',
     stat: 'Cerca',
-    label: 'qualsevol empresa o entitat',
-    detail: 'Descobreix quant ha rebut en diners públics',
-    link: '/cerca',
+    statLabel: 'contractes + subvencions creuats',
+    description: 'Escriu el nom de qualsevol empresa, ajuntament o entitat i descobreix quant ha rebut en diners públics.',
+    cta: 'Cercar ara',
+    ctaLink: '/cerca',
   },
-].filter(Boolean) as { icon: string; stat: string; label: string; detail: string; link?: string }[];
+].filter(Boolean) as { topLabel: string; headline: string; stat: string; statLabel: string; description: string; cta: string; ctaLink: string }[];
 
 function parseSalary(s: string | undefined): number {
   if (!s) return 0;
@@ -100,59 +103,10 @@ function parseSalary(s: string | undefined): number {
   section="inicio"
   keywords="transparència, dades públiques, Catalunya, contractes, subvencions, govern"
 >
-  <!-- Hero -->
-  <section class="bg-gray-950 text-white">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-      <p class="text-gray-500 text-xs font-medium mb-6 tracking-widest uppercase">Dades públiques de Catalunya</p>
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
-        On van els teus<br />diners?
-      </h1>
-      {annualVolume && (
-        <p class="text-lg sm:text-xl text-gray-400 mb-4">
-          <span class="text-white font-semibold">{formatCompactNumber(annualVolume)} €</span> en contractes i subvencions públiques el 2024
-        </p>
-      )}
-      <p class="text-sm text-gray-500 max-w-xl mb-10">
-        Dades reals de l'API de Transparència Catalunya. Sense filtres, sense opinions. Tu decideixes.
-      </p>
-
-      {annual && (
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-gray-800/80 rounded-lg overflow-hidden">
-          <div class="bg-gray-900 p-3 sm:p-5">
-            <p class="text-xl sm:text-3xl font-bold text-white">{formatCompactNumber(annual.importContractes)} €</p>
-            <p class="text-[10px] sm:text-xs text-gray-500 mt-1">en contractes · 2024</p>
-          </div>
-          <div class="bg-gray-900 p-3 sm:p-5">
-            <p class="text-xl sm:text-3xl font-bold text-white">{formatCompactNumber(annual.contractes)}</p>
-            <p class="text-[10px] sm:text-xs text-gray-500 mt-1">contractes registrats</p>
-          </div>
-          <div class="bg-gray-900 p-3 sm:p-5">
-            <p class="text-xl sm:text-3xl font-bold text-white">{formatCompactNumber(annual.importSubvencions)} €</p>
-            <p class="text-[10px] sm:text-xs text-gray-500 mt-1">en subvencions · 2024</p>
-          </div>
-          <div class="bg-gray-900 p-3 sm:p-5">
-            <p class="text-xl sm:text-3xl font-bold text-white">{formatCompactNumber(annual.subvencions)}</p>
-            <p class="text-[10px] sm:text-xs text-gray-500 mt-1">concessions registrades</p>
-          </div>
-        </div>
-      )}
-
-      {heroEquivalences.length > 0 && (
-        <div class="flex flex-wrap gap-2 mt-6 mb-8">
-          <span class="text-xs text-gray-600">Això equival a</span>
-          {heroEquivalences.map((eq) => (
-            <span class="text-xs bg-gray-800 text-gray-300 px-2.5 py-1 rounded-full">
-              {eq.icon} {eq.text}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {sliderSlides.length > 0 && (
-        <DataSlider client:load slides={sliderSlides} />
-      )}
-    </div>
-  </section>
+  <!-- Hero Slider -->
+  {heroSlides.length > 0 && (
+    <HeroSlider client:load slides={heroSlides} />
+  )}
 
   <!-- 1. Les empreses que més cobren -->
   {topCompanies.length > 0 && (
