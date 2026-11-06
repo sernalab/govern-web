@@ -28,7 +28,7 @@ const totalVolume = stats
     </div>
 
     {stats && (
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-gray-800 rounded-lg overflow-hidden mb-10">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-px bg-gray-800 rounded-lg overflow-hidden mb-10">
         <div class="bg-gray-900 p-3 sm:p-6">
           <p class="text-xl sm:text-3xl font-bold text-white">{formatCompactNumber(stats.totalContractes)}</p>
           <p class="text-[10px] sm:text-xs text-gray-500 mt-1">contractes públics</p>
@@ -40,10 +40,6 @@ const totalVolume = stats
         <div class="bg-gray-900 p-3 sm:p-6">
           <p class="text-xl sm:text-3xl font-bold text-white">{totalVolume ? formatCompactNumber(totalVolume) + ' €' : '---'}</p>
           <p class="text-[10px] sm:text-xs text-gray-500 mt-1">volum total gestionat</p>
-        </div>
-        <div class="bg-gray-900 p-3 sm:p-6">
-          <p class="text-xl sm:text-3xl font-bold text-white">{stats.totalCasosCorrupcio}</p>
-          <p class="text-[10px] sm:text-xs text-gray-500 mt-1">casos de corrupció</p>
         </div>
       </div>
     )}
